@@ -1,0 +1,33 @@
+General idea:
+Identify the topics within an article. The topics are extracted from
+a thrid party corpus like Wikipedia under supervision and is thus
+more reliable.
+
+Task decomposition:
+1. To perform a topic identification, we need a model for each topic
+    We want to start with ESA model by Gabrilovich and Markovitch. It
+    is basically tf-idf model for each article in Wikipedia. And each
+    article is a topic.
+    Brown clusters by Peter F. Brown may also be a good choice.
+
+    If we have time, we may also introduce more complicatd models such
+    as a topic with sentimental denotation.
+
+2. With topic models, we still need a strategy to extract the topics
+   from an article. We want to something similar to object identification
+   in an image.
+    We will develop an alogrithm similar to selective search by Uijlings
+    on text. We will start with each sentence as our initial regions
+
+3. For evaluation, we will use the extracted topics as input features for
+   later tasks. For example, we may use it for document classification.
+
+Questions:
+1. Any similar previous works?
+2. Any pit falls? Anything that is obvious troublesome?
+3. Any better evaluation methods? Do we have to rely on a third task?
+4. If it does not work on the classification task we chose, what shall
+   we do? Failure on one task doesn't really mean a failure right? How
+   do we actually know is this method useful or not?
+
+
