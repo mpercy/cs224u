@@ -4,23 +4,30 @@ a thrid party corpus like Wikipedia under supervision and is thus
 more reliable.
 
 Task decomposition:
-1. To perform a topic identification, we need a model for each topic
-    We want to start with ESA model by Gabrilovich and Markovitch. It
-    is basically tf-idf model for each article in Wikipedia. And each
-    article is a topic.
-    Brown clusters by Peter F. Brown may also be a good choice.
+1. To perform a topic identification, we need a model for each topic.
+   We want to start with ESA model by Gabrilovich and Markovitch. It
+   is basically tf-idf model for each article in Wikipedia. And each
+   article is a topic.
+   Brown clusters by Peter F. Brown may also be a good choice.
 
-    If we have time, we may also introduce more complicatd models such
-    as a topic with sentimental denotation.
+   If we have time, we may also introduce more complicated models such
+   as a topic with sentimental denotation.
 
 2. With topic models, we still need a strategy to extract the topics
    from an article. We want to something similar to object identification
    in an image.
-    We will develop an alogrithm similar to selective search by Uijlings
-    on text. We will start with each sentence as our initial regions
+   We will develop an algorithm similar to selective search by Uijlings
+   on text. We will start with each sentence as our initial regions.
+   The idea is to use heirarchical clustering as the basis for an overall
+   topic model.
+
+   We could also consider using GloVe vectors for words and clustering
+   words based on cosine similarity.
 
 3. For evaluation, we will use the extracted topics as input features for
    later tasks. For example, we may use it for document classification.
+   There are many document classification data sets available for
+   comparison including AthR, XGraph, and BbCrypt.
 
 Questions:
 1. Any similar previous works?
@@ -31,3 +38,13 @@ Questions:
    do we actually know is this method useful or not?
 
 
+Some potentially related work:
+
+1. Peter Young, Alice Lai, Micah Hodosh, Julia Hockenmaier. From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions. ACL '14.
+   - Mapping sentences to images using hypernyms, word vector similarity and composition of word vectors in sentences.
+2. Sida Wang and Christopher D. Manning. Baselines and bigrams: Simple, good sentiment and topic classification. ACL '12.
+   - Various topic classification & sentiment analysis ideas & data sets.
+3. Qi Sun, et al. Text segmentation with LDA-based Fisher kernel. ACL '08.
+   - An approach to extending LDA to segment a document into discrete topic sections.
+4. Eric H. Huang, Richard Socher, Christopher D. Manning, and Andrew Y. Ng. 2012. Improving word representations via global context and multiple word prototypes. ACL '12.
+   - Vector space model comparable w/ GloVe, but also a potentially interesting contextual dataset.
