@@ -3,6 +3,20 @@ Identify the topics within an article. The topics are extracted from
 a thrid party corpus like Wikipedia under supervision and is thus
 more reliable.
 
+TODO list:
+1. topic modeling
+   word frequency model
+   direchlet model
+2. tpoic identification
+   selective search with word freqeucy vector as similairity measure
+   selective search with direchlet probability vector as similarity
+
+   text segmentation as in 2012_Wang_Manning_Baselines_Bigrams.pdf
+   selective search with recursive text segmentation
+
+3. evaluation
+
+
 Task decomposition:
 1. To perform a topic identification, we need a model for each topic.
    We want to start with ESA model by Gabrilovich and Markovitch. It
@@ -37,14 +51,3 @@ Questions:
    we do? Failure on one task doesn't really mean a failure right? How
    do we actually know is this method useful or not?
 
-
-Some potentially related work:
-
-1. Peter Young, Alice Lai, Micah Hodosh, Julia Hockenmaier. From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions. ACL '14.
-   - Mapping sentences to images using hypernyms, word vector similarity and composition of word vectors in sentences.
-2. Sida Wang and Christopher D. Manning. Baselines and bigrams: Simple, good sentiment and topic classification. ACL '12.
-   - Various topic classification & sentiment analysis ideas & data sets.
-3. Qi Sun, et al. Text segmentation with LDA-based Fisher kernel. ACL '08.
-   - An approach to extending LDA to segment a document into discrete topic sections.
-4. Eric H. Huang, Richard Socher, Christopher D. Manning, and Andrew Y. Ng. 2012. Improving word representations via global context and multiple word prototypes. ACL '12.
-   - Vector space model comparable w/ GloVe, but also a potentially interesting contextual dataset.

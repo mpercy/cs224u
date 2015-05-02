@@ -1,6 +1,22 @@
-There are 6 papers.
+
 2014_sematic_analysis.pdf published something to do text classification with wikipedia topics. We may treat this as our previous work.
+
 2006_ESA.pdf and 2007_ESA.pdf are the papers on the method of ESA, which is used to extract topic information from wikipedia. It is used in  2014_sematic_analysis.pdf.
+
 1992_brownCluster.pdf is something like ESA. It is compared with ESA in  2014_sematic_analysis.pdf.
+
 2012_selectiveSearchDraft.pdf is a paper on image object detection. I think we can build a similar object detection method on text.
-The last paper is not so useful. But it proposes a way of perciving the relations between labels in a heirarchical category structure.
+
+2000_James-Stein Estimator.pdf is not so useful. But it proposes a way of perciving the relations between labels in a heirarchical category structure.
+
+2014_Young_ImageDescriptions.pdf. Mapping sentences to images using hypernyms, word vector similarity and composition of word vectors in sentences.
+
+2012_Wang_Manning_Baselines_Bigrams.pdf. Various topic classification & sentiment analysis ideas & data sets.
+
+2008_Sun_Text_Segmentation_LDA.pdf. An approach to extending LDA to segment a document into discrete topic sections.
+
+2012_Huang_WordReps_GlobalContext_WordPrototypes.pdf. Vector space model comparable w/ GloVe, but also a potentially interesting contextual dataset.
+
+hLDA_slides.pdf. A presentation slides that introduces hierarchical LDA.
+
+2004_hLDA.pdf. A hierarchical LDA paper. Less useful. The hierarchical here means the topics that composes a article are in some kind of hierarchy. It does not represent the topics within an article as a tree.
