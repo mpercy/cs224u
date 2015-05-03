@@ -1,3 +1,4 @@
+2003_LDA.pdf. Original proposal of LDA by Andrew Ng.
 
 2014_sematic_analysis.pdf published something to do text classification with wikipedia topics. We may treat this as our previous work.
 

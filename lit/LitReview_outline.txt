@@ -1,8 +1,9 @@
-Paper included:
 2014_sematic_analysis.pdf 
-2006_ESA.pdf
 2007_ESA.pdf
 1992_brownCluster.pdf
 2012_selectiveSearchDraft.pdf
 2008_Sun_Text_Segmentation_LDA.pdf
 2012_Huang_WordReps_GlobalContext_WordPrototypes.pdf
+2004_hLDA.pdf
+2003_LDA.pdf
+cue paper
