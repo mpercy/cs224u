@@ -22,7 +22,7 @@ Download the following files:
 
 * http://mpercy-datasets-01.s3.amazonaws.com/unreasonable.txt (41K)
 * http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_wordids.txt.bz2 (766K)
-* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_bow.mm.index.metadata.cpickle (129M)
+* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_bow.mm.metadata.cpickle (129M)
 * http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en.tfidf_model (4.1M)
 * http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_similarity.tar.gz (3.2G; 4.5G uncompressed)
 
