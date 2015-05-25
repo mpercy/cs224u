@@ -23,6 +23,7 @@ try:
 except:
    import pickle
 
+from gensim import utils
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
 from gensim.similarities import Similarity
@@ -69,9 +70,8 @@ if __name__ == '__main__':
         logger.info("Processing document #%d..." % (docnum,))
 
         # Perform a simple tokenization of the document.
-        # TODO: Use a good tokenizer. This one seems to choke on UTF-8 text?
-        #doc = wordpunct_tokenize(line)
-        doc = line.strip().split() # Just split on spaces for now.
+        #doc = line.strip().split() # Just split on spaces for now.
+        doc = wordpunct_tokenize(utils.to_utf8(line).decode("utf8"))
 
         logger.debug(doc)
 
