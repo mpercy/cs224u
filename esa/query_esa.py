@@ -69,7 +69,10 @@ if __name__ == '__main__':
         logger.info("Processing document #%d..." % (docnum,))
 
         # Perform a simple tokenization of the document.
-        doc = wordpunct_tokenize(line)
+        # TODO: Use a good tokenizer. This one seems to choke on UTF-8 text?
+        #doc = wordpunct_tokenize(line)
+        doc = line.strip().split() # Just split on spaces for now.
+
         logger.debug(doc)
 
         # Convert from tokens to word ids from the model dictionary.
