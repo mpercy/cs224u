@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Usage: query_esa.py input_file model_prefix
+Usage: %(program)s input_file model_prefix
 
 input_file should be in the format of one document per line, with tokens
 separated by spaces.
@@ -10,9 +10,10 @@ filename prefix of the ESA model files, which should be in the current
 directory.
 
 Example:
-    query_esa.py test.txt wiki_en
+    %(program)s test.txt wiki_en
 """
 
+import inspect
 import logging
 import os.path
 import sys
@@ -22,28 +23,9 @@ try:
 except:
    import pickle
 
-from gensim.corpora import Dictionary, TextCorpus
+from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
 from gensim.similarities import Similarity
-
-class DocPerTextLineCorpus(TextCorpus):
-    def __init__(self, fname, dictionary=None):
-        if not dictionary:
-            logger.fatal("no dictionary specified")
-
-        try:
-            self.infile = open(fname, 'r')
-        except IOError:
-            print 'cannot open', fname
-        else:
-            print fname, 'has', len(self.infile.readlines()), 'lines'
-
-        self.metadata = False
-        self.dictionary = dictionary
-
-    def get_texts(self):
-        for line in self.infile:
-            yield line.strip().split()
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -54,7 +36,7 @@ if __name__ == '__main__':
 
     # check and process input arguments
     if len(sys.argv) < 3:
-        print(__doc__)
+        print(inspect.cleandoc(__doc__) % locals())
         sys.exit(1)
     input_file, output_prefix = sys.argv[1:3]
 
@@ -65,7 +47,7 @@ if __name__ == '__main__':
     logger.debug(dictionary)
 
     logger.info("Loading document name map...")
-    article_dict = pickle.load(open(output_prefix + '_doc_index.pickle', 'r'))
+    article_dict = pickle.load(open(output_prefix + '_bow.mm.metadata.cpickle', 'r'))
 
     logger.info("Loading tf-idf model...")
     tfidf = TfidfModel.load(output_prefix + '.tfidf_model')
@@ -105,7 +87,7 @@ if __name__ == '__main__':
 
         # Print the similarity scores in descending order.
         sims = sorted(sims, key=lambda item: -item[1])
-        for doc_id, similarity in sims:
-            doc_title = article_dict[doc_id]
-            print "Similarity %f: %s [docid %d]" % (similarity, doc_title, doc_id)
+        for doc_idx, similarity in sims:
+            pageid, title = article_dict[doc_idx]
+            print "Similarity %f: %s [doc-index %d, wiki-page-id %s]" % (similarity, title, doc_idx, pageid)
 
