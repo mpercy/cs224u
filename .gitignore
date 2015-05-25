@@ -1,0 +1,7 @@
+*.log
+*.mm
+*.index
+*.cpickle
+*_similarity_index.*
+*.tfidf_model
+*.bz2
