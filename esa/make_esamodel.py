@@ -11,7 +11,7 @@ If you have the `pattern` package installed, this script can use a fancy
 lemmatization to get a lemma of each token (instead of plain alphabetic
 tokenizer). The package is available at https://github.com/clips/pattern
 
-Example: python [--lemmatize] %(program)s enwiki-20150403-pages-articles.xml.bz2 wiki_en
+Example: %(program)s enwiki-20150403-pages-articles.xml.bz2 wiki_en
 """
 
 import argparse

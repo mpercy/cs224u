@@ -26,6 +26,7 @@ except:
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
 from gensim.similarities import Similarity
+from nltk.tokenize import wordpunct_tokenize
 
 if __name__ == '__main__':
     program = os.path.basename(sys.argv[0])
@@ -67,8 +68,8 @@ if __name__ == '__main__':
     for docnum, line in enumerate(infile):
         logger.info("Processing document #%d..." % (docnum,))
 
-        # Perform simple tokenization of the document by spaces.
-        doc = line.strip().split()
+        # Perform a simple tokenization of the document.
+        doc = wordpunct_tokenize(line)
         logger.debug(doc)
 
         # Convert from tokens to word ids from the model dictionary.
