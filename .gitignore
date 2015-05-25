@@ -5,3 +5,4 @@
 *_similarity_index.*
 *.tfidf_model
 *.bz2
+*_model_dir
