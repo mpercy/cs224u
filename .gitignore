@@ -6,3 +6,4 @@
 *.tfidf_model
 *.bz2
 *_model_dir
+*.pyc
