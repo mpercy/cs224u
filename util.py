@@ -35,15 +35,7 @@ def sentenceSeg(doc):
 def cosine(x, y):
     rlt =  distance.cosine(x, y)
     if isnan(rlt):
-        # f = open('nan_dist.txt', 'a')
-        # for _x in x:
-        #     f.write(str(_x)+",")
-        # f.write('\n')
-        # for _y in y:
-        #     f.write(str(_y)+',')
-        # f.write('\n')
-        # f.write('\n')
-        # f.close()
+        # TODO: what's the best
         return -2
     return rlt
 
