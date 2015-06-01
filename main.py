@@ -185,21 +185,22 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
     # load data
     baseFolder = data_dir
     cats = listdir(baseFolder)
-    for catIdx in range(len(cats)):
-        logger.info('processing cat: %s', cats[catIdx])
+    for catIdx, cat in enumerate(cats):
+        logger.info('processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
-            docs = listdir(baseFolder+'/'+cats[catIdx])[:20]
+            docs = listdir(os.path.join(baseFolder, cat))[:20]
         except:
             continue
         numDocs = len(docs)
-        for i in range(numDocs):
-            logger.info('processing doc %d/%d ...', i, numDocs)
-            doc = open(baseFolder+'/'+cats[catIdx]+'/'+docs[i]).read()
+        for docIdx, doc_filename in enumerate(docs):
+            cat_doc_filename = os.path.join(cat, doc_filename)
+            logger.info('processing document %s (%d/%d)', cat_doc_filename, docIdx, numDocs)
+            doc = open(os.path.join(baseFolder, cat_doc_filename)).read()
             seg, regs = topicSearch(doc, model = model)
-            logger.info('doc %d segmented', i)
+            logger.info('doc %d segmented', docIdx)
             feature = convertToFeature(seg, regs, model = model)
-            logger.info('doc %d feature extracted', i)
-            if i < numDocs*0.9:
+            logger.info('doc %d feature extracted', docIdx)
+            if docIdx < numDocs*0.9:
                 train.append(feature)
                 trainY.append(catIdx)
             else:
