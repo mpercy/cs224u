@@ -13,15 +13,14 @@ Example:
     %(program)s test.txt wiki_en
 """
 
+import heapq
 import inspect
 import logging
+import numpy as np
 import os.path
+import scipy
 import sys
-
-try:
-   import cPickle as pickle
-except:
-   import pickle
+import time
 
 from gensim import utils
 from gensim.corpora import Dictionary
@@ -49,13 +48,14 @@ if __name__ == '__main__':
     logger.debug(dictionary)
 
     logger.info("Loading document name map...")
-    article_dict = pickle.load(open(output_prefix + '_bow.mm.metadata.cpickle', 'r'))
+    article_dict = utils.unpickle(output_prefix + '_bow.mm.metadata.cpickle')
 
     logger.info("Loading tf-idf model...")
     tfidf = TfidfModel.load(output_prefix + '.tfidf_model')
 
     logger.info("Loading similarity index...")
     similarity_index = Similarity.load(output_prefix + '_similarity.index', mmap='r')
+    similarity_index.use_reverse_index = True
 
     logger.info("Finished loading model files.")
 
@@ -64,14 +64,18 @@ if __name__ == '__main__':
     try:
         infile = open(input_file, 'r')
     except IOError:
-        print 'cannot open', input_file
+        print('cannot open %s' % (input_file,))
+        sys.exit(1)
 
     for docnum, line in enumerate(infile):
+        line = line.rstrip()
         logger.info("Processing document #%d..." % (docnum,))
 
         # Perform a simple tokenization of the document.
         #doc = line.strip().split() # Just split on spaces for now.
-        doc = wordpunct_tokenize(utils.to_utf8(line).decode("utf8"))
+        line = utils.to_utf8(line).decode("utf8")
+        doc = wordpunct_tokenize(line)
+        doc = [w.lower() for w in doc]
 
         logger.debug(doc)
 
@@ -85,13 +89,76 @@ if __name__ == '__main__':
 
         # Calculate document cosine similarity against the Wikipedia concept corpus using
         # the document's TF-IDF word scores calculated in the previous step.
-        similarity_index.num_best = 50 # Only include the top 50 concept matches.
-        sims = similarity_index[proc_doc]
-        logger.debug(sims)
+        NUM_BEST = 40
+        #similarity_index.num_best = NUM_BEST # Only include the top concept matches.
 
-        # Print the similarity scores in descending order.
-        sims = sorted(sims, key=lambda item: -item[1])
-        for doc_idx, similarity in sims:
-            pageid, title = article_dict[doc_idx]
-            print "Similarity %f: %s [doc-index %d, wiki-page-id %s]" % (similarity, title, doc_idx, pageid)
+        """
+        # Warm up the mmaps
+        logger.info("Performing warm-up query with reverse indexes enabled...")
+        similarity_index.use_reverse_index = True
+        start = time.time()
+        sims = similarity_index[proc_doc]
+        end = time.time()
+        logger.info("Time elapsed: %s" % (end - start))
+        logger.debug(sims)
+        """
+
+        saved_sims = []
+        #for ri in [False, True]:
+        for ri in [True]:
+            similarity_index.use_reverse_index = ri
+            for i in range(0, 3):
+                logger.info("===============================================")
+                logger.info("Performing query %d with reverse_indexes=%s" % (i, ri))
+                start = time.time()
+                sims = similarity_index[proc_doc]
+                end = time.time()
+                logger.info("Time elapsed: %s" % (end - start))
+                logger.debug(sims)
+
+            saved_sims.append(sims)
+            #print(ri)
+            #print(sims)
+
+            # Print the similarity scores in descending order.
+            print("LINE: %s" % (line,))
+            sims = heapq.nlargest(NUM_BEST, enumerate(sims), key=lambda item: item[1])
+            for doc_idx, similarity in sims:
+                #print("HELLOOO")
+                #print(similarity)
+                pageid, title = article_dict[doc_idx]
+                print("Similarity %f: %s [doc-index %d, wiki-page-id %s]" %
+                    (similarity, title, doc_idx, pageid))
+
+        """
+        # Perform some model validation.
+        if not saved_sims:
+            raise ValueError("Didn't save anything...")
+        if len(saved_sims[0]) != len(saved_sims[1]):
+            raise ValueError("lengths don't match: %d vs %d" % (len(saved_sims[0]), len(saved_sims[1])))
+
+        # Now count all the non-trivial differences.
+        # Although honestly... there really should be no differences.
+        num_different = 0
+        for i in range(len(saved_sims[0])):
+            if saved_sims[0][i] != saved_sims[1][i]:
+                delta = abs(saved_sims[0][i] - saved_sims[1][i])
+                if delta >= 0.0000001:
+                    num_different += 1
+                    print("Similarity values for doc %d (%s) are different: %f vs %f (delta = %s)" %
+                        (i, article_dict[i][1], saved_sims[0][i], saved_sims[1][i], str(delta)))
+        if num_different > 0:
+            print("%d items are different between the models" % (num_different,))
+
+        # Do some manual checking. Only works on full Wikipedia index.
+        for sims in saved_sims:
+            for doc_idx in [ 3208069, 2568385, 94707, 321477, 2358703, 16069, 133249, 457179 ]:
+                similarity = sims[doc_idx]
+                pageid, title = article_dict[doc_idx]
+                print(">> Sim %f: %s [doc-index %d, wiki-page-id %s]" %
+                      (similarity, title, doc_idx, pageid))
+
+        if num_different == 0:
+            print("Values match!")
+        """
 

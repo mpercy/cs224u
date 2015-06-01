@@ -60,7 +60,7 @@ if __name__ == '__main__':
     logger.info(">>> Loading Wikipedia corpus from %s ..." % input_file)
     wiki = WikiCorpus(input_file, lemmatize=lemmatize) # takes about 9h on a macbook pro, for 3.5m articles (june 2011)
     # only keep the most frequent words (out of total ~8.2m unique tokens)
-    wiki.dictionary.filter_extremes(no_below=20, no_above=0.1, keep_n=DEFAULT_DICT_SIZE)
+    wiki.dictionary.filter_extremes(no_below=20, no_above=0.1, keep_n=keep_words)
 
     # save dictionary and bag-of-words (term-document frequency matrix)
     logger.info(">>> Serializing bag-of-words representation of filtered wikipedia corpus ...")
@@ -91,7 +91,8 @@ if __name__ == '__main__':
 
     logger.info(">>> Generating similarity index ...")
     #similarity_index = Similarity(output_prefix + "_similarity_index", tfidf_corpus, len(dictionary))
-    similarity_index = Similarity(output_prefix + "_similarity_index", tfidf[mm], len(dictionary))
+    similarity_index = Similarity(output_prefix + "_similarity_index", tfidf[mm], len(dictionary),
+                                  use_reverse_index=True)
     del tfidf
 
     logger.info(">>> Serializing similarity index ...")
