@@ -93,3 +93,14 @@ tokenizer). The package is available at https://github.com/clips/pattern
 
 Example: ./make_esamodel.py enwiki-20150403-pages-articles.xml.bz2 wiki_en
 ```
+
+## Building the reverse indexes
+
+After you build the initial model, which only creates forward indexes, you must
+then build the reverse indexes. The `make_rev_index.py` script will do this
+for you. You just need to give it the model prefix and it will take care of the
+rest. Example:
+
+```
+./make_rev_index.py wiki_en
+```
