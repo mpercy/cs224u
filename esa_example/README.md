@@ -5,32 +5,31 @@ The scripts in this directory implement the cosine-ESA model
 
 ## Requirements
 
-Software requirements: Python, numpy, scipy, gensim, nltk
+Software requirements: Python, numpy, scipy, gensim, nltk, scikit-learn
 
 I used the following versions (latest as of this writing, obtained via pip):
 
 * numpy (1.9.2)
 * scipy (0.15.1)
-* gensim (0.11.1-1)
 * nltk (3.0.2)
+* scikit-learn (0.16.1)
+
+At the time of this writing, a custom version of `gensim` is required.
+Install it with `pip` using the following incantation:
+
+```
+pip install https://github.com/mpercy/gensim/archive/reverse-indexes-2.zip
+```
 
 ## Download
 
-A pre-trained model with 100K words can be found on Amazon S3.
+A pre-trained model with a reverse index and a 200K word vocabulary can be found on Amazon S3.
 
-Download the following files:
+Use the `aws` command-line tool from Amazon to sync the following S3 directory (about 30G):
 
-* http://mpercy-datasets-01.s3.amazonaws.com/unreasonable.txt (41K)
-* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_wordids.txt.bz2 (766K)
-* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_bow.mm.metadata.cpickle (129M)
-* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en.tfidf_model (4.1M)
-* http://mpercy-datasets-01.s3.amazonaws.com/wiki_en/wiki_en_similarity.tar.gz (3.2G; 4.5G uncompressed)
+s3://mpercy-datasets-01/wiki_en-200000--20150531-035019/
 
-Then unpack the similarity indexes. This will create 129 files in the current directory:
-
-```
-tar xzvf wiki_en_similarity.tar.gz
-```
+This will create about 300 files in the current directory.
 
 ## Prepare documents
 
