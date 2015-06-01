@@ -66,8 +66,10 @@ class ESAModel(object):
         For short documents, using the reverse index is usually much faster.
         """
 
+        logger.debug("input string: %s", input_str)
+
         # Tokenize the input string.
-        input_str = utils.to_utf8(input_str).decode("utf8")
+        input_str = utils.to_utf8(input_str, errors='replace').decode("utf8")
         doc = wordpunct_tokenize(input_str)
         doc = [w.lower() for w in doc]
 
