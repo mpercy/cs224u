@@ -1,4 +1,20 @@
-from util import sentenceSeg, PriorityQueue, esa_model, cosine
+#!/usr/bin/env python
+"""
+Usage: %(program)s model_prefix data_dir
+
+Run model.
+
+model_prefix should be something like "wiki_en" corresponding to the
+filename prefix of the ESA model files, which must be in the current directory.
+
+data_dir should be the base folder for the newsgroups data.
+
+Example:
+    %(program)s wiki_en
+"""
+
+from esa import ESAModel
+from util import sentenceSeg, PriorityQueue, cosine
 import inspect
 import logging
 import os.path
@@ -16,36 +32,36 @@ from gensim.similarities import Similarity
 from nltk.tokenize import wordpunct_tokenize
 from os import listdir
 
-# loading model information
-dictionary = Dictionary.load_from_text('wiki_en_wordids.txt.bz2')
-article_dict = pickle.load(open('wiki_en_bow.mm.metadata.cpickle', 'r'))
-tfidf = TfidfModel.load('wiki_en.tfidf_model')
-similarity_index = Similarity.load('wiki_en_similarity.index', mmap='r')
-
 
 
 def main():
-    evaluation()
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
 
-def convertToFeature(seg, regs, 
-                     model = esa_model, 
-                     # dictionary=dictionary, 
-                     # article_dict=article_dict,
-                     # tfidf = tfidf, 
-                     # similarity_index = similarity_index, 
-                     classNum = 3796181):
-    feature = [0.0 for _ in range(classNum)]
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.INFO)
+
+    # check and process input arguments
+    if len(sys.argv) < 3:
+        print(inspect.cleandoc(__doc__) % locals())
+        sys.exit(1)
+    model_prefix, data_dir = sys.argv[1:3]
+
+    evaluation(model_prefix = model_prefix, data_dir = data_dir)
+
+def convertToFeature(seg, regs, model = None):
+    feature = [0.0 for _ in range(model.num_documents())]
     # cnt = 0
     for reg in regs:
         # print '\t', cnt
         # cnt += 1
         doc = ' '.join(seg[reg[0]:reg[1]])
-        s = model(doc, dictionary, article_dict, tfidf, similarity_index)
+        s = model.get_similarity(doc)
         feature = np.amax([s, feature], axis=0)
         # print feature.shape, s.shape
     return feature
 
-def topicSearch(doc, model=esa_model, similarity = cosine, initialPropose = sentenceSeg):
+def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceSeg):
     # facilitating functions
     def getRegion(similarityArray, i, initSeg):
         if similarityArray[i] == 0 and i!=0:
@@ -85,10 +101,10 @@ def topicSearch(doc, model=esa_model, similarity = cosine, initialPropose = sent
 
     # initialize similarity set.
     for i in range(len(similaritySet)-1):
-        cur = model(initSeg[i], dictionary = dictionary, article_dict = article_dict, tfidf = tfidf, similarity_index = similarity_index)
+        cur = model.get_similarity(initSeg[i])
         # print len(cur), 'topics'
         # exit(1)
-    next = model(initSeg[i+1], dictionary = dictionary, article_dict = article_dict, tfidf = tfidf, similarity_index = similarity_index)
+    next = model.get_similarity(initSeg[i+1])
     similaritySet[i] = similarity(cur, next)
     # print 'similarity initialized!'
     # print similaritySet
@@ -104,17 +120,17 @@ def topicSearch(doc, model=esa_model, similarity = cosine, initialPropose = sent
         similaritySet[getNext(similaritySet, mostSimilar)] = 0
 
         # set the similarity score properly
-        cur = model(getRegion(similaritySet, mostSimilar, initSeg), dictionary = dictionary, article_dict = article_dict, tfidf = tfidf, similarity_index = similarity_index)
+        cur = model.get_similarity(getRegion(similaritySet, mostSimilar, initSeg))
         preIdx = getPrevious(similaritySet, mostSimilar)
         if preIdx != None:
             # print 'pre idx:', preIdx
-            pre = model(getRegion(similaritySet, preIdx, initSeg), dictionary = dictionary, article_dict = article_dict, tfidf = tfidf, similarity_index = similarity_index)        
+            pre = model.get_similarity(getRegion(similaritySet, preIdx, initSeg))
             similaritySet[preIdx] = similarity(pre, cur)
         nxtIdx = getNext(similaritySet, mostSimilar)
         if nxtIdx == None:
             similaritySet[mostSimilar] = -1
         else:
-            nxt = model(getRegion(similaritySet, nxtIdx, initSeg), dictionary = dictionary, article_dict = article_dict, tfidf = tfidf, similarity_index = similarity_index)
+            nxt = model.get_similarity(getRegion(similaritySet, nxtIdx, initSeg))
             similaritySet[mostSimilar] = similarity(cur, nxt)
         # print
         # add new region to hypotheses locations
@@ -159,21 +175,17 @@ def NaiveBayes(train, trainY, test, testY):
             correctCnt += 1
     return (1.0*correctCnt)/totalCnt
 
-def evaluation(tp_search = topicSearch, clf = NaiveBayes, topicSearch = topicSearch):
+def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
     train = []
     trainY = []
     test = []
     testY = []
 
     # load model
-    dictionary = Dictionary.load_from_text('wiki_en_wordids.txt.bz2')
-    article_dict = pickle.load(open('wiki_en_bow.mm.metadata.cpickle', 'r'))
-    tfidf = TfidfModel.load('wiki_en.tfidf_model')
-    similarity_index = Similarity.load('wiki_en_similarity.index', mmap='r')
-    print 'model loaded'
+    model = ESAModel(model_prefix)
 
     # load data
-    baseFolder = '20news-18828'
+    baseFolder = data_dir
     cats = listdir(baseFolder)
     for catIdx in range(len(cats)):
         print 'processing cat:', cats[catIdx]
@@ -185,9 +197,9 @@ def evaluation(tp_search = topicSearch, clf = NaiveBayes, topicSearch = topicSea
         for i in range(docNum):
             print 'processing doc', i
             doc = open(baseFolder+'/'+cats[catIdx]+'/'+docs[i]).read()
-            seg, regs = topicSearch(doc)
+            seg, regs = topicSearch(doc, model = model)
             print 'doc', i, 'segmented'
-            feature = convertToFeature(seg, regs)
+            feature = convertToFeature(seg, regs, model = model)
             print 'doc', i, 'feature extracted'
             if i < docNum*0.9:
                 train.append(feature)
