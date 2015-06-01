@@ -25,11 +25,22 @@ pip install https://github.com/mpercy/gensim/archive/reverse-indexes-2.zip
 
 A pre-trained model with a reverse index and a 200K word vocabulary can be found on Amazon S3.
 
-Use the `aws` command-line tool from Amazon to sync the following S3 directory (about 30G):
+Use the `aws` command-line tool from Amazon to sync the directory (about 30G).
+More information on the aws command-line tools can be found here: http://aws.amazon.com/cli/
+
+Model file location on S3:
 
 s3://mpercy-datasets-01/wiki_en-200000--20150531-035019/
 
-This will create about 300 files in the current directory.
+Example command:
+
+```
+mkdir wiki_en-200000--20150531-035019
+cd wiki_en-200000--20150531-035019/
+aws s3 sync s3://mpercy-datasets-01/wiki_en-200000--20150531-035019/ .
+```
+
+This will create about 300 files in the `wiki_en-200000--20150531-035019` current directory.
 
 ## Prepare documents
 
