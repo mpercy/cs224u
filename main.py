@@ -32,15 +32,13 @@ from gensim.similarities import Similarity
 from nltk.tokenize import wordpunct_tokenize
 from os import listdir
 
+program = os.path.basename(sys.argv[0])
+logger = logging.getLogger(program)
 
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+logging.root.setLevel(level=logging.INFO)
 
 def main():
-    program = os.path.basename(sys.argv[0])
-    logger = logging.getLogger(program)
-
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.INFO)
-
     # check and process input arguments
     if len(sys.argv) < 3:
         print(inspect.cleandoc(__doc__) % locals())
@@ -143,7 +141,7 @@ def SVM(train, trainY, test, testY):
     clf = SVC()
     clf.fit(train, trainY)
     prediction = clf.predict(test)
-    print 'training finished'
+    logger.info('training finished')
     totalCnt = len(test)
     correctCnt = 0
     for idx in range(totalCnt):
@@ -167,7 +165,7 @@ def NaiveBayes(train, trainY, test, testY):
     clf = GaussianNB()
     clf.fit(train, trainY)
     prediction = clf.predict(test)
-    print 'trained'
+    logger.info('trained')
     totalCnt = len(test)
     correctCnt = 0
     for idx in range(totalCnt):
@@ -188,27 +186,26 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
     baseFolder = data_dir
     cats = listdir(baseFolder)
     for catIdx in range(len(cats)):
-        print 'processing cat:', cats[catIdx]
+        logger.info('processing cat: %s', cats[catIdx])
         try:
             docs = listdir(baseFolder+'/'+cats[catIdx])[:20]
         except:
             continue
-        docNum = len(docs)
-        for i in range(docNum):
-            print 'processing doc', i
+        numDocs = len(docs)
+        for i in range(numDocs):
+            logger.info('processing doc %d/%d ...', i, numDocs)
             doc = open(baseFolder+'/'+cats[catIdx]+'/'+docs[i]).read()
             seg, regs = topicSearch(doc, model = model)
-            print 'doc', i, 'segmented'
+            logger.info('doc %d segmented', i)
             feature = convertToFeature(seg, regs, model = model)
-            print 'doc', i, 'feature extracted'
-            if i < docNum*0.9:
+            logger.info('doc %d feature extracted', i)
+            if i < numDocs*0.9:
                 train.append(feature)
                 trainY.append(catIdx)
             else:
                 test.append(feature)
                 testY.append(catIdx)
-            print '-----'
-            print
+            logger.info('-----')
     clf(train, trainY, test, testY)
 
 if __name__ == "__main__":
