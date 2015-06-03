@@ -6,6 +6,8 @@ import os.path
 import sys
 from math import isnan
 
+import gensim
+
 sentenceEnds = ['...', '.', '.', '!', '?']
 
 def sentenceSeg(doc):
@@ -28,7 +30,7 @@ def cosine(x, y):
     return rlt
 
 def cosine_sparse(x, y):
-  return sklearn.metrics.pairwise.cosine_similarity(x, y)
+    return sklearn.metrics.pairwise.cosine_similarity(x, y)
 
 class PriorityQueue:
     def __init__(self):
@@ -44,3 +46,15 @@ class PriorityQueue:
 
     def isEmpty():
         return self._queue==[]
+
+class DataSet(gensim.utils.SaveLoad):
+    """
+    Uses the gensim mmap stuff to efficiently save/load a data set.
+    To get the efficiency benefit, the given arguments should be
+    scipy.sparse.csr_matrix instances or numpy ndarrays.
+    """
+    def __init__(self, train, trainY, test, testY):
+        self.train = train
+        self.trainY = trainY
+        self.test = test
+        self.testY = testY

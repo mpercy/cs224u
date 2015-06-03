@@ -14,12 +14,13 @@ Example:
 """
 
 from esa import ESAModel
-from util import sentenceSeg, PriorityQueue, cosine
+from util import sentenceSeg, PriorityQueue, cosine, DataSet
 import inspect
 import logging
 import os.path
 import sys
 import numpy as np
+import scipy.sparse
 
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
@@ -53,7 +54,7 @@ def main():
     evaluation(model_prefix = model_prefix, data_dir = data_dir)
 
 def convertToFeature(seg, regs, model = None):
-    feature = [0.0 for _ in range(model.num_documents())]
+    feature = np.zeros(shape=model.num_documents(), dtype=np.float64)
     # cnt = 0
     for reg in regs:
         # print '\t', cnt
@@ -210,7 +211,7 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
             doc = open(os.path.join(baseFolder, cat_doc_filename)).read()
             seg, regs = topicSearch(doc, model = model)
             logger.info('doc %d segmented', docIdx)
-            feature = convertToFeature(seg, regs, model = model)
+            feature = scipy.sparse.csr_matrix(convertToFeature(seg, regs, model = model))
             logger.info('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)
@@ -220,15 +221,26 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
                 testY.append(catIdx)
             logger.info('-----')
 
-    logger.info("Pickling featurized documents...")
-    gensim.utils.pickle(train, "train.pickle")
-    gensim.utils.pickle(trainY, "trainY.pickle")
-    gensim.utils.pickle(test, "test.pickle")
-    gensim.utils.pickle(testY, "testY.pickle")
+    # Convert to sparse format for compact storage and minimal memory usage.
+    train = scipy.sparse.vstack(train, format='csr')
+    trainY = scipy.sparse.vstack(trainY, format='csr')
+    test = scipy.sparse.vstack(test, format='csr')
+    testY = scipy.sparse.vstack(testY, format='csr')
+
+    # Serialize to disk in an efficient, mmap-able format.
+    dataset = DataSet(train, trainY, test, testY)
+    filename = "dataset_" + model_prefix + ".pickle"
+    logger.info("Saving dataset...")
+    dataset.save(filename)
+    # Free the memory for the existing data structures..
+    del dataset, train, trainY, test, testY
+
+    # Reload the dataset, mmapped.
+    dataset = DataSet.load(filename, mmap='r')
 
     for clf in [NaiveBayes, logisticRegression, SVM]:
         logger.info("Evaluating on classifier %s...", funcname(clf))
-        res = clf(train, trainY, test, testY)
+        res = clf(dataset.train, dataset.trainY, dataset.test, dataset.testY)
         logger.info("Fraction correct: %f", res)
         logger.info("========================")
 
