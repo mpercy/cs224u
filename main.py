@@ -20,12 +20,17 @@ import logging
 import os.path
 import sys
 import numpy as np
+
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+
 try:
    import cPickle as pickle
 except:
    import pickle
 
-from gensim import utils
+import gensim
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
 from gensim.similarities import Similarity
@@ -135,7 +140,6 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
         hypothesesLocations.append((mostSimilar, nxtIdx))
 
     return (initSeg, hypothesesLocations)
-        
 
 def SVM(train, trainY, test, testY):
     clf = SVC()
@@ -164,6 +168,8 @@ def logisticRegression(train, trainY, test, testY):
 def NaiveBayes(train, trainY, test, testY):
     clf = GaussianNB()
     clf.fit(train, trainY)
+
+    logger.info("Predicting...")
     prediction = clf.predict(test)
     logger.info('trained')
     totalCnt = len(test)
@@ -172,6 +178,12 @@ def NaiveBayes(train, trainY, test, testY):
         if prediction[idx] == testY[idx]:
             correctCnt += 1
     return (1.0*correctCnt)/totalCnt
+
+def funcname(f):
+    for attr in inspect.getmembers(f):
+        if attr[0] == '__name__':
+            return attr[1]
+    return None
 
 def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
     train = []
@@ -207,7 +219,18 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
                 test.append(feature)
                 testY.append(catIdx)
             logger.info('-----')
-    clf(train, trainY, test, testY)
+
+    logger.info("Pickling featurized documents...")
+    gensim.utils.pickle(train, "train.pickle")
+    gensim.utils.pickle(trainY, "trainY.pickle")
+    gensim.utils.pickle(test, "test.pickle")
+    gensim.utils.pickle(testY, "testY.pickle")
+
+    for clf in [NaiveBayes, logisticRegression, SVM]:
+        logger.info("Evaluating on classifier %s...", funcname(clf))
+        res = clf(train, trainY, test, testY)
+        logger.info("Fraction correct: %f", res)
+        logger.info("========================")
 
 if __name__ == "__main__":
     main()
