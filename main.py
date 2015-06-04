@@ -53,7 +53,7 @@ def main():
     model_prefix, data_dir = sys.argv[1:3]
 
     # load model
-    #model = ESAModel(model_prefix)
+    #model = ESAModel(model_prefix) # ESA is not working very well.
     model = GloveModel(model_prefix + ".pickle")
 
     evaluation(model = model, model_prefix = model_prefix, data_dir = data_dir)
@@ -240,19 +240,6 @@ def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '
     trainY = np.hstack(trainY)
     test = np.vstack(test)
     testY = np.hstack(testY)
-
-    """
-    # Serialize to disk in an efficient, mmap-able format.
-    dataset = DataSet(train, trainY, test, testY)
-    filename = "dataset_" + model_prefix + ".pickle"
-    logger.info("Saving dataset...")
-    dataset.save(filename)
-    # Free the memory for the existing data structures..
-    del dataset, train, trainY, test, testY
-
-    # Reload the dataset, mmapped.
-    dataset = DataSet.load(filename, mmap='r')
-    """
 
     for clf in [NaiveBayes, logisticRegression, SVM]:
         logger.info("Evaluating on classifier %s...", funcname(clf))
