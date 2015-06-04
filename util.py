@@ -57,3 +57,41 @@ class DataSet(gensim.utils.SaveLoad):
         self.trainY = trainY
         self.test = test
         self.testY = testY
+
+class SimpleDict(gensim.utils.SaveLoad):
+    def __init__(self):
+        self.token2id = {}
+        self.id2token = []
+        self.vectors = []
+
+    def __len__(self):
+        return len(self.id2token)
+
+    def finalize(self):
+        self.vectors = np.vstack(self.vectors)
+
+    # Pilfered from gensim.corpora.Dictionary
+    def doc2bow(self, document):
+        """
+        Convert `document` (a list of words) into the bag-of-words format = list
+        of `(token_id, token_count)` 2-tuples. Each word is assumed to be a
+        **tokenized and normalized** string (either unicode or utf8-encoded). No further preprocessing
+        is done on the words in `document`; apply tokenization, stemming etc. before
+        calling this method.
+        """
+        result = {}
+        document = sorted(gensim.utils.to_unicode(token) for token in document)
+        # construct (word, frequency) mapping. in python3 this is done simply
+        # using Counter(), but here i use itertools.groupby() for the job
+        for word_norm, group in itertools.groupby(document):
+            frequency = len(list(group)) # how many times does this word appear in the input document
+            tokenid = self.token2id.get(word_norm, None)
+            if tokenid is None:
+                continue
+            # update how many times a token appeared in the document
+            result[tokenid] = frequency
+
+        # return tokenids, in ascending id order
+        result = sorted(iteritems(result))
+        return result
+
