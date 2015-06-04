@@ -6,6 +6,7 @@ import os.path
 import re
 import sys
 from math import isnan
+from six import iteritems
 
 import itertools
 import gensim
@@ -66,6 +67,9 @@ class SimpleDict(gensim.utils.SaveLoad):
 
     def __len__(self):
         return len(self.id2token)
+
+    def num_features(self):
+        return self.vectors.shape[1]
 
     def finalize(self):
         self.vectors = np.vstack(self.vectors)

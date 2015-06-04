@@ -13,6 +13,7 @@ Example:
     %(program)s wiki_en
 """
 
+from glove import GloveModel
 from esa import ESAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet
 import inspect
@@ -52,7 +53,8 @@ def main():
     model_prefix, data_dir = sys.argv[1:3]
 
     # load model
-    model = ESAModel(model_prefix)
+    #model = ESAModel(model_prefix)
+    model = GloveModel(model_prefix + ".pickle")
 
     evaluation(model = model, model_prefix = model_prefix, data_dir = data_dir)
 
