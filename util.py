@@ -12,7 +12,7 @@ sentenceEnds = ['...', '.', '.', '!', '?']
 
 def sentenceSeg(doc):
     # new paragraph is meaningless here
-    doc = doc.replace('\n', '').replace('\r', '')
+    doc = doc.replace('\n', ' ').replace('\r', ' ')
     # split the doc with sentence ending marks
     initialRegions = [doc]
     for sentenceEnd in sentenceEnds:
