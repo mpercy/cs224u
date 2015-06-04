@@ -51,7 +51,10 @@ def main():
         sys.exit(1)
     model_prefix, data_dir = sys.argv[1:3]
 
-    evaluation(model_prefix = model_prefix, data_dir = data_dir)
+    # load model
+    model = ESAModel(model_prefix)
+
+    evaluation(model = model, model_prefix = model_prefix, data_dir = data_dir)
 
 def convertToFeature(seg, regs, model = None):
     feature = np.zeros(shape=model.num_features(), dtype=np.float64)
@@ -187,14 +190,11 @@ def funcname(f):
             return attr[1]
     return None
 
-def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
+def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
     train = []
     trainY = []
     test = []
     testY = []
-
-    # load model
-    model = ESAModel(model_prefix)
 
     # load data
     baseFolder = data_dir
