@@ -41,8 +41,8 @@ class ESAModel(object):
         logger.info("ESA: Loading similarity index...")
         self.similarity_index = Similarity.load(model_prefix + '_similarity.index', mmap='r')
 
-        logger.info("ESA: Preloading reverse indexes...")
-        self.similarity_index.preload_reverse_index()
+        #logger.info("ESA: Preloading reverse indexes...")
+        #self.similarity_index.preload_reverse_index()
 
         logger.info("ESA: Finished loading model files.")
 
