@@ -66,6 +66,9 @@ def convertToFeature(seg, regs, model = None):
     return feature
 
 def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceSeg):
+    logger.info("performing topic search...")
+    """ attempt to merge adjacent sentences based on their model similarity """
+
     # facilitating functions
     def getRegion(similarityArray, i, initSeg):
         if similarityArray[i] == 0 and i!=0:
@@ -74,6 +77,7 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
         while(j < len(similarityArray) and similarityArray[j]==0):
             j+=1
         return '.'.join(initSeg[i:j+1])
+
     def getPrevious(similarityArray, i):
         if i == 0:
              return None
@@ -81,6 +85,7 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
         while(similarityArray[pre]==0 and pre != 0):
                pre -= 1
         return pre
+
     def getNext(similarityArray, i):
         l = len(similarityArray)
         next = i+1
@@ -94,27 +99,23 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
 
     # initial proposal of regions
     initSeg = initialPropose(doc)
+    logging.info("Created %d initial segments", len(initSeg))
+
     # recording initial regions
     hypothesesLocations = [(i, i+1) for i in range(len(initSeg))]
-    # similarity is recorded as an array the non-zero value is the start of a 
-    # segment with its similarity to next
-    similaritySet = [0 for _ in range(len(initSeg))]
-    # to mark the last region as -1 
-    similaritySet[-1] = -1
-    # print len(similaritySet), ' segments'
 
-    # initialize similarity set.
-    for i in range(len(similaritySet)-1):
+    # Similarity set is a list of similarities between a segment and its next segment.
+    similaritySet = np.zeros(shape=(len(initSeg) - 1), dtype=np.float64)
+
+    # Initialize similarities.
+    for i in range(len(similaritySet)):
         cur = model.get_similarity(initSeg[i])
-        # print len(cur), 'topics'
-        # exit(1)
-    next = model.get_similarity(initSeg[i+1])
-    similaritySet[i] = similarity(cur, next)
-    # print 'similarity initialized!'
-    # print similaritySet
-    # print 
-    while(True):
-        # print similaritySet
+        next = model.get_similarity(initSeg[i+1])
+        similaritySet[i] = similarity(cur, next)
+    logger.info('Similarity initialized!')
+
+    while True:
+        logger.info("Segment similarities: %s", similaritySet)
         # get the most similar
         mostSimilar = np.argmax(similaritySet)
         if similaritySet[mostSimilar] == 0:
@@ -199,19 +200,22 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
     baseFolder = data_dir
     cats = listdir(baseFolder)
     for catIdx, cat in enumerate(cats):
-        logger.info('processing category %s (%d/%d)', cat, catIdx, len(cats))
+        logger.info('==========================================================')
+        logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
             docs = listdir(os.path.join(baseFolder, cat))[:20]
         except:
             continue
         numDocs = len(docs)
         for docIdx, doc_filename in enumerate(docs):
-            cat_doc_filename = os.path.join(cat, doc_filename)
-            logger.info('processing document %s (%d/%d)', cat_doc_filename, docIdx, numDocs)
-            doc = open(os.path.join(baseFolder, cat_doc_filename)).read()
+            doc_filename = os.path.join(baseFolder, cat, doc_filename)
+            logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
+            logger.info('also things')
+            doc = open(doc_filename).read()
             seg, regs = topicSearch(doc, model = model)
             logger.info('doc %d segmented', docIdx)
             feature = scipy.sparse.csr_matrix(convertToFeature(seg, regs, model = model))
+            logger.info("Feature shape: %s, nnz: %d", feature.shape, feature.nnz)
             logger.info('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)
@@ -220,6 +224,7 @@ def evaluation(clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828')
                 test.append(feature)
                 testY.append(catIdx)
             logger.info('-----')
+    logger.info('==========================================================')
 
     # Convert to sparse format for compact storage and minimal memory usage.
     train = scipy.sparse.vstack(train, format='csr')
