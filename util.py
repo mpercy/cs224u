@@ -3,24 +3,23 @@ import sklearn.metrics.pairwise
 import inspect
 import logging
 import os.path
+import re
 import sys
 from math import isnan
 
+import itertools
 import gensim
+import numpy as np
 
-sentenceEnds = ['...', '.', '.', '!', '?']
+sentenceEnds = ['...', '.', ';', '!', '?']
+sentenceEndPattern = re.compile('|'.join([re.escape(tok) for tok in sentenceEnds]))
 
 def sentenceSeg(doc):
     # new paragraph is meaningless here
-    doc = doc.replace('\n', ' ').replace('\r', ' ')
+    doc = re.sub(r'\s+', ' ', doc)
     # split the doc with sentence ending marks
-    initialRegions = [doc]
-    for sentenceEnd in sentenceEnds:
-        tmp = []
-        for region in initialRegions:
-            tmp += region.split(sentenceEnd)
-        initialRegions = tmp
-    return [x for x in initialRegions if x!='']
+    initialRegions = re.split(sentenceEndPattern, doc)
+    return [x for x in initialRegions if x != '']
 
 def cosine(x, y):
     rlt =  distance.cosine(x, y)

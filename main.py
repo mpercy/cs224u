@@ -54,13 +54,13 @@ def main():
     evaluation(model_prefix = model_prefix, data_dir = data_dir)
 
 def convertToFeature(seg, regs, model = None):
-    feature = np.zeros(shape=model.num_documents(), dtype=np.float64)
+    feature = np.zeros(shape=model.num_features(), dtype=np.float64)
     # cnt = 0
     for reg in regs:
         # print '\t', cnt
         # cnt += 1
         doc = ' '.join(seg[reg[0]:reg[1]])
-        s = model.get_similarity(doc)
+        s = model.featurize(doc)
         feature = np.amax([s, feature], axis=0)
         # print feature.shape, s.shape
     return feature
@@ -109,8 +109,8 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
 
     # Initialize similarities.
     for i in range(len(similaritySet)):
-        cur = model.get_similarity(initSeg[i])
-        next = model.get_similarity(initSeg[i+1])
+        cur = model.featurize(initSeg[i])
+        next = model.featurize(initSeg[i+1])
         similaritySet[i] = similarity(cur, next)
     logger.info('Similarity initialized!')
 
@@ -125,17 +125,17 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
         similaritySet[getNext(similaritySet, mostSimilar)] = 0
 
         # set the similarity score properly
-        cur = model.get_similarity(getRegion(similaritySet, mostSimilar, initSeg))
+        cur = model.featurize(getRegion(similaritySet, mostSimilar, initSeg))
         preIdx = getPrevious(similaritySet, mostSimilar)
         if preIdx != None:
             # print 'pre idx:', preIdx
-            pre = model.get_similarity(getRegion(similaritySet, preIdx, initSeg))
+            pre = model.featurize(getRegion(similaritySet, preIdx, initSeg))
             similaritySet[preIdx] = similarity(pre, cur)
         nxtIdx = getNext(similaritySet, mostSimilar)
         if nxtIdx == None:
             similaritySet[mostSimilar] = -1
         else:
-            nxt = model.get_similarity(getRegion(similaritySet, nxtIdx, initSeg))
+            nxt = model.featurize(getRegion(similaritySet, nxtIdx, initSeg))
             similaritySet[mostSimilar] = similarity(cur, nxt)
         # print
         # add new region to hypotheses locations

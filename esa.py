@@ -46,7 +46,8 @@ class ESAModel(object):
 
         logger.info("ESA: Finished loading model files.")
 
-    def num_documents(self):
+    # Features in the similarity model, actually documents.
+    def num_features(self):
         """ Returns number of documents in the index. """
         return len(self.similarity_index)
 
@@ -54,7 +55,7 @@ class ESAModel(object):
         """ Returns the number of words / features / terms used in the vocabulary. """
         return len(self.dictionary)
 
-    def get_similarity(self, input_str, num_best=None, use_reverse_index=True):
+    def featurize(self, input_str, num_best=None, use_reverse_index=True):
         """
         Returns similar documents by cosine similarity based on TF-IDF score.
         If num_best is left as None, returns a numpy.array with a score for
