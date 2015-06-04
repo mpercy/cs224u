@@ -74,31 +74,37 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
     logger.info("performing topic search...")
     """ attempt to merge adjacent sentences based on their model similarity """
 
-    # facilitating functions
-    def getRegion(similarityArray, i, initSeg):
-        if similarityArray[i] == 0 and i!=0:
-            raise Exception("Not a region head...", "what's this for?")
-        j = i
-        while(j < len(similarityArray) and similarityArray[j]==0):
-            j+=1
-        return '.'.join(initSeg[i:j+1])
+    # Get a joined region of sentences starting at pairIndex and continuing as
+    # long as the pair similarities are 0, which means either they are disjoint
+    # or have been merged.
+    def getRegion(pairSimilarities, pairIndex, segments):
+        if pairSimilarities[pairIndex] == 0 and pairIndex != 0:
+            raise Exception("Similarity of pair at index %d is 0: pair=('%s', '%s'), segments: %s" %
+                            (pairIndex, segments[pairIndex], segments[pairIndex+1], segments))
+        nextIndex = pairIndex
+        while nextIndex < len(pairSimilarities) and pairSimilarities[nextIndex] == 0:
+            nextIndex += 1
+        return '. '.join(segments[pairIndex:nextIndex+1])
 
-    def getPrevious(similarityArray, i):
-        if i == 0:
-             return None
-        pre = i-1
-        while(similarityArray[pre]==0 and pre != 0):
-               pre -= 1
-        return pre
-
-    def getNext(similarityArray, i):
-        l = len(similarityArray)
-        next = i+1
-        while(next<l and similarityArray[next]==0):
-            next += 1
-        if next >= l:
+    # Returns the first index in pairSimilarities less than pairIndex in which
+    # the pair similarity is nonzero, or None if it can't find one.
+    def getPrevious(pairSimilarities, pairIndex):
+        pairIndex -= 1
+        while pairIndex >= 0 and pairSimilarities[pairIndex] == 0:
+            pairIndex -= 1
+        if pairIndex < 0:
             return None
-        return next
+        return pairIndex
+
+    # Returns the next index in pairSimilarities after pairIndex in which the
+    # pair similarity is nonzero, or None if it can't find one.
+    def getNext(pairSimilarities, pairIndex):
+        pairIndex += 1
+        while pairIndex < len(pairSimilarities) and pairSimilarities[pairIndex] == 0:
+            pairIndex += 1
+        if pairIndex >= len(pairSimilarities):
+            return None
+        return pairIndex
 
 
 
@@ -114,37 +120,41 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
 
     # Initialize similarities.
     for i in range(len(similaritySet)):
-        cur = model.featurize(initSeg[i])
-        next = model.featurize(initSeg[i+1])
-        similaritySet[i] = similarity(cur, next)
-    logger.info('Similarity initialized!')
+        curSegment = model.featurize(initSeg[i])
+        nextSegment = model.featurize(initSeg[i+1])
+        similaritySet[i] = similarity(curSegment, nextSegment)
+    #logger.info('Similarity initialized!')
 
     while True:
-        logger.info("Segment similarities: %s", similaritySet)
+        #logger.info("Segment similarities: %s", similaritySet)
         # get the most similar
-        mostSimilar = np.argmax(similaritySet)
-        if similaritySet[mostSimilar] == 0:
+        mostSimilarIndex = np.argmax(similaritySet)
+        if similaritySet[mostSimilarIndex] == 0:
             break
 
-        # merge region
-        similaritySet[getNext(similaritySet, mostSimilar)] = 0
+        # Attempt to merge region.
+        nextIndex = getNext(similaritySet, mostSimilarIndex)
+        if nextIndex is not None:
+            similaritySet[nextIndex] = 0
 
-        # set the similarity score properly
-        cur = model.featurize(getRegion(similaritySet, mostSimilar, initSeg))
-        preIdx = getPrevious(similaritySet, mostSimilar)
-        if preIdx != None:
-            # print 'pre idx:', preIdx
-            pre = model.featurize(getRegion(similaritySet, preIdx, initSeg))
-            similaritySet[preIdx] = similarity(pre, cur)
-        nxtIdx = getNext(similaritySet, mostSimilar)
-        if nxtIdx == None:
-            similaritySet[mostSimilar] = -1
+        # Recalculate similarity scores.
+        curSegFeatures = model.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
+
+        prevIndex = getPrevious(similaritySet, mostSimilarIndex)
+        if prevIndex != None:
+            # print 'pre idx:', prevIndex
+            prevFeatures = model.featurize(getRegion(similaritySet, prevIndex, initSeg))
+            similaritySet[prevIndex] = similarity(prevFeatures, curSegFeatures)
+
+        nextIndex = getNext(similaritySet, mostSimilarIndex)
+        if nextIndex == None:
+            similaritySet[mostSimilarIndex] = -1
         else:
-            nxt = model.featurize(getRegion(similaritySet, nxtIdx, initSeg))
-            similaritySet[mostSimilar] = similarity(cur, nxt)
-        # print
+            nextFeatures = model.featurize(getRegion(similaritySet, nextIndex, initSeg))
+            similaritySet[mostSimilarIndex] = similarity(curSegFeatures, nextFeatures)
+
         # add new region to hypotheses locations
-        hypothesesLocations.append((mostSimilar, nxtIdx))
+        hypothesesLocations.append((mostSimilarIndex, nextIndex))
 
     return (initSeg, hypothesesLocations)
 
@@ -202,7 +212,6 @@ def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '
     baseFolder = data_dir
     cats = listdir(baseFolder)
     for catIdx, cat in enumerate(cats):
-        logger.info('==========================================================')
         logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
             docs = listdir(os.path.join(baseFolder, cat))[:20]
@@ -212,28 +221,27 @@ def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '
         for docIdx, doc_filename in enumerate(docs):
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
-            logger.info('also things')
             doc = open(doc_filename).read()
+            #feature = model.featurize(doc)
             seg, regs = topicSearch(doc, model = model)
-            logger.info('doc %d segmented', docIdx)
-            feature = scipy.sparse.csr_matrix(convertToFeature(seg, regs, model = model))
-            logger.info("Feature shape: %s, nnz: %d", feature.shape, feature.nnz)
-            logger.info('doc %d feature extracted', docIdx)
+            logger.debug('doc %d segmented', docIdx)
+            feature = convertToFeature(seg, regs, model = model)
+            logger.debug('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)
                 trainY.append(catIdx)
             else:
                 test.append(feature)
                 testY.append(catIdx)
-            logger.info('-----')
-    logger.info('==========================================================')
+            logger.debug('-----')
 
     # Convert to sparse format for compact storage and minimal memory usage.
-    train = scipy.sparse.vstack(train, format='csr')
-    trainY = scipy.sparse.vstack(trainY, format='csr')
-    test = scipy.sparse.vstack(test, format='csr')
-    testY = scipy.sparse.vstack(testY, format='csr')
+    train = np.vstack(train)
+    trainY = np.hstack(trainY)
+    test = np.vstack(test)
+    testY = np.hstack(testY)
 
+    """
     # Serialize to disk in an efficient, mmap-able format.
     dataset = DataSet(train, trainY, test, testY)
     filename = "dataset_" + model_prefix + ".pickle"
@@ -244,10 +252,11 @@ def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '
 
     # Reload the dataset, mmapped.
     dataset = DataSet.load(filename, mmap='r')
+    """
 
     for clf in [NaiveBayes, logisticRegression, SVM]:
         logger.info("Evaluating on classifier %s...", funcname(clf))
-        res = clf(dataset.train, dataset.trainY, dataset.test, dataset.testY)
+        res = clf(train, trainY, test, testY)
         logger.info("Fraction correct: %f", res)
         logger.info("========================")
 

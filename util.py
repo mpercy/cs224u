@@ -20,7 +20,7 @@ def sentenceSeg(doc):
     doc = re.sub(r'\s+', ' ', doc)
     # split the doc with sentence ending marks
     initialRegions = re.split(sentenceEndPattern, doc)
-    return [x for x in initialRegions if x != '']
+    return [x.strip() for x in initialRegions if x != '']
 
 def cosine(x, y):
     rlt =  distance.cosine(x, y)
