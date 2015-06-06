@@ -10,7 +10,7 @@ filename prefix of the ESA model files, which must be in the current directory.
 data_dir should be the base folder for the newsgroups data.
 
 Example:
-    %(program)s wiki_en
+    %(program)s wiki_en 20news-18828
 """
 
 from glove import GloveModel
@@ -48,31 +48,31 @@ logging.root.setLevel(level=logging.INFO)
 def main():
     # check and process input arguments
     if len(sys.argv) < 3:
-        print(inspect.cleandoc(__doc__) % locals())
+        print(inspect.cleandoc(__doc__) % {"program": program})
         sys.exit(1)
     model_prefix, data_dir = sys.argv[1:3]
 
-    # load model
-    #model = ESAModel(model_prefix) # ESA is not working very well.
-    model = GloveModel(model_prefix + ".pickle")
+    # load feature extractor
+    #feature_extractor = ESAModel(model_prefix) # ESA is not working very well.
+    feature_extractor = GloveModel(model_prefix + ".pickle")
 
-    evaluation(model = model, model_prefix = model_prefix, data_dir = data_dir)
+    evaluation(feature_extractor = feature_extractor, model_prefix = model_prefix, data_dir = data_dir)
 
-def convertToFeature(seg, regs, model = None):
-    feature = np.zeros(shape=model.num_features(), dtype=np.float64)
+def convertToFeature(seg, regs, feature_extractor = None):
+    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
     # cnt = 0
     for reg in regs:
         # print '\t', cnt
         # cnt += 1
         doc = ' '.join(seg[reg[0]:reg[1]])
-        s = model.featurize(doc)
+        s = feature_extractor.featurize(doc)
         feature = np.amax([s, feature], axis=0)
         # print feature.shape, s.shape
     return feature
 
-def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceSeg):
+def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose = sentenceSeg):
     logger.info("performing topic search...")
-    """ attempt to merge adjacent sentences based on their model similarity """
+    """ attempt to merge adjacent sentences based on their feature_extractor similarity """
 
     # Get a joined region of sentences starting at pairIndex and continuing as
     # long as the pair similarities are 0, which means either they are disjoint
@@ -120,8 +120,8 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
 
     # Initialize similarities.
     for i in range(len(similaritySet)):
-        curSegment = model.featurize(initSeg[i])
-        nextSegment = model.featurize(initSeg[i+1])
+        curSegment = feature_extractor.featurize(initSeg[i])
+        nextSegment = feature_extractor.featurize(initSeg[i+1])
         similaritySet[i] = similarity(curSegment, nextSegment)
     #logger.info('Similarity initialized!')
 
@@ -138,19 +138,19 @@ def topicSearch(doc, model=None, similarity = cosine, initialPropose = sentenceS
             similaritySet[nextIndex] = 0
 
         # Recalculate similarity scores.
-        curSegFeatures = model.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
+        curSegFeatures = feature_extractor.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
 
         prevIndex = getPrevious(similaritySet, mostSimilarIndex)
         if prevIndex != None:
             # print 'pre idx:', prevIndex
-            prevFeatures = model.featurize(getRegion(similaritySet, prevIndex, initSeg))
+            prevFeatures = feature_extractor.featurize(getRegion(similaritySet, prevIndex, initSeg))
             similaritySet[prevIndex] = similarity(prevFeatures, curSegFeatures)
 
         nextIndex = getNext(similaritySet, mostSimilarIndex)
         if nextIndex == None:
             similaritySet[mostSimilarIndex] = -1
         else:
-            nextFeatures = model.featurize(getRegion(similaritySet, nextIndex, initSeg))
+            nextFeatures = feature_extractor.featurize(getRegion(similaritySet, nextIndex, initSeg))
             similaritySet[mostSimilarIndex] = similarity(curSegFeatures, nextFeatures)
 
         # add new region to hypotheses locations
@@ -202,7 +202,7 @@ def funcname(f):
             return attr[1]
     return None
 
-def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
+def evaluation(feature_extractor = None, clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
     train = []
     trainY = []
     test = []
@@ -222,10 +222,10 @@ def evaluation(model = None, clf = NaiveBayes, model_prefix = None, data_dir = '
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
             doc = open(doc_filename).read()
-            #feature = model.featurize(doc)
-            seg, regs = topicSearch(doc, model = model)
+            #feature = feature_extractor.featurize(doc)
+            seg, regs = topicSearch(doc, feature_extractor = feature_extractor)
             logger.debug('doc %d segmented', docIdx)
-            feature = convertToFeature(seg, regs, model = model)
+            feature = convertToFeature(seg, regs, feature_extractor = feature_extractor)
             logger.debug('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)
