@@ -1,6 +1,5 @@
 from scipy.spatial import distance
 import sklearn.metrics.pairwise
-import inspect
 import logging
 import os.path
 import re
@@ -262,3 +261,6 @@ class FlatFeatureExtractor(object):
 
     def featurize(self, doc):
         return self.feature_extractor.featurize(doc)
+
+def function_name(f):
+    return f.__name__

@@ -15,8 +15,9 @@ Example:
 
 from glove import GloveModel
 from esa import ESAModel
-from util import sentenceSeg, PriorityQueue, cosine, DataSet, \
-                 MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor
+from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
+                 MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
+                 FlatFeatureExtractor
 import argparse
 import inspect
 import json
@@ -29,6 +30,7 @@ import scipy.sparse
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
+from sklearn.metrics import classification_report, f1_score, precision_recall_fscore_support
 
 try:
    import cPickle as pickle
@@ -52,52 +54,8 @@ DEFAULT_MODEL = 'GloveModel'
 DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
 DEFAULT_NUM_REGIONS = 15
 
-def SVM(train, trainY, test, testY):
-    clf = SVC()
-    clf.fit(train, trainY)
-    prediction = clf.predict(test)
-    logger.info('training finished')
-    totalCnt = len(test)
-    correctCnt = 0
-    for idx in range(totalCnt):
-        if prediction[idx] == testY[idx]:
-            correctCnt += 1
-    return (1.0*correctCnt)/totalCnt
-
-def logisticRegression(train, trainY, test, testY):
-    clf = LogisticRegression()
-    clf.fit(train, trainY)
-    prediction = clf.predict(test)
-
-    totalCnt = len(test)
-    correctCnt = 0
-    for idx in range(totalCnt):
-        if prediction[idx] == testY[idx]:
-            correctCnt += 1
-    return (1.0*correctCnt)/totalCnt
-
-def NaiveBayes(train, trainY, test, testY):
-    clf = GaussianNB()
-    clf.fit(train, trainY)
-
-    logger.info("Predicting...")
-    prediction = clf.predict(test)
-    logger.info('trained')
-    totalCnt = len(test)
-    correctCnt = 0
-    for idx in range(totalCnt):
-        if prediction[idx] == testY[idx]:
-            correctCnt += 1
-    return (1.0*correctCnt)/totalCnt
-
-def funcname(f):
-    for attr in inspect.getmembers(f):
-        if attr[0] == '__name__':
-            return attr[1]
-    return None
-
 def evaluation(feature_extractor = None,
-               clf = NaiveBayes,
+               clf = GaussianNB,
                model_prefix = None,
                data_dir = '20news-18828',
                result_record = None,
@@ -144,13 +102,28 @@ def evaluation(feature_extractor = None,
     logger.info("Shape of training set: %s", train.shape)
     logger.info("Shape of test set: %s", test.shape)
 
-    for clf in [NaiveBayes, logisticRegression, SVM]:
-        classifier_name = funcname(clf)
+    for clf_class in [GaussianNB, LogisticRegression, SVC]:
+        classifier_name = function_name(clf_class)
+        if classifier_name is None:
+            raise Exception("Unable to get name of classifier class", clf_class)
+
         logger.info("Evaluating on classifier %s...", classifier_name)
-        result = clf(train, trainY, test, testY)
-        logger.info("Fraction correct: %f", result)
-        logger.info("========================")
-        result_record[classifier_name] = result
+        clf = clf_class()
+        clf.fit(train, trainY)
+        logger.info('training finished')
+
+        # Make prediction.
+        testPredY = clf.predict(test)
+
+        # Print detailed report.
+        print(classification_report(testY, testPredY, target_names = cats, digits = 5))
+
+        # Save the important metrics.
+        precision, recall, f1, support = \
+            precision_recall_fscore_support(testY, testPredY, average='micro')
+        result_record[classifier_name + "_precision"] = precision
+        result_record[classifier_name + "_recall"] = recall
+        result_record[classifier_name + "_f1"] = f1
 
     with open(record_fname, "a") as records_out:
         json.dump(result_record, records_out, sort_keys = True)
