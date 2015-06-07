@@ -16,6 +16,75 @@ sentenceEndPattern = re.compile('|'.join([re.escape(tok) for tok in sentenceEnds
 
 logger = logging.getLogger("cs224u.util")
 
+class TopicTree:
+    '''
+        defines a tree structure for topics
+        region is the starting and ending postion of current topic
+        childeren are the topics of next level
+    '''
+    def __init__(self, region=None):
+        self.region = region
+        self.children = []
+
+    def dump(self):
+        log = str(self.region[0])+','+str(self.region[1])+': '
+        for c in self.children:
+            log += str(c.region[0]) + ',' + str(c.region[1]) + ';'
+
+        print log
+
+
+def parseTree(regs, length):
+    '''
+        this function parses the regs into a tree
+        regs are the proposed regions, 
+        length is the document length which is also the largest number in the regs
+        this will return a 
+    '''
+    regions = dict()
+    for start, end in regs:
+        try:
+            regions[start].append(end)
+        except:
+            regions[start] = [end]
+    if length not in regions[0]:
+        raise ValueError('Document is not fully covered. Topic search error!')
+    root = TopicTree((0, length))
+    regions[0].remove(length)
+
+    def findChildren(node):
+        s, e = node.region
+        if e == s+1:
+            return
+        nxt = s
+        while nxt < e:
+            nxte = max(regions[nxt])
+            tmp = TopicTree((nxt, nxte))
+            node.children.append(tmp)
+            regions[nxt].remove(nxte)
+            nxt = nxte
+
+        for child in node.children:
+            findChildren(child)
+    findChildren(root)
+    return root
+
+def getLayer(root, depth, fullCoverage = True):
+    layer = [root]
+    for i in range(depth):
+        tmp = []
+        for node in layer:
+            if node.children:
+                for c in node.children:
+                    tmp.append(c)
+            elif fullCoverage:
+                tmp.append(node)
+        layer = tmp
+    return layer 
+
+
+
+
 def sentenceSeg(doc):
     # new paragraph is meaningless here
     doc = re.sub(r'\s+', ' ', doc)

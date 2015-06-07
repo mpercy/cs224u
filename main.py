@@ -17,7 +17,7 @@ from glove import GloveModel
 from esa import ESAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
-                 FlatFeatureExtractor
+                 FlatFeatureExtractor, topicSearch, parseTree, getLayer
 import argparse
 import inspect
 import json
@@ -53,6 +53,46 @@ logging.root.setLevel(level=logging.INFO)
 DEFAULT_MODEL = 'GloveModel'
 DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
 DEFAULT_NUM_REGIONS = 15
+
+
+def main():
+    testFullcoverage()
+
+def testParseTree():
+    tmp = pickle.load(open('d.pickle'))
+    regs = tmp['regions']
+    root = parseTree(regs, 32)
+    layers = [root]
+    while layers:
+        log = ''
+        nxtLayers = []
+        for node in layers:
+            s, e = node.region
+            log += str(s)+','+str(e)+'; '
+            for c in node.children:
+                nxtLayers.append(c)
+        print log
+        layers = nxtLayers
+
+def testFullcoverage():
+    tmp = pickle.load(open('d.pickle'))
+    regs = tmp['regions']
+    root = parseTree(regs, 32)
+    layers = getLayer(root, 7, fullCoverage=True)
+    log = ''
+    for node in layers:
+        log += str(node.region[0]) + ',' + str(node.region[1])+ '; '
+    print log
+
+
+def parsingDoc():
+    m = ESAModel('wiki_en-200000--20150531-035019')
+    doc = open('/Users/Ted/Dropbox/2015_Spring/CS224U/cs224u/20news-18828/comp.os.ms-windows.misc/8514').read()
+
+    initSeg, hypoLoc = topicSearch(doc, feature_extractor=m)
+    print initSeg
+    print hypoLoc
+
 
 def evaluation(feature_extractor = None,
                clf = GaussianNB,
@@ -129,8 +169,7 @@ def evaluation(feature_extractor = None,
         json.dump(result_record, records_out, sort_keys = True)
         records_out.write("\n")
 
-if __name__ == "__main__":
-
+def evaluate():
     # Define command-line args.
     parser = argparse.ArgumentParser(description='Evaluate topic classification approaches.',
                                      epilog=str(inspect.cleandoc(__doc__) % {'program': program}))
@@ -176,3 +215,5 @@ if __name__ == "__main__":
                data_dir = args.data_dir,
                result_record = result_record,
                record_fname = args.record_fname)
+if __name__ == '__main__':
+    main()
