@@ -15,9 +15,11 @@ Example:
 
 from glove import GloveModel
 from esa import ESAModel
-from util import sentenceSeg, PriorityQueue, cosine, DataSet, MaxTopicFeatureExtractor
+from util import sentenceSeg, PriorityQueue, cosine, DataSet, \
+                 MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor
 import argparse
 import inspect
+import json
 import logging
 import os.path
 import sys
@@ -46,33 +48,9 @@ logger = logging.getLogger(program)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
-DEFAULT_MODEL='GloveModel'
-DEFAULT_FEATURIZER='MaxTopicFeatureExtractor'
-
-def main():
-    # Define command-line args.
-    parser = argparse.ArgumentParser(description='Evaluate topic classification approaches.',
-                                     epilog=str(inspect.cleandoc(__doc__) % {'program': program}))
-    parser.add_argument('--model', help=('Base feature model. Default: ' + DEFAULT_MODEL))
-    parser.set_defaults(model=DEFAULT_MODEL)
-    parser.add_argument('--featurizer', help=('Higher level featurizer. Default: ' + DEFAULT_FEATURIZER))
-    parser.set_defaults(featurizer=DEFAULT_FEATURIZER)
-    parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
-    parser.add_argument('data_dir', help='Directory to find the newsgroups data in ')
-    args = parser.parse_args()
-
-    # load base feature model
-    model_clazz = globals()[args.model]
-    model = model_clazz(args.model_prefix)
-    #model = ESAModel(args.model_prefix) # ESA is not working very well.
-    #model = GloveModel(args.model_prefix)
-
-    # load secondary feature extractor
-    featurizer_clazz = globals()[args.featurizer]
-    featurizer = featurizer_clazz(base_feature_extractor = model)
-    #featurizer = MaxTopicFeatureExtractor(base_feature_extractor = model)
-
-    evaluation(feature_extractor = featurizer, model_prefix = args.model_prefix, data_dir = args.data_dir)
+DEFAULT_MODEL = 'GloveModel'
+DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
+DEFAULT_NUM_REGIONS = 15
 
 def SVM(train, trainY, test, testY):
     clf = SVC()
@@ -118,7 +96,16 @@ def funcname(f):
             return attr[1]
     return None
 
-def evaluation(feature_extractor = None, clf = NaiveBayes, model_prefix = None, data_dir = '20news-18828'):
+def evaluation(feature_extractor = None,
+               clf = NaiveBayes,
+               model_prefix = None,
+               data_dir = '20news-18828',
+               result_record = None,
+               record_fname = None):
+    if result_record is None:
+        raise Exception("Must pass result_record")
+    if record_fname is None:
+        raise Exception("Must pass record_fname")
     train = []
     trainY = []
     test = []
@@ -154,11 +141,58 @@ def evaluation(feature_extractor = None, clf = NaiveBayes, model_prefix = None, 
     test = np.vstack(test)
     testY = np.hstack(testY)
 
+    logger.info("Shape of training set: %s", train.shape)
+    logger.info("Shape of test set: %s", test.shape)
+
     for clf in [NaiveBayes, logisticRegression, SVM]:
-        logger.info("Evaluating on classifier %s...", funcname(clf))
-        res = clf(train, trainY, test, testY)
-        logger.info("Fraction correct: %f", res)
+        classifier_name = funcname(clf)
+        logger.info("Evaluating on classifier %s...", classifier_name)
+        result = clf(train, trainY, test, testY)
+        logger.info("Fraction correct: %f", result)
         logger.info("========================")
+        result_record[classifier_name] = result
+
+    with open(record_fname, "a") as records_out:
+        json.dump(result_record, records_out, sort_keys = True)
+        records_out.write("\n")
 
 if __name__ == "__main__":
-    main()
+
+    # Define command-line args.
+    parser = argparse.ArgumentParser(description='Evaluate topic classification approaches.',
+                                     epilog=str(inspect.cleandoc(__doc__) % {'program': program}))
+    parser.add_argument('--model', help=('Base feature model. Default: ' + DEFAULT_MODEL))
+    parser.set_defaults(model=DEFAULT_MODEL)
+    parser.add_argument('--featurizer',
+                        help=('Higher level featurizer. Default: ' + DEFAULT_FEATURIZER))
+    parser.set_defaults(featurizer=DEFAULT_FEATURIZER)
+    parser.add_argument('--max_regions', type=int,
+                        help=('Maximum regions to use. Default: ' + str(DEFAULT_NUM_REGIONS)))
+    parser.set_defaults(max_regions=DEFAULT_NUM_REGIONS)
+    parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
+    parser.add_argument('data_dir', help='Directory in which to find the 20-newsgroups data.')
+    parser.add_argument('record_fname', help='Filename to append result records.')
+    args = parser.parse_args()
+
+    # load base feature model
+    model_clazz = globals()[args.model]
+    model = model_clazz(args.model_prefix)
+    #model = ESAModel(args.model_prefix) # ESA is not working very well.
+    #model = GloveModel(args.model_prefix)
+
+    # load secondary feature extractor
+    featurizer_clazz = globals()[args.featurizer]
+    featurizer = featurizer_clazz(base_feature_extractor = model)
+    #featurizer = MaxTopicFeatureExtractor(base_feature_extractor = model)
+
+    result_record = {}
+    result_record['model_prefix'] = args.model_prefix
+    result_record['model'] = args.model
+    result_record['featurizer'] = args.featurizer
+    result_record['max_regions'] = args.max_regions
+
+    evaluation(feature_extractor = featurizer,
+               model_prefix = args.model_prefix,
+               data_dir = args.data_dir,
+               result_record = result_record,
+               record_fname = args.record_fname)

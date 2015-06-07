@@ -101,23 +101,9 @@ class SimpleDict(gensim.utils.SaveLoad):
         result = sorted(iteritems(result))
         return result
 
-# Rename of convertToFeature() function.
-# Performs an element-wise max on the extracted feature vectors.
-def piecewiseMaxFeatures(seg, regs, feature_extractor = None):
-    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
-    # cnt = 0
-    for reg in regs:
-        # print '\t', cnt
-        # cnt += 1
-        doc = ' '.join(seg[reg[0]:reg[1]])
-        s = feature_extractor.featurize(doc)
-        feature = np.amax([s, feature], axis=0)
-        # print feature.shape, s.shape
-    return feature
-
 # Perform topic search and return a list of tuples containing progressively merged topics.
 def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose = sentenceSeg):
-    logger.info("performing topic search...")
+    logger.debug("performing topic search...")
     """ attempt to merge adjacent sentences based on their feature_extractor similarity """
 
     # Get a joined region of sentences starting at pairIndex and continuing as
@@ -202,13 +188,77 @@ def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose
 
     return (initSeg, hypothesesLocations)
 
+# Rename of convertToFeature() function.
+# Performs an element-wise max on the extracted feature vectors.
+def piecewiseMaxFeatures(tokens, regions, feature_extractor = None):
+    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
+    # cnt = 0
+    for region_start, region_end in regions:
+        # print '\t', cnt
+        # cnt += 1
+        doc = ' '.join(tokens[region_start:region_end])
+        s = feature_extractor.featurize(doc)
+        feature = np.amax([s, feature], axis=0)
+        # print feature.shape, s.shape
+    return feature
+
+# Take the last 15 regions
+def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_regions = 15):
+    features_per_region = feature_extractor.num_features()
+    tot_num_features = features_per_region * max_regions
+    doc_vec = np.zeros(shape=tot_num_features, dtype=np.float64)
+    for i in range(len(regions)):
+        if i >= max_regions:
+            break
+        # Iterate in reverse order.
+        idx = len(regions) - 1 - i
+        region_start, region_end = regions[idx]
+        doc = ' '.join(tokens[region_start:region_end])
+        region_vec = feature_extractor.featurize(doc)
+        doc_offset = i * features_per_region
+        doc_vec[doc_offset:doc_offset + features_per_region] = region_vec
+    return doc_vec
+
 class MaxTopicFeatureExtractor(object):
     def __init__(self, base_feature_extractor = None):
         if base_feature_extractor is None:
             raise Exception("model must be specified")
         self.feature_extractor = base_feature_extractor
 
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
     def featurize(self, doc):
-        seg, regs = topicSearch(doc, feature_extractor = self.feature_extractor)
-        feature = piecewiseMaxFeatures(seg, regs, feature_extractor = self.feature_extractor)
+        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        feature = piecewiseMaxFeatures(tokens, regions, feature_extractor = self.feature_extractor)
         return feature
+
+class HierarchicalTopicFeatureExtractor(object):
+    def __init__(self, base_feature_extractor = None, max_regions = 15):
+        if base_feature_extractor is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = base_feature_extractor
+        self.max_regions = max_regions
+
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
+    def featurize(self, doc):
+        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        features = mergeHierarchicalSegments(tokens,
+                                             regions,
+                                             feature_extractor = self.feature_extractor,
+                                             max_regions = self.max_regions)
+        return features
+
+class FlatFeatureExtractor(object):
+    def __init__(self, base_feature_extractor = None):
+        if base_feature_extractor is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = base_feature_extractor
+
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
+    def featurize(self, doc):
+        return self.feature_extractor.featurize(doc)
