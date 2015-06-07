@@ -234,7 +234,8 @@ def piecewiseMaxFeatures(segments, regions, feature_extractor = None):
         # print feature.shape, s.shape
     return feature
 
-# Take the last 15 regions
+# Take the last 15 regions.
+# This function takes a simple "unrolling" approach to hierarchical features.
 def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_regions = 15, reverse = True):
     features_per_region = feature_extractor.num_features()
     tot_num_features = features_per_region * max_regions
