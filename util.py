@@ -21,7 +21,12 @@ def sentenceSeg(doc):
     doc = re.sub(r'\s+', ' ', doc)
     # split the doc with sentence ending marks
     initialRegions = re.split(sentenceEndPattern, doc)
-    return [x.strip() for x in initialRegions if x != '']
+    regions = []
+    for r in initialRegions:
+        stripped = r.strip()
+        if stripped != '':
+            regions.append(stripped)
+    return regions
 
 def cosine(x, y):
     rlt =  distance.cosine(x, y)
@@ -104,108 +109,133 @@ class SimpleDict(gensim.utils.SaveLoad):
         return result
 
 # Perform topic search and return a list of tuples containing progressively merged topics.
-def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose = sentenceSeg):
+def topicSearch(doc, feature_extractor=None, similarity = cosine, splitter = sentenceSeg):
     logger.debug("performing topic search...")
     """ attempt to merge adjacent sentences based on their feature_extractor similarity """
 
-    # Get a joined region of sentences starting at pairIndex and continuing as
-    # long as the pair similarities are 0, which means either they are disjoint
-    # or have been merged.
-    def getRegion(pairSimilarities, pairIndex, segments):
-        if pairSimilarities[pairIndex] == 0 and pairIndex != 0:
-            raise Exception("Similarity of pair at index %d is 0: pair=('%s', '%s'), segments: %s" %
-                            (pairIndex, segments[pairIndex], segments[pairIndex+1], segments))
-        nextIndex = pairIndex
-        while nextIndex < len(pairSimilarities) and pairSimilarities[nextIndex] == 0:
-            nextIndex += 1
-        return '. '.join(segments[pairIndex:nextIndex+1])
+    NEGATIVE_INFINITY = float("-inf")
 
-    # Returns the first index in pairSimilarities less than pairIndex in which
-    # the pair similarity is nonzero, or None if it can't find one.
-    def getPrevious(pairSimilarities, pairIndex):
+    # Returns the first index in similarityWithNext less than pairIndex in which
+    # the pair similarity is not -Inf, or 0 if there are none.
+    def getPrevious(similarityWithNext, pairIndex):
+        assert pairIndex < len(similarityWithNext), pairIndex
         pairIndex -= 1
-        while pairIndex >= 0 and pairSimilarities[pairIndex] == 0:
+        while pairIndex >= 0 and similarityWithNext[pairIndex] == NEGATIVE_INFINITY:
             pairIndex -= 1
         if pairIndex < 0:
-            return None
+            pairIndex = 0
         return pairIndex
 
-    # Returns the next index in pairSimilarities after pairIndex in which the
-    # pair similarity is nonzero, or None if it can't find one.
-    def getNext(pairSimilarities, pairIndex):
+    # Returns the next index in similarityWithNext after pairIndex in which the
+    # pair similarity is not -Inf, or len(similarityWithNext) if it can't find one.
+    def getNext(similarityWithNext, pairIndex):
+        assert pairIndex >= 0, pairIndex
         pairIndex += 1
-        while pairIndex < len(pairSimilarities) and pairSimilarities[pairIndex] == 0:
+        while pairIndex < len(similarityWithNext) and similarityWithNext[pairIndex] == NEGATIVE_INFINITY:
             pairIndex += 1
-        if pairIndex >= len(pairSimilarities):
-            return None
         return pairIndex
+
+    def joinSegments(segments, start, end):
+        return ' '.join(segments[start:end])
+
+    def mergeWithNext(similarityWithNext, pairIndex, segments):
+        logger.debug("Merging index %d with next...", pairIndex)
+        assert pairIndex >= 0 and pairIndex < len(similarityWithNext), pairIndex
+        nextIndex = getNext(similarityWithNext, pairIndex)
+
+        # Special-casing for when there is no next segment to merge.
+        if nextIndex == len(similarityWithNext):
+            if pairIndex == 0:
+                # We special-case the situation where we are trying to merge
+                # region 0 and there are no other regions to merge it with.
+                # This will be our last merge.
+                similarityWithNext[pairIndex] = NEGATIVE_INFINITY
+                return None
+            else:
+                # Step backward to 'eat' this segment.
+                return mergeWithNext(similarityWithNext, getPrevious(similarityWithNext, pairIndex), segments)
+
+        # Consider nextIndex merged into pairIndex.
+        similarityWithNext[nextIndex] = NEGATIVE_INFINITY
+
+        # After destroying nextIndex, recalculate the new "next index" and the
+        # features for our new merged region.
+        nextIndex = getNext(similarityWithNext, pairIndex)
+        curSegFeatures = feature_extractor.featurize(joinSegments(segments, pairIndex, nextIndex))
+
+        # Calculate similarity to our new following neighbor.
+        if nextIndex == len(similarityWithNext):
+            # We use similarity of 0 to mark that no segments follow.
+            similarityWithNext[pairIndex] = 0
+        else:
+            nextNextIndex = getNext(similarityWithNext, nextIndex)
+            nextSegFeatures = feature_extractor.featurize(joinSegments(segments, nextIndex, nextNextIndex))
+            similarityWithNext[pairIndex] = similarity(curSegFeatures, nextSegFeatures)
+
+        # Recalculate similarity to our new previous neighbor.
+        prevIndex = getPrevious(similarityWithNext, pairIndex)
+        if prevIndex != pairIndex:
+            # print 'pre idx:', prevIndex
+            prevFeatures = feature_extractor.featurize(joinSegments(segments, prevIndex, pairIndex))
+            similarityWithNext[prevIndex] = similarity(prevFeatures, curSegFeatures)
+
+        return (pairIndex, nextIndex)
 
     # initial proposal of regions
-    initSeg = initialPropose(doc)
-    logging.info("Created %d initial segments", len(initSeg))
+    segments = splitter(doc)
+    logging.info("Created %d initial segments", len(segments))
 
-    # recording initial regions
-    hypothesesLocations = [(i, i+1) for i in range(len(initSeg))]
+    # record initial regions
+    regions = [(i, i+1) for i in range(len(segments))]
 
     # Similarity set is a list of similarities between a segment and its next segment.
-    similaritySet = np.zeros(shape=(len(initSeg) - 1), dtype=np.float64)
+    similarityWithNext = np.zeros(shape=len(segments), dtype=np.float64)
 
     # Initialize similarities.
-    for i in range(len(similaritySet)):
-        curSegment = feature_extractor.featurize(initSeg[i])
-        nextSegment = feature_extractor.featurize(initSeg[i+1])
-        similaritySet[i] = similarity(curSegment, nextSegment)
+    for i in range(len(similarityWithNext)):
+        if i + 1 == len(segments):
+            similarityWithNext[i] = 0
+        else:
+            curSegment = feature_extractor.featurize(segments[i])
+            nextSegment = feature_extractor.featurize(segments[i+1])
+            similarityWithNext[i] = similarity(curSegment, nextSegment)
     #logger.info('Similarity initialized!')
 
     while True:
-        #logger.info("Segment similarities: %s", similaritySet)
-        # get the most similar
-        mostSimilarIndex = np.argmax(similaritySet)
-        if similaritySet[mostSimilarIndex] == 0:
+        #logger.info("Segment similarities: %s", similarityWithNext)
+        # Find and merge the most similar regions.
+        mostSimilarIndex = np.argmax(similarityWithNext)
+        if similarityWithNext[mostSimilarIndex] == NEGATIVE_INFINITY:
+            # We have merged all of our regions.
             break
 
-        # Attempt to merge region.
-        nextIndex = getNext(similaritySet, mostSimilarIndex)
-        if nextIndex is not None:
-            similaritySet[nextIndex] = 0
+        # Merge the region.
+        # Sometimes the merge can choose a different index to merge than the
+        # one we asked for, so we need to record the one it returns.
+        mergedRegion = mergeWithNext(similarityWithNext, mostSimilarIndex, segments)
 
-        # Recalculate similarity scores.
-        curSegFeatures = feature_extractor.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
+        if mergedRegion is not None:
+            # Add new region to hypotheses locations.
+            regions.append(mergedRegion)
 
-        prevIndex = getPrevious(similaritySet, mostSimilarIndex)
-        if prevIndex != None:
-            # print 'pre idx:', prevIndex
-            prevFeatures = feature_extractor.featurize(getRegion(similaritySet, prevIndex, initSeg))
-            similaritySet[prevIndex] = similarity(prevFeatures, curSegFeatures)
-
-        nextIndex = getNext(similaritySet, mostSimilarIndex)
-        if nextIndex == None:
-            similaritySet[mostSimilarIndex] = -1
-        else:
-            nextFeatures = feature_extractor.featurize(getRegion(similaritySet, nextIndex, initSeg))
-            similaritySet[mostSimilarIndex] = similarity(curSegFeatures, nextFeatures)
-
-        # add new region to hypotheses locations
-        hypothesesLocations.append((mostSimilarIndex, nextIndex))
-
-    return (initSeg, hypothesesLocations)
+    return (segments, regions)
 
 # Rename of convertToFeature() function.
 # Performs an element-wise max on the extracted feature vectors.
-def piecewiseMaxFeatures(tokens, regions, feature_extractor = None):
+def piecewiseMaxFeatures(segments, regions, feature_extractor = None):
     feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
     # cnt = 0
     for region_start, region_end in regions:
         # print '\t', cnt
         # cnt += 1
-        doc = ' '.join(tokens[region_start:region_end])
+        doc = ' '.join(segments[region_start:region_end])
         s = feature_extractor.featurize(doc)
         feature = np.amax([s, feature], axis=0)
         # print feature.shape, s.shape
     return feature
 
 # Take the last 15 regions
-def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_regions = 15, reverse = True):
+def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_regions = 15, reverse = True):
     features_per_region = feature_extractor.num_features()
     tot_num_features = features_per_region * max_regions
     doc_vec = np.zeros(shape=tot_num_features, dtype=np.float64)
@@ -217,7 +247,7 @@ def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_reg
             # Iterate in reverse order.
             idx = len(regions) - 1 - i
         region_start, region_end = regions[idx]
-        doc = ' '.join(tokens[region_start:region_end])
+        doc = ' '.join(segments[region_start:region_end])
         region_vec = feature_extractor.featurize(doc)
         doc_offset = i * features_per_region
         doc_vec[doc_offset:doc_offset + features_per_region] = region_vec
@@ -233,8 +263,8 @@ class MaxTopicFeatureExtractor(object):
         return self.feature_extractor.num_features()
 
     def featurize(self, doc):
-        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
-        feature = piecewiseMaxFeatures(tokens, regions, feature_extractor = self.feature_extractor)
+        segments, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        feature = piecewiseMaxFeatures(segments, regions, feature_extractor = self.feature_extractor)
         return feature
 
 class HierarchicalTopicFeatureExtractor(object):
@@ -249,8 +279,8 @@ class HierarchicalTopicFeatureExtractor(object):
         return self.feature_extractor.num_features()
 
     def featurize(self, doc):
-        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
-        features = mergeHierarchicalSegments(tokens,
+        segments, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        features = mergeHierarchicalSegments(segments,
                                              regions,
                                              feature_extractor = self.feature_extractor,
                                              max_regions = self.max_regions,
