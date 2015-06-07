@@ -273,7 +273,7 @@ class HierarchicalTopicFeatureExtractor(object):
             raise Exception("model must be specified")
         self.feature_extractor = opts['base_feature_extractor']
         self.max_regions = opts['max_regions'] if opts['max_regions'] else 15
-        self.reverse = opts['reverse'] if opts['reverse'] else 15
+        self.reverse = opts['reverse'] if opts['reverse'] else False
 
     def num_features(self):
         return self.feature_extractor.num_features()

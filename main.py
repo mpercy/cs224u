@@ -143,9 +143,11 @@ if __name__ == "__main__":
     parser.add_argument('--max_regions', type=int,
                         help=('Maximum regions to use. Default: ' + str(DEFAULT_NUM_REGIONS)))
     parser.set_defaults(max_regions=DEFAULT_NUM_REGIONS)
-    parser.add_argument('--reverse', type=bool,
-                        help=('Whether to reverse the hierarchical region iteration'))
+
+    parser.add_argument('--reverse', dest='reverse', action='store_true', help='reverse region iter')
+    parser.add_argument('--no-reverse', dest='reverse', action='store_false', help='reverse region iter')
     parser.set_defaults(reverse=True)
+
     parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
     parser.add_argument('data_dir', help='Directory in which to find the 20-newsgroups data.')
     parser.add_argument('record_fname', help='Filename to append result records.')
