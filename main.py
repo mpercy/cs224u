@@ -75,7 +75,7 @@ def evaluation(feature_extractor = None,
     for catIdx, cat in enumerate(cats):
         logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
-            docs = listdir(os.path.join(baseFolder, cat))[:20]
+            docs = sorted(listdir(os.path.join(baseFolder, cat)), key = int)[:20]
         except:
             continue
         numDocs = len(docs)
