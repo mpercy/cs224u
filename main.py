@@ -24,6 +24,7 @@ import json
 import logging
 import os.path
 import sys
+import time
 import numpy as np
 import scipy.sparse
 
@@ -165,6 +166,7 @@ if __name__ == "__main__":
     #featurizer = MaxTopicFeatureExtractor(options)
 
     result_record = {}
+    result_record['timestamp'] = time.asctime()
     result_record['model_prefix'] = args.model_prefix
     result_record['model'] = args.model
     result_record['featurizer'] = args.featurizer
