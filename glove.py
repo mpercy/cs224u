@@ -8,11 +8,11 @@ import gensim
 import numpy as np
 
 class GloveModel(object):
-    def __init__(self, fname):
-        self.fname = fname
-        if self.fname is None:
-            raise ValueError("fname must be specified")
-        self.dict = SimpleDict.load(fname, mmap='r')
+    def __init__(self, model_prefix = None):
+        if model_prefix is None:
+            raise ValueError("Must specify model_prefix")
+        self.fname = model_prefix + '.pickle'
+        self.dict = SimpleDict.load(self.fname, mmap='r')
 
     def num_features(self):
         return self.dict.num_features()

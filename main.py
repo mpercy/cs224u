@@ -15,7 +15,8 @@ Example:
 
 from glove import GloveModel
 from esa import ESAModel
-from util import sentenceSeg, PriorityQueue, cosine, DataSet
+from util import sentenceSeg, PriorityQueue, cosine, DataSet, MaxTopicFeatureExtractor
+import argparse
 import inspect
 import logging
 import os.path
@@ -45,118 +46,33 @@ logger = logging.getLogger(program)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
+DEFAULT_MODEL='GloveModel'
+DEFAULT_FEATURIZER='MaxTopicFeatureExtractor'
+
 def main():
-    # check and process input arguments
-    if len(sys.argv) < 3:
-        print(inspect.cleandoc(__doc__) % {"program": program})
-        sys.exit(1)
-    model_prefix, data_dir = sys.argv[1:3]
+    # Define command-line args.
+    parser = argparse.ArgumentParser(description='Evaluate topic classification approaches.',
+                                     epilog=str(inspect.cleandoc(__doc__) % {'program': program}))
+    parser.add_argument('--model', help=('Base feature model. Default: ' + DEFAULT_MODEL))
+    parser.set_defaults(model=DEFAULT_MODEL)
+    parser.add_argument('--featurizer', help=('Higher level featurizer. Default: ' + DEFAULT_FEATURIZER))
+    parser.set_defaults(featurizer=DEFAULT_FEATURIZER)
+    parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
+    parser.add_argument('data_dir', help='Directory to find the newsgroups data in ')
+    args = parser.parse_args()
 
-    # load feature extractor
-    #feature_extractor = ESAModel(model_prefix) # ESA is not working very well.
-    feature_extractor = GloveModel(model_prefix + ".pickle")
+    # load base feature model
+    model_clazz = globals()[args.model]
+    model = model_clazz(args.model_prefix)
+    #model = ESAModel(args.model_prefix) # ESA is not working very well.
+    #model = GloveModel(args.model_prefix)
 
-    evaluation(feature_extractor = feature_extractor, model_prefix = model_prefix, data_dir = data_dir)
+    # load secondary feature extractor
+    featurizer_clazz = globals()[args.featurizer]
+    featurizer = featurizer_clazz(base_feature_extractor = model)
+    #featurizer = MaxTopicFeatureExtractor(base_feature_extractor = model)
 
-def convertToFeature(seg, regs, feature_extractor = None):
-    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
-    # cnt = 0
-    for reg in regs:
-        # print '\t', cnt
-        # cnt += 1
-        doc = ' '.join(seg[reg[0]:reg[1]])
-        s = feature_extractor.featurize(doc)
-        feature = np.amax([s, feature], axis=0)
-        # print feature.shape, s.shape
-    return feature
-
-def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose = sentenceSeg):
-    logger.info("performing topic search...")
-    """ attempt to merge adjacent sentences based on their feature_extractor similarity """
-
-    # Get a joined region of sentences starting at pairIndex and continuing as
-    # long as the pair similarities are 0, which means either they are disjoint
-    # or have been merged.
-    def getRegion(pairSimilarities, pairIndex, segments):
-        if pairSimilarities[pairIndex] == 0 and pairIndex != 0:
-            raise Exception("Similarity of pair at index %d is 0: pair=('%s', '%s'), segments: %s" %
-                            (pairIndex, segments[pairIndex], segments[pairIndex+1], segments))
-        nextIndex = pairIndex
-        while nextIndex < len(pairSimilarities) and pairSimilarities[nextIndex] == 0:
-            nextIndex += 1
-        return '. '.join(segments[pairIndex:nextIndex+1])
-
-    # Returns the first index in pairSimilarities less than pairIndex in which
-    # the pair similarity is nonzero, or None if it can't find one.
-    def getPrevious(pairSimilarities, pairIndex):
-        pairIndex -= 1
-        while pairIndex >= 0 and pairSimilarities[pairIndex] == 0:
-            pairIndex -= 1
-        if pairIndex < 0:
-            return None
-        return pairIndex
-
-    # Returns the next index in pairSimilarities after pairIndex in which the
-    # pair similarity is nonzero, or None if it can't find one.
-    def getNext(pairSimilarities, pairIndex):
-        pairIndex += 1
-        while pairIndex < len(pairSimilarities) and pairSimilarities[pairIndex] == 0:
-            pairIndex += 1
-        if pairIndex >= len(pairSimilarities):
-            return None
-        return pairIndex
-
-
-
-    # initial proposal of regions
-    initSeg = initialPropose(doc)
-    logging.info("Created %d initial segments", len(initSeg))
-
-    # recording initial regions
-    hypothesesLocations = [(i, i+1) for i in range(len(initSeg))]
-
-    # Similarity set is a list of similarities between a segment and its next segment.
-    similaritySet = np.zeros(shape=(len(initSeg) - 1), dtype=np.float64)
-
-    # Initialize similarities.
-    for i in range(len(similaritySet)):
-        curSegment = feature_extractor.featurize(initSeg[i])
-        nextSegment = feature_extractor.featurize(initSeg[i+1])
-        similaritySet[i] = similarity(curSegment, nextSegment)
-    #logger.info('Similarity initialized!')
-
-    while True:
-        #logger.info("Segment similarities: %s", similaritySet)
-        # get the most similar
-        mostSimilarIndex = np.argmax(similaritySet)
-        if similaritySet[mostSimilarIndex] == 0:
-            break
-
-        # Attempt to merge region.
-        nextIndex = getNext(similaritySet, mostSimilarIndex)
-        if nextIndex is not None:
-            similaritySet[nextIndex] = 0
-
-        # Recalculate similarity scores.
-        curSegFeatures = feature_extractor.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
-
-        prevIndex = getPrevious(similaritySet, mostSimilarIndex)
-        if prevIndex != None:
-            # print 'pre idx:', prevIndex
-            prevFeatures = feature_extractor.featurize(getRegion(similaritySet, prevIndex, initSeg))
-            similaritySet[prevIndex] = similarity(prevFeatures, curSegFeatures)
-
-        nextIndex = getNext(similaritySet, mostSimilarIndex)
-        if nextIndex == None:
-            similaritySet[mostSimilarIndex] = -1
-        else:
-            nextFeatures = feature_extractor.featurize(getRegion(similaritySet, nextIndex, initSeg))
-            similaritySet[mostSimilarIndex] = similarity(curSegFeatures, nextFeatures)
-
-        # add new region to hypotheses locations
-        hypothesesLocations.append((mostSimilarIndex, nextIndex))
-
-    return (initSeg, hypothesesLocations)
+    evaluation(feature_extractor = featurizer, model_prefix = args.model_prefix, data_dir = args.data_dir)
 
 def SVM(train, trainY, test, testY):
     clf = SVC()
@@ -222,10 +138,7 @@ def evaluation(feature_extractor = None, clf = NaiveBayes, model_prefix = None, 
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
             doc = open(doc_filename).read()
-            #feature = feature_extractor.featurize(doc)
-            seg, regs = topicSearch(doc, feature_extractor = feature_extractor)
-            logger.debug('doc %d segmented', docIdx)
-            feature = convertToFeature(seg, regs, feature_extractor = feature_extractor)
+            feature = feature_extractor.featurize(doc)
             logger.debug('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)

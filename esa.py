@@ -23,7 +23,7 @@ class ESAModel(object):
     particular shard will display some slowdown until the caches get warmed up.
     """
 
-    def __init__(self, model_prefix=None, num_best = None):
+    def __init__(self, model_prefix = None, num_best = None):
         self.model_prefix = model_prefix
         self.num_best = num_best
         if self.model_prefix is None:

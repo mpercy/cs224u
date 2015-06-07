@@ -15,6 +15,8 @@ import numpy as np
 sentenceEnds = ['...', '.', ';', '!', '?']
 sentenceEndPattern = re.compile('|'.join([re.escape(tok) for tok in sentenceEnds]))
 
+logger = logging.getLogger("cs224u.util")
+
 def sentenceSeg(doc):
     # new paragraph is meaningless here
     doc = re.sub(r'\s+', ' ', doc)
@@ -99,3 +101,114 @@ class SimpleDict(gensim.utils.SaveLoad):
         result = sorted(iteritems(result))
         return result
 
+# Rename of convertToFeature() function.
+# Performs an element-wise max on the extracted feature vectors.
+def piecewiseMaxFeatures(seg, regs, feature_extractor = None):
+    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
+    # cnt = 0
+    for reg in regs:
+        # print '\t', cnt
+        # cnt += 1
+        doc = ' '.join(seg[reg[0]:reg[1]])
+        s = feature_extractor.featurize(doc)
+        feature = np.amax([s, feature], axis=0)
+        # print feature.shape, s.shape
+    return feature
+
+# Perform topic search and return a list of tuples containing progressively merged topics.
+def topicSearch(doc, feature_extractor=None, similarity = cosine, initialPropose = sentenceSeg):
+    logger.info("performing topic search...")
+    """ attempt to merge adjacent sentences based on their feature_extractor similarity """
+
+    # Get a joined region of sentences starting at pairIndex and continuing as
+    # long as the pair similarities are 0, which means either they are disjoint
+    # or have been merged.
+    def getRegion(pairSimilarities, pairIndex, segments):
+        if pairSimilarities[pairIndex] == 0 and pairIndex != 0:
+            raise Exception("Similarity of pair at index %d is 0: pair=('%s', '%s'), segments: %s" %
+                            (pairIndex, segments[pairIndex], segments[pairIndex+1], segments))
+        nextIndex = pairIndex
+        while nextIndex < len(pairSimilarities) and pairSimilarities[nextIndex] == 0:
+            nextIndex += 1
+        return '. '.join(segments[pairIndex:nextIndex+1])
+
+    # Returns the first index in pairSimilarities less than pairIndex in which
+    # the pair similarity is nonzero, or None if it can't find one.
+    def getPrevious(pairSimilarities, pairIndex):
+        pairIndex -= 1
+        while pairIndex >= 0 and pairSimilarities[pairIndex] == 0:
+            pairIndex -= 1
+        if pairIndex < 0:
+            return None
+        return pairIndex
+
+    # Returns the next index in pairSimilarities after pairIndex in which the
+    # pair similarity is nonzero, or None if it can't find one.
+    def getNext(pairSimilarities, pairIndex):
+        pairIndex += 1
+        while pairIndex < len(pairSimilarities) and pairSimilarities[pairIndex] == 0:
+            pairIndex += 1
+        if pairIndex >= len(pairSimilarities):
+            return None
+        return pairIndex
+
+    # initial proposal of regions
+    initSeg = initialPropose(doc)
+    logging.info("Created %d initial segments", len(initSeg))
+
+    # recording initial regions
+    hypothesesLocations = [(i, i+1) for i in range(len(initSeg))]
+
+    # Similarity set is a list of similarities between a segment and its next segment.
+    similaritySet = np.zeros(shape=(len(initSeg) - 1), dtype=np.float64)
+
+    # Initialize similarities.
+    for i in range(len(similaritySet)):
+        curSegment = feature_extractor.featurize(initSeg[i])
+        nextSegment = feature_extractor.featurize(initSeg[i+1])
+        similaritySet[i] = similarity(curSegment, nextSegment)
+    #logger.info('Similarity initialized!')
+
+    while True:
+        #logger.info("Segment similarities: %s", similaritySet)
+        # get the most similar
+        mostSimilarIndex = np.argmax(similaritySet)
+        if similaritySet[mostSimilarIndex] == 0:
+            break
+
+        # Attempt to merge region.
+        nextIndex = getNext(similaritySet, mostSimilarIndex)
+        if nextIndex is not None:
+            similaritySet[nextIndex] = 0
+
+        # Recalculate similarity scores.
+        curSegFeatures = feature_extractor.featurize(getRegion(similaritySet, mostSimilarIndex, initSeg))
+
+        prevIndex = getPrevious(similaritySet, mostSimilarIndex)
+        if prevIndex != None:
+            # print 'pre idx:', prevIndex
+            prevFeatures = feature_extractor.featurize(getRegion(similaritySet, prevIndex, initSeg))
+            similaritySet[prevIndex] = similarity(prevFeatures, curSegFeatures)
+
+        nextIndex = getNext(similaritySet, mostSimilarIndex)
+        if nextIndex == None:
+            similaritySet[mostSimilarIndex] = -1
+        else:
+            nextFeatures = feature_extractor.featurize(getRegion(similaritySet, nextIndex, initSeg))
+            similaritySet[mostSimilarIndex] = similarity(curSegFeatures, nextFeatures)
+
+        # add new region to hypotheses locations
+        hypothesesLocations.append((mostSimilarIndex, nextIndex))
+
+    return (initSeg, hypothesesLocations)
+
+class MaxTopicFeatureExtractor(object):
+    def __init__(self, base_feature_extractor = None):
+        if base_feature_extractor is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = base_feature_extractor
+
+    def featurize(self, doc):
+        seg, regs = topicSearch(doc, feature_extractor = self.feature_extractor)
+        feature = piecewiseMaxFeatures(seg, regs, feature_extractor = self.feature_extractor)
+        return feature
