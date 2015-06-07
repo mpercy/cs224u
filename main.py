@@ -142,6 +142,9 @@ if __name__ == "__main__":
     parser.add_argument('--max_regions', type=int,
                         help=('Maximum regions to use. Default: ' + str(DEFAULT_NUM_REGIONS)))
     parser.set_defaults(max_regions=DEFAULT_NUM_REGIONS)
+    parser.add_argument('--reverse', type=bool,
+                        help=('Whether to reverse the hierarchical region iteration'))
+    parser.set_defaults(reverse=True)
     parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
     parser.add_argument('data_dir', help='Directory in which to find the 20-newsgroups data.')
     parser.add_argument('record_fname', help='Filename to append result records.')
@@ -155,14 +158,18 @@ if __name__ == "__main__":
 
     # load secondary feature extractor
     featurizer_clazz = globals()[args.featurizer]
-    featurizer = featurizer_clazz(base_feature_extractor = model)
-    #featurizer = MaxTopicFeatureExtractor(base_feature_extractor = model)
+    options = {'base_feature_extractor': model,
+               'max_regions': args.max_regions,
+               'reverse': args.reverse}
+    featurizer = featurizer_clazz(options)
+    #featurizer = MaxTopicFeatureExtractor(options)
 
     result_record = {}
     result_record['model_prefix'] = args.model_prefix
     result_record['model'] = args.model
     result_record['featurizer'] = args.featurizer
     result_record['max_regions'] = args.max_regions
+    result_record['reverse'] = args.reverse
 
     evaluation(feature_extractor = featurizer,
                model_prefix = args.model_prefix,

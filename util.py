@@ -33,6 +33,9 @@ def cosine(x, y):
 def cosine_sparse(x, y):
     return sklearn.metrics.pairwise.cosine_similarity(x, y)
 
+def function_name(f):
+    return f.__name__
+
 class PriorityQueue:
     def __init__(self):
         self._queue = []
@@ -202,15 +205,17 @@ def piecewiseMaxFeatures(tokens, regions, feature_extractor = None):
     return feature
 
 # Take the last 15 regions
-def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_regions = 15):
+def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_regions = 15, reverse = True):
     features_per_region = feature_extractor.num_features()
     tot_num_features = features_per_region * max_regions
     doc_vec = np.zeros(shape=tot_num_features, dtype=np.float64)
     for i in range(len(regions)):
         if i >= max_regions:
             break
-        # Iterate in reverse order.
-        idx = len(regions) - 1 - i
+        idx = i
+        if reverse:
+            # Iterate in reverse order.
+            idx = len(regions) - 1 - i
         region_start, region_end = regions[idx]
         doc = ' '.join(tokens[region_start:region_end])
         region_vec = feature_extractor.featurize(doc)
@@ -219,10 +224,10 @@ def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_reg
     return doc_vec
 
 class MaxTopicFeatureExtractor(object):
-    def __init__(self, base_feature_extractor = None):
-        if base_feature_extractor is None:
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
-        self.feature_extractor = base_feature_extractor
+        self.feature_extractor = opts['base_feature_extractor']
 
     def num_features(self):
         return self.feature_extractor.num_features()
@@ -233,11 +238,12 @@ class MaxTopicFeatureExtractor(object):
         return feature
 
 class HierarchicalTopicFeatureExtractor(object):
-    def __init__(self, base_feature_extractor = None, max_regions = 15):
-        if base_feature_extractor is None:
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
-        self.feature_extractor = base_feature_extractor
-        self.max_regions = max_regions
+        self.feature_extractor = opts['base_feature_extractor']
+        self.max_regions = opts['max_regions'] if opts['max_regions'] else 15
+        self.reverse = opts['reverse'] if opts['reverse'] else 15
 
     def num_features(self):
         return self.feature_extractor.num_features()
@@ -247,20 +253,18 @@ class HierarchicalTopicFeatureExtractor(object):
         features = mergeHierarchicalSegments(tokens,
                                              regions,
                                              feature_extractor = self.feature_extractor,
-                                             max_regions = self.max_regions)
+                                             max_regions = self.max_regions,
+                                             reverse = self.reverse)
         return features
 
 class FlatFeatureExtractor(object):
-    def __init__(self, base_feature_extractor = None):
-        if base_feature_extractor is None:
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
-        self.feature_extractor = base_feature_extractor
+        self.feature_extractor = opts['base_feature_extractor']
 
     def num_features(self):
         return self.feature_extractor.num_features()
 
     def featurize(self, doc):
         return self.feature_extractor.featurize(doc)
-
-def function_name(f):
-    return f.__name__
