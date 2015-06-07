@@ -37,7 +37,7 @@ Example command:
 ```
 mkdir wiki_en-200000--20150531-035019
 cd wiki_en-200000--20150531-035019/
-aws s3 sync s3://mpercy-datasets-01/wiki_en-200000--20150531-035019/ .
+aws --no-sign-request --region=us-east-1 s3 sync s3://mpercy-datasets-01/wiki_en-200000--20150531-035019/ .
 ```
 
 This will create about 300 files in the `wiki_en-200000--20150531-035019` current directory.
