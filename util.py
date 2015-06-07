@@ -292,6 +292,20 @@ def mergeHierarchicalSegments(tokens, regions, feature_extractor = None, max_reg
         doc_vec[doc_offset:doc_offset + features_per_region] = region_vec
     return doc_vec
 
+# returns the top k layer similarities
+# the importance of each layer decays with its depth which may be fine tuned
+# TODO: testing
+def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 3, fullLayer = True, decay = 0.7):
+    root = parseTree(tokens, regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
+    features = []
+    alph = 1.
+    for i in range(layers):
+        regs = getLayer(root, i+1, fullLayer)
+        features += piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph
+        alph *= decay
+    return features
+
+
 class MaxTopicFeatureExtractor(object):
     def __init__(self, opts):
         if opts['base_feature_extractor'] is None:
@@ -325,6 +339,31 @@ class HierarchicalTopicFeatureExtractor(object):
                                              max_regions = self.max_regions,
                                              reverse = self.reverse)
         return features
+
+# TODO: testing
+class TopKLayerHierarchicalFeatureExtractor(object):
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = opts['base_feature_extractor']
+        self.depth = opts['depth'] if opts['depth'] else 3
+        self.fullLayer = opts['fullLayer'] if opts['fullLayer'] else True
+        self.decay = opts['decay'] if opts['decay'] else 0.7
+
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
+    def featurize(self, doc):
+        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        features = topKHierarchicalSegments( tokens,
+                                             regions,
+                                             feature_extractor = self.feature_extractor,
+                                             layers = self.max_regions,
+                                             fullLayer = self.reverse,
+                                             decay = self.decay)
+        return features
+
+
 
 class FlatFeatureExtractor(object):
     def __init__(self, opts):

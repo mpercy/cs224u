@@ -78,7 +78,7 @@ def testFullcoverage():
     tmp = pickle.load(open('d.pickle'))
     regs = tmp['regions']
     root = parseTree(regs, 32)
-    layers = getLayer(root, 7, fullCoverage=True)
+    layers = getLayer(root, 4, fullCoverage=False)
     log = ''
     for node in layers:
         log += str(node.region[0]) + ',' + str(node.region[1])+ '; '
