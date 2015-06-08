@@ -156,7 +156,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--depth', type=int,
                         help=('Depth of the TopK layer hierarchical feature extractor'))
-    parser.add_argument('--decay', type=int,
+    parser.add_argument('--decay', type=float,
                         help=('Decay of the TopK layer hierarchical feature extractor'))
 
     parser.add_argument('--reverse', dest='reverse', action='store_true', help='reverse region iter')
