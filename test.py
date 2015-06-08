@@ -21,21 +21,22 @@ logger = logging.getLogger("cs224u.test")
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
-def NaiveBayesBaseLine():
-    news_train = load_mlcomp('20news-18828', 'train')
-    news_test = load_mlcomp('20news-18828', 'test')
-    vectorizer = TfidfVectorizer(encoding='latin1')
-    X_train = vectorizer.fit_transform((open(f).read()
-                                    for f in news_train.filenames))
-    y_train = news_train.target
-    X_test = vectorizer.transform((open(f).read() 
-                                    for f in news_test.filenames))
-    y_test = news_test.target
+class NaiveBayesBaseLine(unittest.TestCase):
+    def testBaseLine(self):
+        news_train = load_mlcomp('20news-18828', 'train')
+        news_test = load_mlcomp('20news-18828', 'test')
+        vectorizer = TfidfVectorizer(encoding='latin1')
+        X_train = vectorizer.fit_transform((open(f).read()
+                                        for f in news_train.filenames))
+        y_train = news_train.target
+        X_test = vectorizer.transform((open(f).read() 
+                                        for f in news_test.filenames))
+        y_test = news_test.target
 
-    clf = MultinomialNB().fit(X_train, y_train)
-    pred = clf.predict(X_test)
-    print(classification_report(y_test, pred,
-                                target_names=news_test.target_names))
+        clf = MultinomialNB().fit(X_train, y_train)
+        pred = clf.predict(X_test)
+        print(classification_report(y_test, pred,
+                                    target_names=news_test.target_names))
 
 
 class MockFeatureExtractor(object):
@@ -50,7 +51,7 @@ class MockFeatureExtractor(object):
 class TopicSearchTest(unittest.TestCase):
 
     def testTopicSearch(self):
-        doc = 'This is a doc. I have a clock. Hello Jim. What the duck? ;;;'
+        doc = 'This is a doc. I have a clock. Hello Jim. What the duck? '
         feature_extractor = MockFeatureExtractor()
         segments, regions = topicSearch(doc, feature_extractor = feature_extractor)
         logging.info(segments)
@@ -63,5 +64,4 @@ class TopicSearchTest(unittest.TestCase):
         self.assertEqual(expected_num_regions, len(regions))
 
 if __name__ == '__main__':
-    # unittest.main()
-    NaiveBayesBaseLine()
+    unittest.main()
