@@ -265,7 +265,7 @@ def topicSearch(doc, feature_extractor=None, similarity = cosine, splitter = sen
 
     # initial proposal of regions
     segments = splitter(doc)
-    logging.info("Created %d initial segments", len(segments))
+    logging.debug("Created %d initial segments", len(segments))
 
     # record initial regions
     regions = [(i, i+1) for i in range(len(segments))]
@@ -305,14 +305,17 @@ def topicSearch(doc, feature_extractor=None, similarity = cosine, splitter = sen
 # Rename of convertToFeature() function.
 # Performs an element-wise max on the extracted feature vectors.
 def piecewiseMaxFeatures(segments, regions, feature_extractor = None):
-    feature = np.zeros(shape=feature_extractor.num_features(), dtype=np.float64)
+    feature = None
     # cnt = 0
     for region_start, region_end in regions:
         # print '\t', cnt
         # cnt += 1
         doc = ' '.join(segments[region_start:region_end])
         s = feature_extractor.featurize(doc)
-        feature = np.amax([s, feature], axis=0)
+        if feature is None:
+            feature = s
+        else:
+            feature = np.amax([s, feature], axis=0)
         # print feature.shape, s.shape
     return feature
 
@@ -338,18 +341,16 @@ def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_r
 
 # returns the top k layer similarities
 # the importance of each layer decays with its depth which may be fine tuned
-# TODO: testing
-def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 1, fullLayer = True, decay = 0.6):
-    root = parseTree(regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
+def topKHierarchicalSegments(segments, regions, feature_extractor = None, depth = 0, fullLayer = True, decay = 0.6):
+    root = parseTree(regions, len(segments))
     features = []
     alph = 1.
-    for i in range(layers + 1):
+    for i in range(depth + 1):
         # print 'Layer', i,'Regions:', [t.region for t in getLayer(root, i, fullLayer)]
         regs = [t.region for t in getLayer(root, i, fullLayer)]
-        features = np.hstack([features, piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph])
+        features.append(piecewiseMaxFeatures(segments, regs, feature_extractor) * alph)
         alph *= decay
-    return features
-
+    return np.hstack(features)
 
 class MaxTopicFeatureExtractor(object):
     def __init__(self, opts):
@@ -403,7 +404,7 @@ class TopKLayerHierarchicalFeatureExtractor(object):
         features = topKHierarchicalSegments( tokens,
                                              regions,
                                              feature_extractor = self.feature_extractor,
-                                             layers = self.depth,
+                                             depth = self.depth,
                                              fullLayer = self.fullLayer,
                                              decay = self.decay)
         return features
