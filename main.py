@@ -28,7 +28,7 @@ import time
 import numpy as np
 import scipy.sparse
 
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, f1_score, precision_recall_fscore_support
@@ -107,7 +107,7 @@ def evaluation(feature_extractor = None,
     logger.info("Shape of training set: %s", train.shape)
     logger.info("Shape of test set: %s", test.shape)
 
-    for clf_class in [GaussianNB, LogisticRegression]:
+    for clf_class in [GaussianNB, MultinomialNB, LogisticRegression]:
         classifier_name = function_name(clf_class)
         if classifier_name is None:
             raise Exception("Unable to get name of classifier class", clf_class)
