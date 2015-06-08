@@ -126,7 +126,7 @@ def evaluation(feature_extractor = None,
 
         # Save the important metrics.
         precision, recall, f1, support = \
-            precision_recall_fscore_support(testY, testPredY, average='micro')
+            precision_recall_fscore_support(testY, testPredY, average='macro')
         result_record[classifier_name + "_precision"] = precision
         result_record[classifier_name + "_recall"] = recall
         result_record[classifier_name + "_f1"] = f1
