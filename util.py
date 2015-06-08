@@ -343,7 +343,7 @@ def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers =
     root = parseTree(regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
     features = []
     alph = 1.
-    for i in range(layers):
+    for i in range(layers + 1):
         # print 'Layer', i,'Regions:', [t.region for t in getLayer(root, i, fullLayer)]
         regs = [t.region for t in getLayer(root, i, fullLayer)]
         features = np.hstack([features, piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph])
@@ -370,8 +370,8 @@ class HierarchicalTopicFeatureExtractor(object):
         if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
         self.feature_extractor = opts['base_feature_extractor']
-        self.max_regions = opts['max_regions'] if opts['max_regions'] else 15
-        self.reverse = opts['reverse'] if opts['reverse'] else False
+        self.max_regions = opts['max_regions'] if 'max_regions' in opts else 15
+        self.reverse = opts['reverse'] if 'reverse' in opts else False
 
     def num_features(self):
         return self.feature_extractor.num_features()

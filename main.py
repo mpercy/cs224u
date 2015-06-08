@@ -130,7 +130,7 @@ def evaluation(feature_extractor = None,
         result_record[classifier_name + "_precision"] = precision
         result_record[classifier_name + "_recall"] = recall
         result_record[classifier_name + "_f1"] = f1
-        result_record[classifier_name + "_support"] = support
+        #result_record[classifier_name + "_support"] = support
 
     with open(record_fname, "a") as records_out:
         json.dump(result_record, records_out, sort_keys = True)
@@ -162,7 +162,6 @@ if __name__ == "__main__":
 
     parser.add_argument('--reverse', dest='reverse', action='store_true', help='reverse region iter')
     parser.add_argument('--no-reverse', dest='reverse', action='store_false', help='reverse region iter')
-    parser.set_defaults(reverse=True)
 
     parser.add_argument('model_prefix', help='Model prefix of passed to the model constructor')
     parser.add_argument('data_dir', help='Directory in which to find the 20-newsgroups data.')
@@ -190,8 +189,10 @@ if __name__ == "__main__":
     result_record['model_prefix'] = args.model_prefix
     result_record['model'] = args.model
     result_record['featurizer'] = args.featurizer
-    result_record['max_regions'] = args.max_regions
-    result_record['reverse'] = args.reverse
+    result_record['max_regions'] = args.max_regions if args.max_regions
+    result_record['depth'] = args.depth if args.depth is not None
+    result_record['decay'] = args.decay if args.decay is not None
+    result_record['sample_size'] = args.sample_size if args.sample_size
 
     evaluation(feature_extractor = featurizer,
                model_prefix = args.model_prefix,
