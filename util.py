@@ -354,6 +354,12 @@ def topKHierarchicalSegments(segments, regions, feature_extractor = None, depth 
         alph *= decay
     return np.hstack(features)
 
+# returns the similarities of kth level
+def lvlKHierarchicalSegments(segments, regions, feature_extractor = None, depth = 0, fullLayer = True):
+    root = parseTree(regions, len(segments))
+    regs = [t.region for t in getLayer(root, depth, fullLayer)]
+    return piecewiseMaxFeatures(segments, regs, feature_extractor)
+
 class MaxTopicFeatureExtractor(object):
     def __init__(self, opts):
         if opts['base_feature_extractor'] is None:
@@ -388,7 +394,6 @@ class HierarchicalTopicFeatureExtractor(object):
                                              reverse = self.reverse)
         return features
 
-# TODO: testing
 class TopKLayerHierarchicalFeatureExtractor(object):
     def __init__(self, opts):
         if opts['base_feature_extractor'] is None:
@@ -411,7 +416,25 @@ class TopKLayerHierarchicalFeatureExtractor(object):
                                              decay = self.decay)
         return features
 
+class LvlKLayerHierarchicalFeatureExtractor(object):
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = opts['base_feature_extractor']
+        self.depth = opts['depth'] if 'depth' in opts else 7
+        self.fullLayer = opts['fullLayer'] if 'fullLayer' in opts else True
 
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
+    def featurize(self, doc):
+        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        features = lvlKHierarchicalSegments( tokens,
+                                             regions,
+                                             feature_extractor = self.feature_extractor,
+                                             depth = self.depth,
+                                             fullLayer = self.fullLayer)
+        return features
 
 class FlatFeatureExtractor(object):
     def __init__(self, opts):
