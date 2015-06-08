@@ -80,22 +80,35 @@ def getLayer(root, depth, fullCoverage = True):
             elif fullCoverage:
                 tmp.append(node)
         layer = tmp
-    return layer 
+    return layer
 
-
-
+def splitAfter(pattern, inputStr):
+    ''' Split a string after each 'pattern'. Do not remove any characters. '''
+    pieces = []
+    start = 0
+    inputLen = len(inputStr)
+    splitPoints = re.finditer(pattern, inputStr)
+    while start < inputLen:
+        try:
+            end = splitPoints.next().end()
+        except StopIteration:
+            end = inputLen
+        pieces.append(inputStr[start:end])
+        start = end
+    return pieces
 
 def sentenceSeg(doc):
+    ''' Segment a document into sentences. '''
     # new paragraph is meaningless here
     doc = re.sub(r'\s+', ' ', doc)
     # split the doc with sentence ending marks
-    initialRegions = re.split(sentenceEndPattern, doc)
-    regions = []
-    for r in initialRegions:
-        stripped = r.strip()
+    initialSegments = splitAfter(sentenceEndPattern, doc)
+    segments = []
+    for s in initialSegments:
+        stripped = s.strip()
         if stripped != '':
-            regions.append(stripped)
-    return regions
+            segments.append(stripped)
+    return segments
 
 def cosine(x, y):
     rlt =  distance.cosine(x, y)
@@ -407,4 +420,5 @@ class FlatFeatureExtractor(object):
         return self.feature_extractor.num_features()
 
     def featurize(self, doc):
+        doc = " ".join(sentenceSeg(doc))
         return self.feature_extractor.featurize(doc)
