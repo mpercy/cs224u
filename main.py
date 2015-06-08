@@ -56,7 +56,9 @@ DEFAULT_NUM_REGIONS = 15
 
 
 def main():
-    evaluate()
+
+def ldaModel():
+    
 
 def testParseTree():
     tmp = pickle.load(open('d.pickle'))
