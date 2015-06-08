@@ -7,3 +7,4 @@
 *.bz2
 *_model_dir
 *.pyc
+glove.6B*

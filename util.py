@@ -326,13 +326,14 @@ def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_r
 # returns the top k layer similarities
 # the importance of each layer decays with its depth which may be fine tuned
 # TODO: testing
-def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 3, fullLayer = True, decay = 0.7):
+def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 1, fullLayer = True, decay = 0.6):
     root = parseTree(regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
     features = []
     alph = 1.
     for i in range(layers):
-        regs = [t.region for t in getLayer(root, i+1, fullLayer)]
-        features += piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph
+        # print 'Layer', i,'Regions:', [t.region for t in getLayer(root, i, fullLayer)]
+        regs = [t.region for t in getLayer(root, i, fullLayer)]
+        features = np.hstack([features, piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph])
         alph *= decay
     return features
 
@@ -377,9 +378,9 @@ class TopKLayerHierarchicalFeatureExtractor(object):
         if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
         self.feature_extractor = opts['base_feature_extractor']
-        self.depth = opts['depth'] if 'depth' in opts else 3
+        self.depth = opts['depth'] if 'depth' in opts else 7
         self.fullLayer = opts['fullLayer'] if 'fullLayer' in opts else True
-        self.decay = opts['decay'] if 'decay' in opts else 0.7
+        self.decay = opts['decay'] if 'decay' in opts else 0.35
 
     def num_features(self):
         return self.feature_extractor.num_features()
