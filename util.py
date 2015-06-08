@@ -11,7 +11,7 @@ import itertools
 import gensim
 import numpy as np
 
-sentenceEnds = ['...', '.', ';', '!', '?']
+sentenceEnds = ['...', '.', ';', '!', '?', "\n\n"]
 sentenceEndPattern = re.compile('|'.join([re.escape(tok) for tok in sentenceEnds]))
 
 logger = logging.getLogger("cs224u.util")
@@ -99,8 +99,9 @@ def splitAfter(pattern, inputStr):
 
 def sentenceSeg(doc):
     ''' Segment a document into sentences. '''
-    # new paragraph is meaningless here
-    doc = re.sub(r'\s+', ' ', doc)
+    # Normalize MS-DOS and Mac newlines to Unix newlines.
+    doc = re.sub(r'\r\n', '\n', doc) # DOS
+    doc = re.sub(r'\r', '\n', doc)   # Mac
     # split the doc with sentence ending marks
     initialSegments = splitAfter(sentenceEndPattern, doc)
     segments = []
@@ -345,6 +346,7 @@ def topKHierarchicalSegments(segments, regions, feature_extractor = None, depth 
     root = parseTree(regions, len(segments))
     features = []
     alph = 1.
+    #logger.info("Depth: %d, decay: %f", depth, decay)
     for i in range(depth + 1):
         # print 'Layer', i,'Regions:', [t.region for t in getLayer(root, i, fullLayer)]
         regs = [t.region for t in getLayer(root, i, fullLayer)]
