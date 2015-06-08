@@ -154,6 +154,11 @@ if __name__ == "__main__":
                         help=('How much to sample the dataset. Set to 0 to disable sampling. Default: ' + str(DEFAULT_SAMPLE_SIZE)))
     parser.set_defaults(sample_size=DEFAULT_SAMPLE_SIZE)
 
+    parser.add_argument('--depth', type=int,
+                        help=('Depth of the TopK layer hierarchical feature extractor'))
+    parser.add_argument('--decay', type=int,
+                        help=('Decay of the TopK layer hierarchical feature extractor'))
+
     parser.add_argument('--reverse', dest='reverse', action='store_true', help='reverse region iter')
     parser.add_argument('--no-reverse', dest='reverse', action='store_false', help='reverse region iter')
     parser.set_defaults(reverse=True)
@@ -173,7 +178,9 @@ if __name__ == "__main__":
     featurizer_clazz = globals()[args.featurizer]
     options = {'base_feature_extractor': model,
                'max_regions': args.max_regions,
-               'reverse': args.reverse}
+               'reverse': args.reverse,
+               'depth': args.depth,
+               'decay': args.decay}
     featurizer = featurizer_clazz(options)
     #featurizer = MaxTopicFeatureExtractor(options)
 
