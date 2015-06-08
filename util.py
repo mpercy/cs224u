@@ -16,6 +16,75 @@ sentenceEndPattern = re.compile('|'.join([re.escape(tok) for tok in sentenceEnds
 
 logger = logging.getLogger("cs224u.util")
 
+class TopicTree:
+    '''
+        defines a tree structure for topics
+        region is the starting and ending postion of current topic
+        childeren are the topics of next level
+    '''
+    def __init__(self, region=None):
+        self.region = region
+        self.children = []
+
+    def dump(self):
+        log = str(self.region[0])+','+str(self.region[1])+': '
+        for c in self.children:
+            log += str(c.region[0]) + ',' + str(c.region[1]) + ';'
+
+        print log
+
+
+def parseTree(regs, length):
+    '''
+        this function parses the regs into a tree
+        regs are the proposed regions, 
+        length is the document length which is also the largest number in the regs
+        this will return a 
+    '''
+    regions = dict()
+    for start, end in regs:
+        try:
+            regions[start].append(end)
+        except:
+            regions[start] = [end]
+    if length not in regions[0]:
+        raise ValueError('Document is not fully covered. Topic search error!')
+    root = TopicTree((0, length))
+    regions[0].remove(length)
+
+    def findChildren(node):
+        s, e = node.region
+        if e == s+1:
+            return
+        nxt = s
+        while nxt < e:
+            nxte = max(regions[nxt])
+            tmp = TopicTree((nxt, nxte))
+            node.children.append(tmp)
+            regions[nxt].remove(nxte)
+            nxt = nxte
+
+        for child in node.children:
+            findChildren(child)
+    findChildren(root)
+    return root
+
+def getLayer(root, depth, fullCoverage = True):
+    layer = [root]
+    for i in range(depth):
+        tmp = []
+        for node in layer:
+            if node.children:
+                for c in node.children:
+                    tmp.append(c)
+            elif fullCoverage:
+                tmp.append(node)
+        layer = tmp
+    return layer 
+
+
+
+
 def sentenceSeg(doc):
     # new paragraph is meaningless here
     doc = re.sub(r'\s+', ' ', doc)
@@ -254,6 +323,20 @@ def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_r
         doc_vec[doc_offset:doc_offset + features_per_region] = region_vec
     return doc_vec
 
+# returns the top k layer similarities
+# the importance of each layer decays with its depth which may be fine tuned
+# TODO: testing
+def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 3, fullLayer = True, decay = 0.7):
+    root = parseTree(tokens, regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
+    features = []
+    alph = 1.
+    for i in range(layers):
+        regs = getLayer(root, i+1, fullLayer)
+        features += piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph
+        alph *= decay
+    return features
+
+
 class MaxTopicFeatureExtractor(object):
     def __init__(self, opts):
         if opts['base_feature_extractor'] is None:
@@ -287,6 +370,31 @@ class HierarchicalTopicFeatureExtractor(object):
                                              max_regions = self.max_regions,
                                              reverse = self.reverse)
         return features
+
+# TODO: testing
+class TopKLayerHierarchicalFeatureExtractor(object):
+    def __init__(self, opts):
+        if opts['base_feature_extractor'] is None:
+            raise Exception("model must be specified")
+        self.feature_extractor = opts['base_feature_extractor']
+        self.depth = opts['depth'] if opts['depth'] else 3
+        self.fullLayer = opts['fullLayer'] if opts['fullLayer'] else True
+        self.decay = opts['decay'] if opts['decay'] else 0.7
+
+    def num_features(self):
+        return self.feature_extractor.num_features()
+
+    def featurize(self, doc):
+        tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+        features = topKHierarchicalSegments( tokens,
+                                             regions,
+                                             feature_extractor = self.feature_extractor,
+                                             layers = self.max_regions,
+                                             fullLayer = self.reverse,
+                                             decay = self.decay)
+        return features
+
+
 
 class FlatFeatureExtractor(object):
     def __init__(self, opts):
