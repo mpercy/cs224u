@@ -327,11 +327,11 @@ def mergeHierarchicalSegments(segments, regions, feature_extractor = None, max_r
 # the importance of each layer decays with its depth which may be fine tuned
 # TODO: testing
 def topKHierarchicalSegments(tokens, regions, feature_extractor = None, layers = 3, fullLayer = True, decay = 0.7):
-    root = parseTree(tokens, regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
+    root = parseTree(regions, len(tokens)) #TODO: check whether it should be len(tokens) or len(tokens) - 1
     features = []
     alph = 1.
     for i in range(layers):
-        regs = getLayer(root, i+1, fullLayer)
+        regs = [t.region for t in getLayer(root, i+1, fullLayer)]
         features += piecewiseMaxFeatures(tokens, regs, feature_extractor)*alph
         alph *= decay
     return features
@@ -377,9 +377,9 @@ class TopKLayerHierarchicalFeatureExtractor(object):
         if opts['base_feature_extractor'] is None:
             raise Exception("model must be specified")
         self.feature_extractor = opts['base_feature_extractor']
-        self.depth = opts['depth'] if opts['depth'] else 3
-        self.fullLayer = opts['fullLayer'] if opts['fullLayer'] else True
-        self.decay = opts['decay'] if opts['decay'] else 0.7
+        self.depth = opts['depth'] if 'depth' in opts else 3
+        self.fullLayer = opts['fullLayer'] if 'fullLayer' in opts else True
+        self.decay = opts['decay'] if 'decay' in opts else 0.7
 
     def num_features(self):
         return self.feature_extractor.num_features()
@@ -389,8 +389,8 @@ class TopKLayerHierarchicalFeatureExtractor(object):
         features = topKHierarchicalSegments( tokens,
                                              regions,
                                              feature_extractor = self.feature_extractor,
-                                             layers = self.max_regions,
-                                             fullLayer = self.reverse,
+                                             layers = self.depth,
+                                             fullLayer = self.fullLayer,
                                              decay = self.decay)
         return features
 

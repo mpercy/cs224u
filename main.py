@@ -17,7 +17,7 @@ from glove import GloveModel
 from esa import ESAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
-                 FlatFeatureExtractor
+                 FlatFeatureExtractor, TopKLayerHierarchicalFeatureExtractor
 import argparse
 import inspect
 import json
