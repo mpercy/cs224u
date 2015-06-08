@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 ##########################################################
 
+from sklearn.datasets import load_mlcomp
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.naive_bayes import MultinomialNB
+
+
+
 from util import topicSearch
 
 import logging
@@ -11,6 +20,23 @@ import random
 logger = logging.getLogger("cs224u.test")
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
+
+def NaiveBayesBaseLine():
+    news_train = load_mlcomp('20news-18828', 'train')
+    news_test = load_mlcomp('20news-18828', 'test')
+    vectorizer = TfidfVectorizer(encoding='latin1')
+    X_train = vectorizer.fit_transform((open(f).read()
+                                    for f in news_train.filenames))
+    y_train = news_train.target
+    X_test = vectorizer.transform((open(f).read() 
+                                    for f in news_test.filenames))
+    y_test = news_test.target
+
+    clf = MultinomialNB().fit(X_train, y_train)
+    pred = clf.predict(X_test)
+    print(classification_report(y_test, pred,
+                                target_names=news_test.target_names))
+
 
 class MockFeatureExtractor(object):
     def num_features(self):
@@ -37,4 +63,5 @@ class TopicSearchTest(unittest.TestCase):
         self.assertEqual(expected_num_regions, len(regions))
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    NaiveBayesBaseLine()
