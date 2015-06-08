@@ -107,7 +107,8 @@ def evaluation(feature_extractor = None,
     logger.info("Shape of training set: %s", train.shape)
     logger.info("Shape of test set: %s", test.shape)
 
-    for clf_class in [GaussianNB, MultinomialNB, LogisticRegression]:
+    #for clf_class in [GaussianNB, MultinomialNB, LogisticRegression, SVC]:
+    for clf_class in [LogisticRegression]:
         classifier_name = function_name(clf_class)
         if classifier_name is None:
             raise Exception("Unable to get name of classifier class", clf_class)
