@@ -189,10 +189,10 @@ if __name__ == "__main__":
     result_record['model_prefix'] = args.model_prefix
     result_record['model'] = args.model
     result_record['featurizer'] = args.featurizer
-    result_record['max_regions'] = args.max_regions if args.max_regions
-    result_record['depth'] = args.depth if args.depth is not None
-    result_record['decay'] = args.decay if args.decay is not None
-    result_record['sample_size'] = args.sample_size if args.sample_size
+    result_record['max_regions'] = args.max_regions
+    if args.depth is not None: result_record['depth'] = args.depth
+    if args.decay is not None: result_record['decay'] = args.decay
+    result_record['sample_size'] = args.sample_size
 
     evaluation(feature_extractor = featurizer,
                model_prefix = args.model_prefix,
