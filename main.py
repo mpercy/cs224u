@@ -54,13 +54,15 @@ logging.root.setLevel(level=logging.INFO)
 DEFAULT_MODEL = 'GloveModel'
 DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
 DEFAULT_NUM_REGIONS = 15
+DEFAULT_SAMPLE_SIZE = 20
 
 def evaluation(feature_extractor = None,
                clf = GaussianNB,
                model_prefix = None,
                data_dir = '20news-18828',
                result_record = None,
-               record_fname = None):
+               record_fname = None,
+               sample_size = None):
     if result_record is None:
         raise Exception("Must pass result_record")
     if record_fname is None:
@@ -76,7 +78,9 @@ def evaluation(feature_extractor = None,
     for catIdx, cat in enumerate(cats):
         logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
-            docs = sorted(listdir(os.path.join(baseFolder, cat)), key = int)[:20]
+            docs = sorted(listdir(os.path.join(baseFolder, cat)), key = int)
+            if sample_size is not None and sample_size != 0:
+                docs = docs[:sample_size]
         except:
             continue
         numDocs = len(docs)
@@ -125,6 +129,7 @@ def evaluation(feature_extractor = None,
         result_record[classifier_name + "_precision"] = precision
         result_record[classifier_name + "_recall"] = recall
         result_record[classifier_name + "_f1"] = f1
+        result_record[classifier_name + "_support"] = support
 
     with open(record_fname, "a") as records_out:
         json.dump(result_record, records_out, sort_keys = True)
@@ -140,9 +145,14 @@ if __name__ == "__main__":
     parser.add_argument('--featurizer',
                         help=('Higher level featurizer. Default: ' + DEFAULT_FEATURIZER))
     parser.set_defaults(featurizer=DEFAULT_FEATURIZER)
+
     parser.add_argument('--max_regions', type=int,
                         help=('Maximum regions to use. Default: ' + str(DEFAULT_NUM_REGIONS)))
     parser.set_defaults(max_regions=DEFAULT_NUM_REGIONS)
+
+    parser.add_argument('--sample_size', type=int,
+                        help=('How much to sample the dataset. Set to 0 to disable sampling. Default: ' + str(DEFAULT_SAMPLE_SIZE)))
+    parser.set_defaults(sample_size=DEFAULT_SAMPLE_SIZE)
 
     parser.add_argument('--reverse', dest='reverse', action='store_true', help='reverse region iter')
     parser.add_argument('--no-reverse', dest='reverse', action='store_false', help='reverse region iter')
@@ -179,4 +189,5 @@ if __name__ == "__main__":
                model_prefix = args.model_prefix,
                data_dir = args.data_dir,
                result_record = result_record,
-               record_fname = args.record_fname)
+               record_fname = args.record_fname,
+               sample_size = args.sample_size)
