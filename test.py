@@ -10,7 +10,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 
 
-from util import topicSearch
+from util import topicSearch, chunkify
 
 import logging
 import numpy as np
@@ -23,6 +23,8 @@ logging.root.setLevel(level=logging.INFO)
 
 class NaiveBayesBaseLine(unittest.TestCase):
     def testBaseLine(self):
+        return # disable slow test for now
+
         news_train = load_mlcomp('20news-18828', 'train')
         news_test = load_mlcomp('20news-18828', 'test')
         vectorizer = TfidfVectorizer(encoding='latin1')
@@ -62,6 +64,12 @@ class TopicSearchTest(unittest.TestCase):
         # one for each merge.
         expected_num_regions = num_segments + (num_segments - 1)
         self.assertEqual(expected_num_regions, len(regions))
+
+    def testChunkify(self):
+        s = "This is a long string with no gosh darn punctuation"
+        chunks = chunkify(s, 8)
+        self.assertGreater(len(chunks), 3, chunks)
+        logger.info(chunks)
 
 if __name__ == '__main__':
     unittest.main()

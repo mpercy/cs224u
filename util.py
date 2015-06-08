@@ -97,8 +97,38 @@ def splitAfter(pattern, inputStr):
         start = end
     return pieces
 
-def sentenceSeg(doc):
-    ''' Segment a document into sentences. '''
+RE_SPACE = re.compile(r'\s')
+
+def chunkify(inputStr, maxLen):
+    '''
+    Split a string into chunks of approximately maxLen size.
+    Only split on spaces. The maxLen is only a hint, and the
+    returned chunks will typically be slightly longer than maxLen.
+    '''
+    chunks = []
+    cur = 0
+    end = len(inputStr)
+    while cur < end:
+        if end - cur <= maxLen:
+            chunkEnd = end
+        else:
+            m = RE_SPACE.search(inputStr, cur + maxLen)
+            if m is None:
+                # If no spaces, c'est la vie.
+                chunkEnd = end
+            else:
+                chunkEnd = m.end()
+
+        chunks.append(inputStr[cur:chunkEnd])
+        cur = chunkEnd
+    return chunks
+
+def sentenceSeg(doc, maxSegmentLengthHint = 1000):
+    '''
+    Segment a document into sentences. maxSegmentLengthHint specifies a hint
+    such that extremely long sentences will get chunked up into segments of
+    roughly this number of characters. They may be slightly longer.
+    '''
     # Normalize MS-DOS and Mac newlines to Unix newlines.
     doc = re.sub(r'\r\n', '\n', doc) # DOS
     doc = re.sub(r'\r', '\n', doc)   # Mac
@@ -107,8 +137,13 @@ def sentenceSeg(doc):
     segments = []
     for s in initialSegments:
         stripped = s.strip()
-        if stripped != '':
-            segments.append(stripped)
+        stripped_len = len(stripped)
+        if stripped_len > 0:
+            if stripped_len <= maxSegmentLengthHint:
+                segments.append(stripped)
+            else:
+                for c in chunkify(stripped, maxSegmentLengthHint):
+                    segments.append(c)
     return segments
 
 def cosine(x, y):
@@ -446,5 +481,5 @@ class FlatFeatureExtractor(object):
         return self.feature_extractor.num_features()
 
     def featurize(self, doc):
-        doc = " ".join(sentenceSeg(doc))
+        #doc = " ".join(sentenceSeg(doc))
         return self.feature_extractor.featurize(doc)
