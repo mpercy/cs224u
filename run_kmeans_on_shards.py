@@ -18,12 +18,12 @@ logging.root.setLevel(level=logging.INFO)
 def k_cluster_wiki(model_prefix):
     k = 2000
     delta = 0.001
-    max_iters = 100
+    max_iters = 10
     error = float('nan')
     old_error = float('nan')
     relative_error_change = float('nan')
 
-    logger.info("Starting k-means clustering with k=%d", k)
+    logger.info("Starting k-means clustering with k=%d, max iters=%d, delta=%f", k, max_iters, delta)
 
     m = ESAModel(model_prefix)
     similarity_index = m.similarity_index
@@ -81,15 +81,15 @@ def k_cluster_wiki(model_prefix):
         cluster_counts = np.ones(k)
         docid = 0
         for shard in similarity_index.shards:
-            for doc_term_vector in shard.get_index().index.toarray():
+            for topic_vec in shard.get_index().index:
                 cluster = cluster_assignments[docid]
-                cluster_centroids[cluster] += doc_term_vector
+                cluster_centroids[cluster] += topic_vec
                 cluster_counts[cluster] += 1
                 docid += 1
         cluster_centroids /= cluster_counts[:,None]         # Take the average (off by one to avoid /0)
         cluster_centroids = normalize(cluster_centroids)    # And normalize.
 
-        logger.info("Iteration: %d, error: %f, previous error: %f, rel change: %f",
+        logger.info("Iteration: %d, previous error: %f, old error: %f, rel change: %f",
                     iter, error, old_error, relative_error_change)
         if relative_error_change < delta:
             logger.info("Converged.")
