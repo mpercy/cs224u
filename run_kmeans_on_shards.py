@@ -39,6 +39,10 @@ def k_cluster_wiki(model_prefix):
     # The cluster that each document belongs to.
     cluster_assignments = None
 
+    logger.info("Preloading memory-mapped shards...")
+    for i, shard in enumerate(similarity_index.shards):
+        shard.get_index()
+
     iter = 0
     while iter < max_iters:
 
@@ -53,12 +57,16 @@ def k_cluster_wiki(model_prefix):
         previous_centroid_distances = np.zeros(k)
         cluster_assignments = []
         docid = 0
-        for shard in similarity_index.shards:
+        num_shards = len(similarity_index.shards)
+        for i, shard in enumerate(similarity_index.shards):
+            logger.info("Processing shard %d/%d ...", i, num_shards)
             # Calculate a (Cluster X Document) cosine similarity matrix for the current shard.
             # (C X T) . (T X D) = (C X D)
+            logger.info("  Calculating similarities...")
             cluster_shard_similarities = previous_cluster_centroids * shard.get_index().index.transpose()
 
             # Select most similar cluster for each document.
+            logger.info("  Calculating argmax...")
             cluster_selections = np.argmax(cluster_shard_similarities, axis=0)
             cluster_assignments = np.hstack([cluster_assignments, cluster_selections])
 
@@ -68,6 +76,7 @@ def k_cluster_wiki(model_prefix):
             # We don't calculate errors on the first iteration since we don't
             # have an assignment yet.
             if previous_cluster_assignments.size != 1: # np.copy() of None has size 1
+                logger.info("  Calculating error...")
                 for doc_cluster_sims in cluster_shard_similarities.transpose():
                     cluster = previous_cluster_assignments[docid]
                     previous_centroid_distances[cluster] += (1 - doc_cluster_sims[cluster])
@@ -76,6 +85,7 @@ def k_cluster_wiki(model_prefix):
             # Iteratively recalculate the centroid of each cluster, so we don't
             # have to swap each shard out and back in.
             docid = shard_first_docid # Reset docid counter to before the error calcs.
+            logger.info("  Computing new cluster centroids...")
             for topic_vec in shard.get_index().index:
                 cluster = cluster_assignments[docid]
                 cluster_centroids[cluster] += topic_vec
