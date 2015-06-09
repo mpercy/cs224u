@@ -1,83 +1,119 @@
-# code for temporary tasks
-from numpy import isnan, array, zeros, argmax
+#!/usr/bin/env python
+############################################################################
+# Run k-means clustering on a forward similarity index to reduce the number
+# of documents in the index.
+
+import logging
 import numpy as np
+import sys
+
 from esa import ESAModel
-from random import randint
-import pickle
-from gensim.similarities.docsim import MatrixSimilarity
-from gensim.matutils import Dense2Corpus
+from gensim.similarities import MatrixSimilarity
+from sklearn.preprocessing import normalize
 
+logger = logging.getLogger("k-means")
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+logging.root.setLevel(level=logging.INFO)
 
-
-def main():
-    k_cluster_wiki()
-
-def k_cluster_wiki():
+def k_cluster_wiki(model_prefix):
     k = 2000
     delta = 0.001
+    max_iters = 100
     error = float('nan')
-    preer = float('nan')
+    old_error = float('nan')
+    relative_error_change = float('nan')
 
-    m = ESAModel('wiki_en-200000--20150531-035019')
-    fnum = 10000 #len(m.similarity_index)
-    vnum = len(m.dictionary)
+    logger.info("Starting k-means clustering with k=%d", k)
 
-    clusterIdcs = [randint(0, k-1) for _ in range(fnum)]
-    similarities = MatrixSimilarity(Dense2Corpus(np.array([[3., 2.], [1.,90.]])))
-    cnt = 0
-    while(isnan(error) or isnan(preer) or abs(1-error/preer)>delta):
-        # calculate the cluster centroid
-        centroids = [zeros(vnum) for _ in range(k)]
-        centCnt = [0. for _ in range(k)]
-        print len(centroids), centroids[0].shape
-        for i in range(fnum):
-            clusterIdx = clusterIdcs[i]
-            centroids[clusterIdx] += m.similarity_index.vector_by_id(i)
-            centCnt[clusterIdx] += 1.
-        print len(centroids), centroids[0].shape
-        for i in range(k):
-            if centCnt[i] > 0:
-                centroids[i] = centroids[i]/centCnt[i]
-        centroids = np.vstack(centroids)
-        print centroids.shape
-        print
-        # update topic assigment and error
-        preer = error
-        error = 0.
-        # build a similarity with centroids
-        similarities.index = centroids
-        # for each shard in m, set the clusterIdcs by comparing the similarity
-        shardNum = len(m.similarity_index.shards)
-        shardSize = m.similarity_index.shardsize
-        batchSize = 10000
-        for shardIdx in range(shardNum):
-            shard = m.similarity_index.shards[shardIdx]
-            batchStart = 0
-            while batchStart < shardSize:
-                batch = shard.index.index[batchStart:min(batchStart+batchSize,shardSize-1), :]
-                clusterSmi = similarities[batch]
-                stardIdx = shardIdx*shardSize+batchStart
-                endIdx = min(stardIdx+batchSize, len(clusterIdcs))
-                clusterIdcs[stardIdx:endIdx] = argmax(clusterSmi, axis=0)
-                batchStart += batchSize
+    m = ESAModel(model_prefix)
+    similarity_index = m.similarity_index
+    dictionary = m.dictionary
 
-        # update error
-        for docIdx in range(fnum):
-            tmp = np.sequare(centroids[clusterIdcs[docIdx]] - m.similarity_index.vector_by_id(docIdx))
-            tmp = sum(tmp)/float(vnum)
-            error += tmp
-        cnt += 1
-        print cnt,  error, preer
-    centroids = [zeros(vnum) for _ in range(k)]
-    centCnt = [0. for _ in range(k)]
-    for i in range(fnum):
-        clusterIdx = clusterIdcs[i]
-        centroids[clusterIdx] += m.similarity_index.vector_by_id(i)
-        centCnt[clusterIdx] += 1.
-    centroids = array(centroids)/array(centCnt)
+    num_topics = len(similarity_index)
+    num_terms = len(dictionary)
 
-    pickle.dump(centroids, open('clusters.p', wb))
+    # Create initial cluster centroids.
+    # L2-normalize them so we can calculate cosine similarity with a simple dot product.
+    cluster_centroids = normalize(np.random.uniform(size=(k, num_terms)))
 
+    # The cluster that each document belongs to.
+    cluster_assignments = None
+
+    iter = 0
+    while iter < max_iters:
+
+        # Calculate cosine similarities between each centroid and each topic.
+        # To save time, we also calculate the error for the previous assignment during this step.
+        logger.info("Calculating cosine similarity of each cluster with each document...")
+        previous_cluster_assignments = cluster_assignments
+        previous_centroid_distances = np.zeros(k)
+        cluster_assignments = []
+        docid = 0
+        for shard in similarity_index.shards:
+            # Calculate a (Cluster X Document) cosine similarity matrix for the current shard.
+            # (C X T) . (T X D) = (C X D)
+            cluster_shard_similarities = cluster_centroids * shard.get_index().index.transpose()
+
+            # Select most similar cluster for each document.
+            cluster_selections = np.argmax(cluster_shard_similarities, axis=0)
+            cluster_assignments.append(cluster_selections)
+
+            # Calculate errors for the previous assignment.
+            # We don't calculate errors on the first iteration since we don't
+            # have an assignment yet.
+            if previous_cluster_assignments is not None:
+                for doc_cluster_sims in cluster_shard_similarities.transpose():
+                    cluster = previous_cluster_assignments[docid]
+                    previous_centroid_distances[cluster] += (1 - doc_cluster_sims[cluster])
+                    docid += 1
+
+        cluster_assignments = np.hstack(cluster_assignments)
+        #print("Cluster assignments:", cluster_assignments)
+
+        # We just use the sum of all cosine distances as our error metric.
+        old_error = error
+        error = np.sum(previous_centroid_distances)
+        relative_error_change = abs(1 - error / old_error)
+
+        # Recalculate the centroid of each cluster.
+        logger.info("Recalculating the centroid of each cluster...")
+        cluster_centroids = np.zeros((k, num_terms))
+        cluster_counts = np.ones(k)
+        docid = 0
+        for shard in similarity_index.shards:
+            for doc_term_vector in shard.get_index().index.toarray():
+                cluster = cluster_assignments[docid]
+                cluster_centroids[cluster] += doc_term_vector
+                cluster_counts[cluster] += 1
+                docid += 1
+        cluster_centroids /= cluster_counts[:,None]         # Take the average (off by one to avoid /0)
+        cluster_centroids = normalize(cluster_centroids)    # And normalize.
+
+        logger.info("Iteration: %d, error: %f, previous error: %f, rel change: %f",
+                    iter, error, old_error, relative_error_change)
+        if relative_error_change < delta:
+            logger.info("Converged.")
+            break
+
+        iter += 1
+
+    # TODO: Drop clusters with zero members assigned and merge clusters that
+    # have converged to the same centroid.
+
+    centroids_fname = "%s.cluster.%d.centroids" % (model_prefix, k)
+    logger.info("Saving clusters to file: %s", centroids_fname)
+    s = MatrixSimilarity(None, dtype = np.float64, num_features = num_terms)
+    s.index = cluster_centroids
+    s.save(centroids_fname)
+
+    assignments_fname = "%s.cluster.%d.assignments" % (model_prefix, k)
+    logger.info("Saving cluster assignments to file: %s", assignments_fname)
+    np.save(open(assignments_fname, 'wb'), cluster_assignments)
+
+    logger.info("Done.")
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) < 2:
+        print("Usage: %s model_prefix" % (sys.argv[0],))
+        sys.exit(1)
+    k_cluster_wiki(sys.argv[1])
