@@ -21,7 +21,6 @@ import scipy
 import scipy.spatial.distance
 from numpy.linalg import svd
 # For visualization:
-from tsne import tsne # See http://lvdmaaten.github.io/tsne/#implementations
 import matplotlib.pyplot as plt
 # For clustering in the 'Word-sense ambiguities' section:
 from sklearn.cluster import AffinityPropagation
@@ -135,54 +134,6 @@ def lsa(mat=None, rownames=None, k=100):
     return (trunc, rownames)
 
 ######################################################################
-# Visualization
-
-def tsne_viz(
-        mat=None,
-        rownames=None,
-        indices=None,
-        colors=None,
-        output_filename=None,
-        figheight=40,
-        figwidth=50,
-        display_progress=False):
-    """2d plot of mat using tsne, with the points labeled by rownames,
-    aligned with colors (defaults to all black).
-    If indices is a list of indices into mat and rownames,
-    then it determines a subspace of mat and rownames to display.
-    Give output_filename a string argument to save the image to disk.
-    figheight and figwidth set the figure dimensions.
-    display_progress=True shows the information that the tsne method prints out."""
-    if not colors:
-        colors = ['black' for i in range(len(rownames))]
-    temp = sys.stdout
-    if not display_progress:
-        # Redirect stdout so that tsne doesn't fill the screen with its iteration info:
-        f = open(os.devnull, 'w')
-        sys.stdout = f
-    tsnemat = tsne(mat)
-    sys.stdout = temp
-    # Plot coordinates:
-    if not indices:
-        indices = range(len(rownames))
-    vocab = np.array(rownames)[indices]
-    xvals = tsnemat[indices, 0]
-    yvals = tsnemat[indices, 1]
-    # Plotting:
-    fig, ax = plt.subplots(nrows=1, ncols=1)
-    fig.set_figheight(40)
-    fig.set_figwidth(50)
-    ax.plot(xvals, yvals, marker='', linestyle='')
-    # Text labels:
-    for word, x, y, color in zip(vocab, xvals, yvals, colors):
-        ax.annotate(word, (x, y), fontsize=8, color=color)
-    # Output:
-    if output_filename:
-        plt.savefig(output_filename, bbox_inches='tight')
-    else:
-        plt.show()
-
-######################################################################
 # Semantic orientation method
 
 def semantic_orientation(
@@ -286,11 +237,6 @@ def glove(
     # in section 4.2:
     return (W + C, rownames)
 
-def glove_viz(mat=None, rownames=None, word_count=1000, iterations=10, n=50, display_progress=True):
-    glove_indices = random.sample(range(len(rownames)), word_count)
-    glovemat, _ = glove(mat=mat[glove_indices, :], iterations=iterations, n=n)
-    tsne_viz(mat=glovemat, rownames=np.array(rownames)[glove_indices])
-
 ######################################################################
 # Shallow neural networks
 
@@ -384,13 +330,14 @@ def sentiment_lexicon_example(
     # Build the new matrix of hidden representations:
     inputs, labels = zip(*sentidata)
     sentihidden = np.array([sentinet.hidden_representation(x) for x in inputs])
+    """
     # Visualize the results with t-SNE:
     def colormap(vals):
-        """Simple way to distinguish the 2x2x2 possible labels -- could be done much better!"""
         signs = ['CC' if x < 0.0 else '00' for _, x in sorted(vals.items())]
         return "#" + "".join(signs)
     colors = [colormap(lex[word]) for word in sentivocab]
     tsne_viz(mat=sentihidden, rownames=sentivocab, colors=colors, display_progress=display_progress, output_filename=output_filename)
+    """
 
 ######################################################################
 # Word similarity task
