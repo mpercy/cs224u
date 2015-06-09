@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 ##########################################################
 
-from sklearn.datasets import load_mlcomp
+from sklearn.datasets import load_mlcomp, fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import confusion_matrix
@@ -9,9 +9,10 @@ from sklearn.metrics import classification_report
 from sklearn.naive_bayes import MultinomialNB
 from models import LDAModel, LSAModel
 
-
-from util import *#topicSearch, chunkify
+from util import * # topicSearch, chunkify
 from os import listdir
+
+from distributedwordreps import ShallowNeuralNetwork
 
 import logging
 import numpy as np
@@ -98,23 +99,21 @@ def test():
 
 class NaiveBayesBaseLine(unittest.TestCase):
     def testBaseLine(self):
-        return # disable slow test for now
-
-        news_train = load_mlcomp('20news-18828', 'train')
-        news_test = load_mlcomp('20news-18828', 'test')
+        return
+        logger.info("Running 20NG NB baseline...")
+        news_train = fetch_20newsgroups(subset='train')
+        news_test = fetch_20newsgroups(subset='test')
         vectorizer = TfidfVectorizer(encoding='latin1')
-        X_train = vectorizer.fit_transform((open(f).read()
-                                        for f in news_train.filenames))
+        X_train = vectorizer.fit_transform(news_train.data)
         y_train = news_train.target
-        X_test = vectorizer.transform((open(f).read() 
-                                        for f in news_test.filenames))
+        X_test = vectorizer.transform(news_test.data)
         y_test = news_test.target
 
         clf = MultinomialNB().fit(X_train, y_train)
-        pred = clf.predict(X_test)
-        print(classification_report(y_test, pred,
+        pred_test = clf.predict(X_test)
+        print(classification_report(y_test, pred_test,
                                     target_names=news_test.target_names))
-
+        logger.info("Done.")
 
 class MockFeatureExtractor(object):
     def num_features(self):
