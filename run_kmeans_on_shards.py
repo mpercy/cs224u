@@ -15,7 +15,7 @@ logger = logging.getLogger("k-means")
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
-def k_cluster_wiki(model_prefix):
+def k_cluster_wiki(input_prefix, output_prefix):
     k = 2000
     delta = 0.001
     max_iters = 10
@@ -25,7 +25,7 @@ def k_cluster_wiki(model_prefix):
 
     logger.info("Starting k-means clustering with k=%d, max iters=%d, delta=%f", k, max_iters, delta)
 
-    m = ESAModel(model_prefix)
+    m = ESAModel(input_prefix)
     similarity_index = m.similarity_index
     dictionary = m.dictionary
 
@@ -110,7 +110,7 @@ def k_cluster_wiki(model_prefix):
         # Checkpoint the clusterings in every iteration so we can test them
         # before they converge.
         # Save centroids.
-        centroids_fname = "%s.cluster.%d.centroids" % (model_prefix, k)
+        centroids_fname = "%s.cluster.%d.centroids" % (output_prefix, k)
         logger.info("Saving clusters to file: %s", centroids_fname)
         s = MatrixSimilarity(None, dtype = np.float64, num_features = num_terms)
         s.index = cluster_centroids
@@ -118,7 +118,7 @@ def k_cluster_wiki(model_prefix):
         del s   # Free any RAM the similarity index might use.
 
         # Save assignments.
-        assignments_fname = "%s.cluster.%d.assignments" % (model_prefix, k)
+        assignments_fname = "%s.cluster.%d.assignments" % (output_prefix, k)
         logger.info("Saving cluster assignments to file: %s", assignments_fname)
         np.save(open(assignments_fname, 'wb'), cluster_assignments)
 
@@ -131,7 +131,7 @@ def k_cluster_wiki(model_prefix):
     logger.info("Done.")
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: %s model_prefix" % (sys.argv[0],))
+    if len(sys.argv) != 3:
+        print("Usage: %s input_prefix output_prefix" % (sys.argv[0],))
         sys.exit(1)
-    k_cluster_wiki(sys.argv[1])
+    k_cluster_wiki(sys.argv[1], sys.argv[2])
