@@ -133,21 +133,22 @@ class NaiveBayesBaseLine(unittest.TestCase):
                                         nb_classes = len(news_test.target_names),
                                         class_labels = news_test.target_names)
         for i, x in enumerate(X_train):
-            print x, y_train[i]
-            trndata.addSample(x, y_train[i])
+            #print x, y_train[i]
+            trndata.addSample(x.toarray(), y_train[i])
         trndata._convertToOneOfMany( )
 
         tstdata = ClassificationDataSet(len(vectorizer.get_feature_names()), 1,
                                         nb_classes = len(news_test.target_names),
                                         class_labels = news_test.target_names)
         for i, x in enumerate(X_test):
-            tstdata.addSample(x, y_test[i])
+            tstdata.addSample(x.toarray(), y_test[i])
         tstdata._convertToOneOfMany( )
 
         fnn = buildNetwork(trndata.indim, 100, trndata.outdim, outclass=SoftmaxLayer)
         trainer = BackpropTrainer(fnn, dataset=trndata, momentum=0.1, learningrate=0.01,
                                   verbose=True, weightdecay=0.01)
 
+        logger.info("Training pybrain for 50 epochs...")
         trainer.trainEpochs(50)
         pred = fnn.activateOnDataset(tstdata)
         pred = np.argmax(pred, axis=1) # argmax gives the class
