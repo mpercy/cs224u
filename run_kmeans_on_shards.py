@@ -89,26 +89,32 @@ def k_cluster_wiki(model_prefix):
         cluster_centroids /= cluster_counts[:,None]         # Take the average (off by one to avoid /0)
         cluster_centroids = normalize(cluster_centroids)    # And normalize.
 
-        logger.info("Iteration: %d, previous error: %f, old error: %f, rel change: %f",
+        logger.info("> Iteration: %d, previous error: %f, old error: %f, rel change: %f",
                     iter, error, old_error, relative_error_change)
+
+        # TODO: Drop clusters with zero members assigned and merge clusters that
+        # have converged to the same centroid.
+
+        # Checkpoint the clusterings in every iteration so we can test them
+        # before they converge.
+        # Save centroids.
+        centroids_fname = "%s.cluster.%d.centroids" % (model_prefix, k)
+        logger.info("Saving clusters to file: %s", centroids_fname)
+        s = MatrixSimilarity(None, dtype = np.float64, num_features = num_terms)
+        s.index = cluster_centroids
+        s.save(centroids_fname)
+        del s   # Free any RAM the similarity index might use.
+
+        # Save assignments.
+        assignments_fname = "%s.cluster.%d.assignments" % (model_prefix, k)
+        logger.info("Saving cluster assignments to file: %s", assignments_fname)
+        np.save(open(assignments_fname, 'wb'), cluster_assignments)
+
         if relative_error_change < delta:
             logger.info("Converged.")
             break
 
         iter += 1
-
-    # TODO: Drop clusters with zero members assigned and merge clusters that
-    # have converged to the same centroid.
-
-    centroids_fname = "%s.cluster.%d.centroids" % (model_prefix, k)
-    logger.info("Saving clusters to file: %s", centroids_fname)
-    s = MatrixSimilarity(None, dtype = np.float64, num_features = num_terms)
-    s.index = cluster_centroids
-    s.save(centroids_fname)
-
-    assignments_fname = "%s.cluster.%d.assignments" % (model_prefix, k)
-    logger.info("Saving cluster assignments to file: %s", assignments_fname)
-    np.save(open(assignments_fname, 'wb'), cluster_assignments)
 
     logger.info("Done.")
 
