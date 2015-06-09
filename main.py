@@ -15,6 +15,7 @@ Example:
 
 from glove import GloveModel
 from esa import ESAModel
+from models import LDAModel, LSAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
                  FlatFeatureExtractor, TopKLayerHierarchicalFeatureExtractor
@@ -113,12 +114,11 @@ def evaluation(feature_extractor = None,
 
     # Instantiate classifiers.
     classifiers = [
-        LogisticRegression(),
-        """
-        ShallowNeuralNetwork(input_dim = feature_extractor.num_features(),
-                             hidden_dim = 60,
-                             output_dim = num_labels)
-        """
+        LogisticRegression()
+        #,
+        #ShallowNeuralNetwork(input_dim = feature_extractor.num_features(),
+        #                     hidden_dim = 60,
+        #                     output_dim = num_labels)
     ]
 
     for clf in classifiers:
