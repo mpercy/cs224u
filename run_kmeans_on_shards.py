@@ -45,49 +45,51 @@ def k_cluster_wiki(model_prefix):
         # Calculate cosine similarities between each centroid and each topic.
         # To save time, we also calculate the error for the previous assignment during this step.
         logger.info("Calculating cosine similarity of each cluster with each document...")
-        previous_cluster_assignments = cluster_assignments
+        previous_cluster_assignments = np.copy(cluster_assignments)
+        previous_cluster_centroids = np.copy(cluster_centroids)
+        cluster_counts = np.ones(k) # Use ones instead of zeros to avoid divide by zero.
+
+        cluster_centroids = np.zeros((k, num_terms))
         previous_centroid_distances = np.zeros(k)
         cluster_assignments = []
         docid = 0
         for shard in similarity_index.shards:
             # Calculate a (Cluster X Document) cosine similarity matrix for the current shard.
             # (C X T) . (T X D) = (C X D)
-            cluster_shard_similarities = cluster_centroids * shard.get_index().index.transpose()
+            cluster_shard_similarities = previous_cluster_centroids * shard.get_index().index.transpose()
 
             # Select most similar cluster for each document.
             cluster_selections = np.argmax(cluster_shard_similarities, axis=0)
-            cluster_assignments.append(cluster_selections)
+            cluster_assignments = np.hstack([cluster_assignments, cluster_selections])
+
+            shard_first_docid = docid
 
             # Calculate errors for the previous assignment.
             # We don't calculate errors on the first iteration since we don't
             # have an assignment yet.
-            if previous_cluster_assignments is not None:
+            if previous_cluster_assignments.size != 1: # np.copy() of None has size 1
                 for doc_cluster_sims in cluster_shard_similarities.transpose():
                     cluster = previous_cluster_assignments[docid]
                     previous_centroid_distances[cluster] += (1 - doc_cluster_sims[cluster])
                     docid += 1
 
-        cluster_assignments = np.hstack(cluster_assignments)
-        #print("Cluster assignments:", cluster_assignments)
-
-        # We just use the sum of all cosine distances as our error metric.
-        old_error = error
-        error = np.sum(previous_centroid_distances)
-        relative_error_change = abs(1 - error / old_error)
-
-        # Recalculate the centroid of each cluster.
-        logger.info("Recalculating the centroid of each cluster...")
-        cluster_centroids = np.zeros((k, num_terms))
-        cluster_counts = np.ones(k)
-        docid = 0
-        for shard in similarity_index.shards:
+            # Iteratively recalculate the centroid of each cluster, so we don't
+            # have to swap each shard out and back in.
+            docid = shard_first_docid # Reset docid counter to before the error calcs.
             for topic_vec in shard.get_index().index:
                 cluster = cluster_assignments[docid]
                 cluster_centroids[cluster] += topic_vec
                 cluster_counts[cluster] += 1
                 docid += 1
+
+        #print("Cluster assignments:", cluster_assignments)
         cluster_centroids /= cluster_counts[:,None]         # Take the average (off by one to avoid /0)
         cluster_centroids = normalize(cluster_centroids)    # And normalize.
+
+        # We just use the sum of all cosine distances as our error metric.
+        old_error = error
+        error = np.sum(previous_centroid_distances)
+        relative_error_change = abs(1 - error / old_error)
 
         logger.info("> Iteration: %d, previous error: %f, old error: %f, rel change: %f",
                     iter, error, old_error, relative_error_change)
