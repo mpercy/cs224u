@@ -333,7 +333,6 @@ def sentiment_lexicon_example(
     """
     # Visualize the results with t-SNE:
     def colormap(vals):
-        """Simple way to distinguish the 2x2x2 possible labels -- could be done much better!"""
         signs = ['CC' if x < 0.0 else '00' for _, x in sorted(vals.items())]
         return "#" + "".join(signs)
     colors = [colormap(lex[word]) for word in sentivocab]
