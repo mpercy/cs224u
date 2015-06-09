@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 ##########################################################
-
+import gensim
+import logging
 from sklearn.datasets import load_mlcomp
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
@@ -8,10 +9,13 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.naive_bayes import MultinomialNB
 from models import LDAModel, LSAModel
-
-
+from sklearn.naive_bayes import GaussianNB, MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from glove import GloveModel
 from util import *#topicSearch, chunkify
 from os import listdir
+from sklearn.metrics import classification_report, f1_score, precision_recall_fscore_support
+from sklearn.svm import SVC
 
 import logging
 import numpy as np
@@ -23,6 +27,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
 def test():
+    sample_size = 20
     train = []
     trainY = []
     test = []
@@ -30,7 +35,7 @@ def test():
 
     # load data
     baseFolder = '20news-18828'
-    opts = {'base_feature_extractor':LDAModel(), 'depth':5, 'fullLayer':True, 'decay':0.8}
+    opts = {'base_feature_extractor':LSAModel(), 'depth':5, 'fullLayer':True, 'decay':0.8}
     feature_extractor = TopKLayerHierarchicalFeatureExtractor(opts)
     cats = listdir(baseFolder)
     for catIdx, cat in enumerate(cats):
@@ -67,7 +72,7 @@ def test():
     logger.info("Shape of test set: %s", test.shape)
 
     #for clf_class in [GaussianNB, MultinomialNB, LogisticRegression, SVC]:
-    for clf_class in [LogisticRegression]:
+    for clf_class in [GaussianNB, LogisticRegression, SVC]:
         classifier_name = function_name(clf_class)
         if classifier_name is None:
             raise Exception("Unable to get name of classifier class", clf_class)
@@ -83,17 +88,17 @@ def test():
         # Print detailed report.
         print(classification_report(testY, testPredY, target_names = cats, digits = 5))
 
-        # Save the important metrics.
-        precision, recall, f1, support = \
-            precision_recall_fscore_support(testY, testPredY, average='weighted')
-        result_record[classifier_name + "_precision"] = precision
-        result_record[classifier_name + "_recall"] = recall
-        result_record[classifier_name + "_f1"] = f1
-        #result_record[classifier_name + "_support"] = support
+    #     # Save the important metrics.
+    #     precision, recall, f1, support = \
+    #         precision_recall_fscore_support(testY, testPredY, average='weighted')
+    #     result_record[classifier_name + "_precision"] = precision
+    #     result_record[classifier_name + "_recall"] = recall
+    #     result_record[classifier_name + "_f1"] = f1
+    #     #result_record[classifier_name + "_support"] = support
 
-    with open(record_fname, "a") as records_out:
-        json.dump(result_record, records_out, sort_keys = True)
-        records_out.write("\n")
+    # with open(record_fname, "a") as records_out:
+    #     json.dump(result_record, records_out, sort_keys = True)
+    #     records_out.write("\n")
 
 
 class NaiveBayesBaseLine(unittest.TestCase):
