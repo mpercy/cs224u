@@ -15,9 +15,11 @@ Example:
 
 from glove import GloveModel
 from esa import ESAModel
+from models import LDAModel, LSAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
                  FlatFeatureExtractor, TopKLayerHierarchicalFeatureExtractor
+#from distributedwordreps import ShallowNeuralNetwork
 import argparse
 import inspect
 import json
@@ -107,14 +109,24 @@ def evaluation(feature_extractor = None,
     logger.info("Shape of training set: %s", train.shape)
     logger.info("Shape of test set: %s", test.shape)
 
-    #for clf_class in [GaussianNB, MultinomialNB, LogisticRegression, SVC]:
-    for clf_class in [LogisticRegression]:
-        classifier_name = function_name(clf_class)
+    num_labels = len(cats)
+    logger.info("Number of labels: %d", num_labels)
+
+    # Instantiate classifiers.
+    classifiers = [
+        LogisticRegression()
+        #,
+        #ShallowNeuralNetwork(input_dim = feature_extractor.num_features(),
+        #                     hidden_dim = 60,
+        #                     output_dim = num_labels)
+    ]
+
+    for clf in classifiers:
+        classifier_name = clf.__class__.__name__
         if classifier_name is None:
             raise Exception("Unable to get name of classifier class", clf_class)
-
         logger.info("Evaluating on classifier %s...", classifier_name)
-        clf = clf_class()
+
         clf.fit(train, trainY)
         logger.info('training finished')
 

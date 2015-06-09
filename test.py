@@ -9,13 +9,17 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.naive_bayes import MultinomialNB
 from models import LDAModel, LSAModel
+
 from sklearn.naive_bayes import GaussianNB, MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from glove import GloveModel
 from util import *#topicSearch, chunkify
+
 from os import listdir
 from sklearn.metrics import classification_report, f1_score, precision_recall_fscore_support
 from sklearn.svm import SVC
+
+from distributedwordreps import ShallowNeuralNetwork
 
 import logging
 import numpy as np
@@ -103,10 +107,13 @@ def test():
 
 class NaiveBayesBaseLine(unittest.TestCase):
     def testBaseLine(self):
-        return # disable slow test for now
+        #return # disable slow test for now
+        logger.info("Running 20NG NB baseline...")
 
+        logger.info("Calculating TF-IDF on 20ng data set...")
         news_train = load_mlcomp('20news-18828', 'train')
         news_test = load_mlcomp('20news-18828', 'test')
+        target_names = news_test.target_names
         vectorizer = TfidfVectorizer(encoding='latin1')
         X_train = vectorizer.fit_transform((open(f).read()
                                         for f in news_train.filenames))
@@ -115,10 +122,54 @@ class NaiveBayesBaseLine(unittest.TestCase):
                                         for f in news_test.filenames))
         y_test = news_test.target
 
+        del news_train, news_test
+
+        logger.info("Running MultinomialNB...")
         clf = MultinomialNB().fit(X_train, y_train)
-        pred = clf.predict(X_test)
+        print(classification_report(y_test, clf.predict(X_test),
+                                    target_names=target_names))
+
+        del clf
+
+        logger.info("Running pybrain...")
+
+        from pybrain.datasets            import ClassificationDataSet
+        from pybrain.utilities           import percentError
+        from pybrain.tools.shortcuts     import buildNetwork
+        from pybrain.supervised.trainers import BackpropTrainer
+        from pybrain.structure.modules   import SoftmaxLayer
+        from pybrain.tools.xml.networkwriter import NetworkWriter
+        from pybrain.tools.xml.networkreader import NetworkReader
+
+        trndata = ClassificationDataSet(len(vectorizer.get_feature_names()), 1,
+                                        nb_classes = len(target_names),
+                                        class_labels = target_names)
+        for i, x in enumerate(X_train):
+            #print x, y_train[i]
+            trndata.addSample(x.toarray(), y_train[i])
+        trndata._convertToOneOfMany( )
+        del X_train, y_train
+
+        tstdata = ClassificationDataSet(len(vectorizer.get_feature_names()), 1,
+                                        nb_classes = len(target_names),
+                                        class_labels = target_names)
+        for i, x in enumerate(X_test):
+            tstdata.addSample(x.toarray(), y_test[i])
+        tstdata._convertToOneOfMany( )
+        del X_test, y_test
+
+        logger.info("Building network...")
+        fnn = buildNetwork(trndata.indim, 100, trndata.outdim, outclass=SoftmaxLayer)
+        trainer = BackpropTrainer(fnn, dataset=trndata, momentum=0.1, learningrate=0.01,
+                                  verbose=True, weightdecay=0.01)
+
+        logger.info("Training pybrain for 50 epochs...")
+        trainer.trainEpochs(50)
+        pred = fnn.activateOnDataset(tstdata)
+        pred = np.argmax(pred, axis=1) # argmax gives the class
+
         print(classification_report(y_test, pred,
-                                    target_names=news_test.target_names))
+                                    target_names=target_names))
 
 
 class MockFeatureExtractor(object):
