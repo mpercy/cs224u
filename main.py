@@ -51,7 +51,7 @@ logger = logging.getLogger(program)
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
-DEFAULT_MODEL = 'GloveModel'
+DEFAULT_MODEL = 'LDAModel' #'GloveModel'
 DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
 DEFAULT_NUM_REGIONS = 15
 DEFAULT_SAMPLE_SIZE = 20

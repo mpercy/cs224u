@@ -1,5 +1,7 @@
 # inlcudes different models to convert a text segmentation into an array
 from nltk.tokenize import wordpunct_tokenize
+from gensim.corpora import Dictionary
+import pickle
 
 class LDAModel:
 	def __init__(self):
@@ -26,7 +28,7 @@ class LDAModel:
 		return vec
 
 
-class LSALModel:
+class LSAModel:
 	def __init__(self):
 		self.fname = 'lsa_model.p'
 		self.model = pickle.load(open(self.fname, 'r'))
