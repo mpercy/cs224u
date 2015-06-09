@@ -32,65 +32,69 @@ logging.root.setLevel(level=logging.INFO)
 
 def test():
     sample_size = 20
-    train = []
-    trainY = []
-    test = []
-    testY = []
+
 
     # load data
     baseFolder = '20news-18828'
-    opts = {'base_feature_extractor':LSAModel(), 'depth':5, 'fullLayer':True, 'decay':0.8}
-    feature_extractor = TopKLayerHierarchicalFeatureExtractor(opts)
-    cats = listdir(baseFolder)
-    for catIdx, cat in enumerate(cats):
-        logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
-        try:
-            docs = sorted(listdir(os.path.join(baseFolder, cat)), key = int)
-            if sample_size is not None and sample_size != 0:
-                docs = docs[:sample_size]
-        except:
-            continue
-        numDocs = len(docs)
-        print numDocs
-        for docIdx, doc_filename in enumerate(docs):
-            doc_filename = os.path.join(baseFolder, cat, doc_filename)
-            logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
-            doc = open(doc_filename).read()
-            feature = feature_extractor.featurize(doc)
-            logger.debug('doc %d feature extracted', docIdx)
-            if docIdx < numDocs*0.9:
-                train.append(feature)
-                trainY.append(catIdx)
-            else:
-                test.append(feature)
-                testY.append(catIdx)
-            logger.debug('-----')
+    m = LDAModel()
+    
+    for depth_iter in range(1, 8):
+        for decay_iter in range(0, 10):
+            train = []
+            trainY = []
+            test = []
+            testY = []
+            opts = {'base_feature_extractor':m, 'depth':depth_iter, 'fullLayer':True, 'decay':decay_iter/10.0}
+            feature_extractor = TopKLayerHierarchicalFeatureExtractor(opts)
+            cats = listdir(baseFolder)
+            for catIdx, cat in enumerate(cats):
+                # logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
+                try:
+                    docs = sorted(listdir(os.path.join(baseFolder, cat)), key = int)
+                    if sample_size is not None and sample_size != 0:
+                        docs = docs[:sample_size]
+                except:
+                    continue
+                numDocs = len(docs)
+                for docIdx, doc_filename in enumerate(docs):
+                    doc_filename = os.path.join(baseFolder, cat, doc_filename)
+                    # logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
+                    doc = open(doc_filename).read()
+                    feature = feature_extractor.featurize(doc)
+                    # logger.debug('doc %d feature extracted', docIdx)
+                    if docIdx < numDocs*0.9:
+                        train.append(feature)
+                        trainY.append(catIdx)
+                    else:
+                        test.append(feature)
+                        testY.append(catIdx)
+                    # logger.debug('-----')
 
-    # Convert to sparse format for compact storage and minimal memory usage.
-    train = np.vstack(train)
-    trainY = np.hstack(trainY)
-    test = np.vstack(test)
-    testY = np.hstack(testY)
+            # Convert to sparse format for compact storage and minimal memory usage.
+            train = np.vstack(train)
+            trainY = np.hstack(trainY)
+            test = np.vstack(test)
+            testY = np.hstack(testY)
 
-    logger.info("Shape of training set: %s", train.shape)
-    logger.info("Shape of test set: %s", test.shape)
+            # logger.info("Shape of training set: %s", train.shape)
+            # logger.info("Shape of test set: %s", test.shape)
 
-    #for clf_class in [GaussianNB, MultinomialNB, LogisticRegression, SVC]:
-    for clf_class in [GaussianNB, LogisticRegression, SVC]:
-        classifier_name = function_name(clf_class)
-        if classifier_name is None:
-            raise Exception("Unable to get name of classifier class", clf_class)
+            #for clf_class in [GaussianNB, MultinomialNB, LogisticRegression, SVC]:
+            for clf_class in [MultinomialNB]:
+                classifier_name = function_name(clf_class)
+                if classifier_name is None:
+                    raise Exception("Unable to get name of classifier class", clf_class)
 
-        logger.info("Evaluating on classifier %s...", classifier_name)
-        clf = clf_class()
-        clf.fit(train, trainY)
-        logger.info('training finished')
+                logger.info("Evaluating on depth %s, decay %s...", str(depth_iter), str(decay_iter/10.))
+                clf = clf_class()
+                clf.fit(train, trainY)
+                logger.info('training finished')
 
-        # Make prediction.
-        testPredY = clf.predict(test)
+                # Make prediction.
+                testPredY = clf.predict(test)
 
-        # Print detailed report.
-        print(classification_report(testY, testPredY, target_names = cats, digits = 5))
+                # Print detailed report.
+                print(classification_report(testY, testPredY, target_names = cats, digits = 5))
 
     #     # Save the important metrics.
     #     precision, recall, f1, support = \
@@ -204,4 +208,3 @@ class TopicSearchTest(unittest.TestCase):
 
 if __name__ == '__main__':
     test()
-    # unittest.main()
