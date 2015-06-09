@@ -9,3 +9,4 @@
 *.pyc
 glove.6B*
 records.txt
+*.p
