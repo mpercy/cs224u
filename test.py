@@ -99,12 +99,13 @@ def test():
 
 class NaiveBayesBaseLine(unittest.TestCase):
     def testBaseLine(self):
-        return # disable slow test for now
+        #return # disable slow test for now
         logger.info("Running 20NG NB baseline...")
 
         logger.info("Calculating TF-IDF on 20ng data set...")
         news_train = load_mlcomp('20news-18828', 'train')
         news_test = load_mlcomp('20news-18828', 'test')
+        target_names = news_test.target_names
         vectorizer = TfidfVectorizer(encoding='latin1')
         X_train = vectorizer.fit_transform((open(f).read()
                                         for f in news_train.filenames))
@@ -113,11 +114,14 @@ class NaiveBayesBaseLine(unittest.TestCase):
                                         for f in news_test.filenames))
         y_test = news_test.target
 
+        del news_train, news_test
+
         logger.info("Running MultinomialNB...")
         clf = MultinomialNB().fit(X_train, y_train)
-        pred = clf.predict(X_test)
-        print(classification_report(y_test, pred,
-                                    target_names=news_test.target_names))
+        print(classification_report(y_test, clf.predict(X_test),
+                                    target_names=target_names))
+
+        del clf
 
         logger.info("Running pybrain...")
 
@@ -130,20 +134,23 @@ class NaiveBayesBaseLine(unittest.TestCase):
         from pybrain.tools.xml.networkreader import NetworkReader
 
         trndata = ClassificationDataSet(len(vectorizer.get_feature_names()), 1,
-                                        nb_classes = len(news_test.target_names),
-                                        class_labels = news_test.target_names)
+                                        nb_classes = len(target_names),
+                                        class_labels = target_names)
         for i, x in enumerate(X_train):
             #print x, y_train[i]
             trndata.addSample(x.toarray(), y_train[i])
         trndata._convertToOneOfMany( )
+        del X_train, y_train
 
         tstdata = ClassificationDataSet(len(vectorizer.get_feature_names()), 1,
-                                        nb_classes = len(news_test.target_names),
-                                        class_labels = news_test.target_names)
+                                        nb_classes = len(target_names),
+                                        class_labels = target_names)
         for i, x in enumerate(X_test):
             tstdata.addSample(x.toarray(), y_test[i])
         tstdata._convertToOneOfMany( )
+        del X_test, y_test
 
+        logger.info("Building network...")
         fnn = buildNetwork(trndata.indim, 100, trndata.outdim, outclass=SoftmaxLayer)
         trainer = BackpropTrainer(fnn, dataset=trndata, momentum=0.1, learningrate=0.01,
                                   verbose=True, weightdecay=0.01)
@@ -154,7 +161,7 @@ class NaiveBayesBaseLine(unittest.TestCase):
         pred = np.argmax(pred, axis=1) # argmax gives the class
 
         print(classification_report(y_test, pred,
-                                    target_names=news_test.target_names))
+                                    target_names=target_names))
 
 
 class MockFeatureExtractor(object):
