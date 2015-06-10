@@ -1,0 +1,101 @@
+C	LogisticRegression_f1	LogisticRegression_f1_train	LogisticRegression_precision	LogisticRegression_recall	RandomForestClassifier_f1	RandomForestClassifier_precision	RandomForestClassifier_recall	ShallowNeuralNetwork_f1	ShallowNeuralNetwork_precision	ShallowNeuralNetwork_recall	decay	depth	featurizer	max_regions	model	model_prefix	penalty	sample_size	timestamp
+	0.732335352959		0.736010493574	0.733222407099							0.2	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.73463297217		0.738600260082	0.73544093178							0.2	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:23:45 2015
+	0.73277803756		0.736051441386	0.73377703827							0.2	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:15:46 2015
+	0.727756676		0.730041764519	0.729339988907							0.2	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:19:15 2015
+	0.735546545436		0.740117236306	0.735995562951							0.2	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:34:20 2015
+	0.730630116667		0.733923604191	0.731003882418							0.2	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 07:01:54 2015
+	0.729913238977		0.733255292961	0.730449251248							0.2	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:39:09 2015
+	0.733132815214		0.736551114221	0.733222407099							0.2	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:25:00 2015
+	0.732466481113	0.838856891743	0.735487522228	0.733185102835							0.2	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							0.4	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.736375948146		0.740046850576	0.737104825291							0.4	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:24:42 2015
+	0.729948545241		0.732089658895	0.731003882418							0.4	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:17:05 2015
+	0.73706685678		0.740327658192	0.737104825291							0.4	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:18:57 2015
+	0.737217684584		0.740674758968	0.737659456461							0.4	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:34:12 2015
+	0.738588658702		0.741902171116	0.738768718802							0.4	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 07:00:14 2015
+	0.726896108818		0.729193340008	0.727676095397							0.4	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:38:05 2015
+	0.728104976678		0.730499781032	0.729339988907							0.4	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:24:43 2015
+	0.73677688129	0.847768268163	0.74013706396	0.737076153419							0.4	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							0.6	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.728862217148		0.733512544956	0.728230726567							0.6	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:24:36 2015
+	0.731890635388		0.738124365146	0.731558513588							0.6	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:17:46 2015
+	0.732962744108		0.737496180933	0.73377703827							0.6	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:20:41 2015
+	0.737840206926		0.742682181838	0.738214087632							0.6	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:34:17 2015
+	0.737041556337		0.740714414817	0.737659456461							0.6	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 06:59:58 2015
+	0.738790673445		0.743110694955	0.739877981143							0.6	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:31:24 2015
+	0.734050038986		0.737786864521	0.73488630061							0.6	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:14:47 2015
+	0.727562084109	0.849072558382	0.728745360183	0.729294052251							0.6	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							0.8	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.732224637394		0.733960830332	0.733222407099							0.8	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:20:59 2015
+	0.737008603377		0.741352757893	0.737659456461							0.8	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:12:07 2015
+	0.732178507423		0.737194892746	0.732667775929							0.8	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:14:11 2015
+	0.731488266095		0.735185152571	0.732113144759							0.8	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:25:23 2015
+	0.74454864911		0.74946188851	0.745978924016							0.8	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 06:45:07 2015
+	0.740563586909		0.745997313576	0.742096505824							0.8	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:04:38 2015
+	0.736667999093		0.741841768277	0.737659456461							0.8	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 09:20:53 2015
+	0.735489094763	0.852836114383	0.738504045848	0.73596442468							0.8	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							0.95	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:46 2015
+	0.733537402829		0.737154425243	0.73377703827							0.95	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:24:48 2015
+	0.733024002182		0.736348150147	0.73377703827							0.95	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:16:05 2015
+	0.734128453053		0.737758810867	0.73488630061							0.95	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:19:51 2015
+	0.73995426118		0.744575493711	0.741541874653							0.95	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:33:56 2015
+	0.736281085729		0.740451518458	0.738214087632							0.95	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 06:57:27 2015
+	0.734158727489		0.737950542664	0.73544093178							0.95	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:33:59 2015
+	0.732021328417		0.740937350116	0.730449251248							0.95	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:18:38 2015
+	0.732087423335	0.853752902044	0.735482414609	0.732629238466							0.95	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							0.9	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.735515819681		0.739600757073	0.735995562951							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:23:49 2015
+	0.735287563536		0.739389082944	0.735995562951							0.9	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:17:07 2015
+	0.734831516758		0.737881259359	0.735995562951							0.9	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:21:01 2015
+	0.73884389678		0.743871353838	0.739877981143							0.9	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:34:32 2015
+	0.74071794524		0.74584284112	0.742096505824							0.9	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 06:59:14 2015
+	0.739971538335		0.74417699505	0.741541874653							0.9	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:37:53 2015
+	0.734820163328		0.745355410346	0.73377703827							0.9	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:22:43 2015
+	0.735981573782	0.851377375124	0.73932033532	0.736520289049							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+	0.732335352959		0.736010493574	0.733222407099							1.0	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:43:47 2015
+	0.728838700245		0.731290119678	0.729339988907							1.0	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 02:24:04 2015
+	0.724388612994		0.728011707262	0.724902939545							1.0	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 03:16:02 2015
+	0.732597441842		0.736504695311	0.733222407099							1.0	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 04:17:28 2015
+	0.728228549279		0.738816626682	0.725457570715							1.0	4	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 05:32:18 2015
+	0.734957797102		0.739342405827	0.735995562951							1.0	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 06:57:37 2015
+	0.735953436774		0.738830746962	0.737104825291							1.0	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 08:33:47 2015
+	0.735384622841		0.73815333857	0.737104825291							1.0	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 10:18:56 2015
+	0.734585734051	0.854196262358	0.73684872676	0.73596442468							1.0	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:15:32 2015
+0.35	0.734448132949	0.855845646214	0.738786183392	0.734852695942							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt	l2	0	Wed Jun 10 13:31:17 2015
+0.55	0.73123999079	0.855540115926	0.735102713523	0.731517509728							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt	l2	0	Wed Jun 10 13:31:17 2015
+0.75	0.727817399782	0.854809565055	0.730717796572	0.728182323513							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt	l2	0	Wed Jun 10 13:31:17 2015
+0.9	0.732452427557	0.855730898301	0.735718617097	0.733185102835							0.9	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt	l2	0	Wed Jun 10 13:31:17 2015
+	0.6		0.6	0.6							0.0	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 22:31:20 2015
+	0.6		0.6	0.6							None	None	MaxTopicFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 22:32:19 2015
+	0.625		0.625	0.625							None	None	FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 22:34:32 2015
+	0.733222407099		0.733222407099	0.733222407099									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Sun Jun  7 23:12:18 2015
+	0.6		0.6	0.6							0.2	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:17:06 2015
+	0.6		0.6	0.6							0.2	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:21:05 2015
+	0.625		0.625	0.625							0.2	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:24:12 2015
+	0.625		0.625	0.625							0.5	1	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:44:39 2015
+	0.625		0.625	0.625							0.5	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:45:36 2015
+	0.581666666667		0.5875	0.625									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:50:44 2015
+	0.566666666667		0.5625	0.625							0.8	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Sun Jun  7 23:53:26 2015
+	0.593333333333		0.591666666667	0.65							1.0	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 00:04:22 2015
+	0.556140350877		0.508771929825	0.631578947368							1.0	2	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 00:08:14 2015
+	0.528070175439		0.521929824561	0.578947368421									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 00:10:24 2015
+	0.705128465905		0.708408377269	0.705903602584									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 00:14:23 2015
+	0.525		0.4875	0.6							1.0	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 01:08:35 2015
+	0.596666666667		0.595833333333	0.65							1.0	3	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 01:12:34 2015
+	0.703369804412		0.706773097478	0.704076355617									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:24:02 2015
+	0.727042710895		0.731051734589	0.727121464226									FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Mon Jun  8 01:30:58 2015
+	0.580952380952		0.576666666667	0.625				0.0047619047619	0.0025	0.05			FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 23:53:53 2015
+	0.580952380952		0.576666666667	0.625				0.00487804878049	0.0025641025641	0.05			FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 23:54:26 2015
+	0.580952380952		0.576666666667	0.625				0.00487804878049	0.0025641025641	0.05			FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 23:57:55 2015
+	0.580952380952		0.576666666667	0.625				0.0047619047619	0.0025	0.05			FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Mon Jun  8 23:58:28 2015
+								0.00495343768575	0.00260308204915	0.0510204081633			FlatFeatureExtractor	15	GloveModel	glove.6B.300d.txt		100	Mon Jun  8 23:59:21 2015
+					0.18619047619	0.1925	0.225				0.8	5	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Tue Jun  9 18:53:40 2015
+					0.304270569454	0.3324752062	0.316326530612				0.8	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		100	Tue Jun  9 19:02:52 2015
+					0.276666666667	0.275	0.3				0.8	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Tue Jun  9 19:08:48 2015
+					0.177619047619	0.176666666667	0.2				0.8	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Tue Jun  9 19:10:23 2015
+	0.532619047619		0.501666666667	0.6							0.9	7	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Wed Jun 10 02:39:24 2015
+	0.735241549618		0.739251259821	0.736520289049							0.9	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 03:41:55 2015
+	0.532619047619	0.99722007722	0.501666666667	0.6							0.9	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		20	Wed Jun 10 11:44:30 2015
+	0.735241549618	0.880822218093	0.739251259821	0.736520289049							0.9	6	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 11:45:45 2015
+	0.731797339241	0.832523896441	0.735207229593	0.732629238466							0.9	0	TopKLayerHierarchicalFeatureExtractor	15	GloveModel	glove.6B.300d.txt		0	Wed Jun 10 12:07:04 2015
