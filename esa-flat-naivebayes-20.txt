@@ -1,0 +1,31 @@
+https://gist.githubusercontent.com/anonymous/848293447452f9f4b889/raw/d0510ee49f6c18395f441bc821745b214eab0b6e/esa_nb_20_flat.txt
+
+2015-06-10 10:07:00,307 : INFO : Shape of training set: (324, 3796181)
+2015-06-10 10:07:00,307 : INFO : Shape of test set: (36, 3796181)
+2015-06-10 10:07:00,307 : INFO : Number of labels: 20
+2015-06-10 10:07:00,307 : INFO : Evaluating on classifier MultinomialNB...
+2015-06-10 10:14:09,107 : INFO : training finished
+/mnt/venv/local/lib/python2.7/site-packages/sklearn/metrics/classification.py:958: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+                          precision    recall  f1-score   support
+
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               sci.space    0.33333   1.00000   0.50000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+         sci.electronics    0.00000   0.00000   0.00000         2
+                 sci.med    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.religion.misc    0.13333   1.00000   0.23529         2
+      talk.politics.guns    0.50000   0.50000   0.50000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+          comp.windows.x    1.00000   1.00000   1.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+   comp.sys.mac.hardware    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+               rec.autos    0.50000   0.50000   0.50000         2
+
+             avg / total    0.47037   0.44444   0.41122        36
