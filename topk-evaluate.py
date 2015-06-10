@@ -136,7 +136,8 @@ def evaluation(model = None,
 
     # Instantiate classifiers.
     classifiers = [
-        LogisticRegression()
+        LogisticRegression(),
+        MultinomialNB()
         #,
         #ShallowNeuralNetwork(input_dim = feature_extractor.num_features(),
         #                     hidden_dim = 60,
@@ -152,10 +153,16 @@ def evaluation(model = None,
         clf.fit(train, trainY)
         logger.info('training finished')
 
+        # Record training error.
+        trainPredY = clf.predict(train)
+        print("Training error:")
+        print(classification_report(trainY, trainPredY, target_names = cats, digits = 5))
+
         # Make prediction.
         testPredY = clf.predict(test)
 
         # Print detailed report.
+        print("Test error:")
         print(classification_report(testY, testPredY, target_names = cats, digits = 5))
 
         # Save the important metrics.
@@ -165,6 +172,10 @@ def evaluation(model = None,
         result_record[classifier_name + "_recall"] = recall
         result_record[classifier_name + "_f1"] = f1
         #result_record[classifier_name + "_support"] = support
+
+        precision, recall, f1, support = \
+            precision_recall_fscore_support(trainY, trainPredY, average='weighted')
+        result_record[classifier_name + "_f1_train"] = f1
 
     with open(record_fname, "a") as records_out:
         json.dump(result_record, records_out, sort_keys = True)
