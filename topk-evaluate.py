@@ -99,7 +99,7 @@ def evaluation(model = None,
         except:
             continue
         numDocs = len(docs)
-        logger.info("Docs: %s", docs)
+        #logger.info("Docs: %s", docs)
         for docIdx, doc_filename in enumerate(docs):
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
