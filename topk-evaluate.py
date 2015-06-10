@@ -18,7 +18,8 @@ from esa import ESAModel, ClusteredESAModel
 from models import LDAModel, LSAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
-                 FlatFeatureExtractor, TopKLayerHierarchicalFeatureExtractor
+                 FlatFeatureExtractor, TopKLayerHierarchicalFeatureExtractor, \
+                 topKHierarchicalSegments
 #from distributedwordreps import ShallowNeuralNetwork
 import argparse
 import inspect
@@ -58,13 +59,16 @@ DEFAULT_FEATURIZER = 'MaxTopicFeatureExtractor'
 DEFAULT_NUM_REGIONS = 15
 DEFAULT_SAMPLE_SIZE = 20
 
-def evaluation(feature_extractor = None,
+def evaluation(model = None,
                clf = GaussianNB,
                model_prefix = None,
                data_dir = '20news-18828',
                result_record = None,
                record_fname = None,
-               sample_size = None):
+               sample_size = None,
+               depth = 0,
+               decay = 1.0,
+               fullLayer = True):
     if result_record is None:
         raise Exception("Must pass result_record")
     if record_fname is None:
@@ -75,27 +79,40 @@ def evaluation(feature_extractor = None,
     testY = []
 
     # load data
+    pickle_suffix = ".%s.segmented.pickle" % (model.__class__.__name__,)
     baseFolder = data_dir
     cats = sorted(listdir(baseFolder))
     for catIdx, cat in enumerate(cats):
         logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         dirpath = os.path.join(baseFolder, cat)
+        #print dirpath
+
         try:
             filtered_docs = []
             for d in listdir(dirpath):
-                if not d.endswith(".pickle"):
+                #print d
+                if d.endswith(pickle_suffix):
                     filtered_docs.append(d)
-            docs = sorted(filtered_docs, key = int)
+            docs = sorted(filtered_docs, key = lambda n: int(n.split(".")[0]))
             if sample_size is not None and sample_size != 0:
                 docs = docs[:sample_size]
         except:
             continue
         numDocs = len(docs)
+        logger.info("Docs: %s", docs)
         for docIdx, doc_filename in enumerate(docs):
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
-            doc = open(doc_filename).read()
-            feature = feature_extractor.featurize(doc)
+            doc = gensim.utils.unpickle(doc_filename)
+            segments = doc[0]
+            regions = doc[1]
+            feature = topKHierarchicalSegments(segments,
+                                               regions,
+                                               feature_extractor = model,
+                                               depth = depth,
+                                               fullLayer = fullLayer,
+                                               decay = decay)
+
             logger.debug('doc %d feature extracted', docIdx)
             if docIdx < numDocs*0.9:
                 train.append(feature)
@@ -191,6 +208,7 @@ if __name__ == "__main__":
     #model = ESAModel(args.model_prefix) # ESA is not working very well.
     #model = GloveModel(args.model_prefix)
 
+    """
     # load secondary feature extractor
     featurizer_clazz = globals()[args.featurizer]
     options = {'base_feature_extractor': model,
@@ -200,20 +218,23 @@ if __name__ == "__main__":
                'decay': args.decay}
     featurizer = featurizer_clazz(options)
     #featurizer = MaxTopicFeatureExtractor(options)
+    """
 
     result_record = {}
     result_record['timestamp'] = time.asctime()
     result_record['model_prefix'] = args.model_prefix
     result_record['model'] = args.model
-    result_record['featurizer'] = args.featurizer
+    result_record['featurizer'] = "TopKLayerHierarchicalFeatureExtractor"
     result_record['max_regions'] = args.max_regions
     if args.depth is not None: result_record['depth'] = args.depth
     if args.decay is not None: result_record['decay'] = args.decay
     result_record['sample_size'] = args.sample_size
 
-    evaluation(feature_extractor = featurizer,
+    evaluation(model = model,
                model_prefix = args.model_prefix,
                data_dir = args.data_dir,
                result_record = result_record,
                record_fname = args.record_fname,
-               sample_size = args.sample_size)
+               sample_size = args.sample_size,
+               depth = args.depth,
+               decay = args.decay)
