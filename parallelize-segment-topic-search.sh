@@ -7,6 +7,8 @@ shift
 parallel=$1
 shift
 
+ROOT=$(readlink -f $(dirname $0))
+
 if [ ! -d "$datadir" ]; then
     echo "Usage: $0 data_dir num_parallel [arguments for segment-topic-search.py]"
     exit 1
@@ -31,7 +33,7 @@ done
 
 set -xe
 for i in $(seq 1 $parallel); do
-  ./segment-topic-search.py --cats "${cats[$i]}" $* &
+  $ROOT/segment-topic-search.py --cats "${cats[$i]}" $* &
 done
 
 wait
