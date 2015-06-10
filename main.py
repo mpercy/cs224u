@@ -76,7 +76,7 @@ def evaluation(feature_extractor = None,
 
     # load data
     baseFolder = data_dir
-    cats = listdir(baseFolder)
+    cats = sorted(listdir(baseFolder))
     for catIdx, cat in enumerate(cats):
         logger.info('Processing category %s (%d/%d)', cat, catIdx, len(cats))
         try:
