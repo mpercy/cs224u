@@ -32,22 +32,18 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
 logging.root.setLevel(level=logging.INFO)
 
 def test():
-    sample_size = 20
+    sample_size = None
     decay_iterval = 20
 
     # load data
     baseFolder = '20news-18828'
     m = LDAModel()
-    logfname = 'lda_topK_fine_tune_val.log_'+ctime()
-    
-
+    logfname = 'lda_topK_fine_tune_no_val.log_'+ctime()
     buggyDocs = []
     for depth_iter in range(0, 10):
         for decay_iter in range(0, decay_iterval+1):
             train = []
             trainY = []
-            val = []
-            valY =[]
             test = []
             testY = []
             opts = {'base_feature_extractor':m, 'depth':depth_iter, 'fullLayer':True, 'decay':decay_iter*1./decay_iterval}
@@ -71,20 +67,17 @@ def test():
                         doc = open(doc_filename).read()
                         feature = feature_extractor.featurize(doc)
                         # logger.debug('doc %d feature extracted', docIdx)
-                        if docIdx < numDocs*0.8:
+                        if docIdx < numDocs*0.9:
                             train.append(feature)
                             trainY.append(catIdx)
-                        elif docIdx < numDocs*0.9:
-                            val.append(feature)
-                            valY.append(catIdx)
                         else:
                             test.append(feature)
                             testY.append(catIdx)
                         # logger.debug('-----')
                         print catIdx, docIdx
                     except:
-                        buggyDocs.append((catIdx, docIdx))
                         print 'ERROR:', catIdx, docIdx, doc_filename
+                        buggyDocs.append((catIdx, docIdx))
                         f = open('error.log', 'a')
                         f.write(str(docIdx)+ ', ' +doc_filename+'\n')
                         f.close()
@@ -92,8 +85,6 @@ def test():
             # Convert to sparse format for compact storage and minimal memory usage.
             train = np.vstack(train)
             trainY = np.hstack(trainY)
-            val = np.vstack(val)
-            valY = np.vstack(valY)
             test = np.vstack(test)
             testY = np.hstack(testY)
 
@@ -112,7 +103,6 @@ def test():
                 logger.info('training finished')
 
                 # Make prediction.
-                valPredY = clf.predict(val)
                 testPredY = clf.predict(test)
 
                 # Print detailed report.
@@ -126,13 +116,6 @@ def test():
                 print str(depth_iter) + ',' + str(decay_iter*1./decay_iterval) + ':\t' + rlt
                 f.write(str(depth_iter) + ',' + str(decay_iter*1./decay_iterval) + ':\t' + rlt + '\n')
 
-                # Save the important metrics for validation
-                precision, recall, f1, support = \
-                    precision_recall_fscore_support(valY, valPredY, average='weighted')
-                rlt = str(precision) + '\t' + str(recall) + '\t' + str(f1) + '\t' + str(support)
-                print str(depth_iter) + ',' + str(decay_iter*1./decay_iterval) + ':\t' + rlt
-                f.write(str(depth_iter) + ',' + str(decay_iter*1./decay_iterval) + ':\t' + rlt + '\n')
-                f.write('\n')
                 f.close()
     # with open(record_fname, "a") as records_out:
     #     json.dump(result_record, records_out, sort_keys = True)

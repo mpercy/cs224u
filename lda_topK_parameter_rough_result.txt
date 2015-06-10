@@ -1,0 +1,1901 @@
+Bins-iMac:cs224u Ted$ python test.py
+2015-06-09 07:13:59,696 : INFO : LDA: Loading word dictionary...
+2015-06-09 07:14:00,130 : INFO : LDA: Loading pretrained model...
+2015-06-09 07:14:05,688 : INFO : LDA: Finished loading model files.
+/Library/Python/2.7/site-packages/numpy-1.9.1-py2.7-macosx-10.6-intel.egg/numpy/core/fromnumeric.py:2499: VisibleDeprecationWarning: `rank` is deprecated; use the `ndim` attribute or function instead. To find the rank of a matrix see `numpy.linalg.matrix_rank`.
+  VisibleDeprecationWarning)
+/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/spatial/distance.py:287: RuntimeWarning: invalid value encountered in double_scalars
+  dist = 1.0 - np.dot(u, v) / (norm(u) * norm(v))
+2015-06-09 07:15:30,762 : INFO : Evaluating on depth 1, decay 0.0...
+2015-06-09 07:15:30,763 : INFO : training finished
+/Library/Python/2.7/site-packages/sklearn/metrics/classification.py:958: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.43333   0.50000   0.43500        40
+
+2015-06-09 07:16:55,607 : INFO : Evaluating on depth 1, decay 0.1...
+2015-06-09 07:16:55,608 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.42500   0.47500   0.42167        40
+
+2015-06-09 07:18:20,586 : INFO : Evaluating on depth 1, decay 0.2...
+2015-06-09 07:18:20,587 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.33333   0.50000   0.40000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.54167   0.55000   0.50833        40
+
+2015-06-09 07:19:46,111 : INFO : Evaluating on depth 1, decay 0.3...
+2015-06-09 07:19:46,113 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.47833   0.52500   0.46524        40
+
+2015-06-09 07:21:11,076 : INFO : Evaluating on depth 1, decay 0.4...
+2015-06-09 07:21:11,077 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.50357        40
+
+2015-06-09 07:22:35,952 : INFO : Evaluating on depth 1, decay 0.5...
+2015-06-09 07:22:35,953 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.50357        40
+
+2015-06-09 07:24:01,368 : INFO : Evaluating on depth 1, decay 0.6...
+2015-06-09 07:24:01,369 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.55833   0.60000   0.55333        40
+
+2015-06-09 07:25:26,349 : INFO : Evaluating on depth 1, decay 0.7...
+2015-06-09 07:25:26,350 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.63333   0.60000   0.58333        40
+
+2015-06-09 07:26:51,088 : INFO : Evaluating on depth 1, decay 0.8...
+2015-06-09 07:26:51,089 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   0.50000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.62500   0.60000   0.58667        40
+
+2015-06-09 07:28:16,024 : INFO : Evaluating on depth 1, decay 0.9...
+2015-06-09 07:28:16,025 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.66167   0.62500   0.60857        40
+
+2015-06-09 07:29:45,314 : INFO : Evaluating on depth 2, decay 0.0...
+2015-06-09 07:29:45,315 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.42500   0.47500   0.42167        40
+
+2015-06-09 07:31:11,874 : INFO : Evaluating on depth 2, decay 0.1...
+2015-06-09 07:31:11,875 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.48333   0.52500   0.46833        40
+
+2015-06-09 07:32:38,878 : INFO : Evaluating on depth 2, decay 0.2...
+2015-06-09 07:32:38,879 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.47833   0.52500   0.46524        40
+
+2015-06-09 07:34:05,638 : INFO : Evaluating on depth 2, decay 0.3...
+2015-06-09 07:34:05,639 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 07:35:32,127 : INFO : Evaluating on depth 2, decay 0.4...
+2015-06-09 07:35:32,128 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.49500   0.55000   0.49690        40
+
+2015-06-09 07:36:59,186 : INFO : Evaluating on depth 2, decay 0.5...
+2015-06-09 07:36:59,187 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.53667   0.57500   0.52690        40
+
+2015-06-09 07:38:26,125 : INFO : Evaluating on depth 2, decay 0.6...
+2015-06-09 07:38:26,126 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   1.00000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52000   0.55000   0.49690        40
+
+2015-06-09 07:39:52,734 : INFO : Evaluating on depth 2, decay 0.7...
+2015-06-09 07:39:52,735 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.25000   0.50000   0.33333         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.62917   0.55000   0.55333        40
+
+2015-06-09 07:41:19,332 : INFO : Evaluating on depth 2, decay 0.8...
+2015-06-09 07:41:19,333 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.20000   0.50000   0.28571         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   0.50000   0.33333         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   0.50000   0.50000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.50000   1.00000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    0.00000   0.00000   0.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.48917   0.52500   0.47929        40
+
+2015-06-09 07:42:45,985 : INFO : Evaluating on depth 2, decay 0.9...
+2015-06-09 07:42:45,986 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.50000   0.50000   0.50000         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.40000   1.00000   0.57143         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    0.00000   0.00000   0.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.56167   0.57500   0.53690        40
+
+2015-06-09 07:44:14,565 : INFO : Evaluating on depth 3, decay 0.0...
+2015-06-09 07:44:14,567 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.50333   0.52500   0.47190        40
+
+2015-06-09 07:45:43,010 : INFO : Evaluating on depth 3, decay 0.1...
+2015-06-09 07:45:43,011 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.33333   1.00000   0.50000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.50000   0.52500   0.46833        40
+
+2015-06-09 07:47:11,750 : INFO : Evaluating on depth 3, decay 0.2...
+2015-06-09 07:47:11,751 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.47833   0.52500   0.46524        40
+
+2015-06-09 07:48:40,610 : INFO : Evaluating on depth 3, decay 0.3...
+2015-06-09 07:48:40,611 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.50357        40
+
+2015-06-09 07:50:09,333 : INFO : Evaluating on depth 3, decay 0.4...
+2015-06-09 07:50:09,334 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.51667   0.57500   0.52333        40
+
+2015-06-09 07:51:39,910 : INFO : Evaluating on depth 3, decay 0.5...
+2015-06-09 07:51:39,911 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   0.50000   0.33333         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.50417   0.52500   0.48833        40
+
+2015-06-09 07:53:10,369 : INFO : Evaluating on depth 3, decay 0.6...
+2015-06-09 07:53:10,370 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   0.50000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.66667   1.00000   0.80000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.53667   0.60000   0.53690        40
+
+2015-06-09 07:54:39,049 : INFO : Evaluating on depth 3, decay 0.7...
+2015-06-09 07:54:39,051 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.66667   1.00000   0.80000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   1.00000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.55833   0.57500   0.53167        40
+
+2015-06-09 07:56:11,072 : INFO : Evaluating on depth 3, decay 0.8...
+2015-06-09 07:56:11,074 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   1.00000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.66667   1.00000   0.80000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.60000   0.60000   0.56167        40
+
+2015-06-09 07:57:40,008 : INFO : Evaluating on depth 3, decay 0.9...
+2015-06-09 07:57:40,009 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.58750   0.57500   0.54000        40
+
+2015-06-09 07:59:11,476 : INFO : Evaluating on depth 4, decay 0.0...
+2015-06-09 07:59:11,478 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.45833   0.52500   0.46167        40
+
+2015-06-09 08:00:43,152 : INFO : Evaluating on depth 4, decay 0.1...
+2015-06-09 08:00:43,154 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.43333   0.50000   0.43500        40
+
+2015-06-09 08:02:16,174 : INFO : Evaluating on depth 4, decay 0.2...
+2015-06-09 08:02:16,175 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 08:03:47,970 : INFO : Evaluating on depth 4, decay 0.3...
+2015-06-09 08:03:47,972 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.57500   0.57500   0.53500        40
+
+2015-06-09 08:05:20,299 : INFO : Evaluating on depth 4, decay 0.4...
+2015-06-09 08:05:20,301 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   1.00000   1.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.46167   0.55000   0.48024        40
+
+2015-06-09 08:06:53,414 : INFO : Evaluating on depth 4, decay 0.5...
+2015-06-09 08:06:53,415 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   0.50000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.53333   0.60000   0.54500        40
+
+2015-06-09 08:08:24,504 : INFO : Evaluating on depth 4, decay 0.6...
+2015-06-09 08:08:24,505 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   1.00000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52500   0.57500   0.51333        40
+
+2015-06-09 08:09:56,038 : INFO : Evaluating on depth 4, decay 0.7...
+2015-06-09 08:09:56,039 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.28571   1.00000   0.44444         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.59762   0.57500   0.54222        40
+
+2015-06-09 08:11:28,431 : INFO : Evaluating on depth 4, decay 0.8...
+2015-06-09 08:11:28,433 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.28571   1.00000   0.44444         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.61429   0.60000   0.56722        40
+
+2015-06-09 08:13:01,747 : INFO : Evaluating on depth 4, decay 0.9...
+2015-06-09 08:13:01,749 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.22222   1.00000   0.36364         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.56111   0.57500   0.52985        40
+
+2015-06-09 08:14:40,848 : INFO : Evaluating on depth 5, decay 0.0...
+2015-06-09 08:14:40,849 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.45333   0.50000   0.43857        40
+
+2015-06-09 08:16:17,585 : INFO : Evaluating on depth 5, decay 0.1...
+2015-06-09 08:16:17,586 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 08:17:51,761 : INFO : Evaluating on depth 5, decay 0.2...
+2015-06-09 08:17:51,763 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 08:19:26,697 : INFO : Evaluating on depth 5, decay 0.3...
+2015-06-09 08:19:26,699 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.49500   0.52500   0.47190        40
+
+2015-06-09 08:21:00,502 : INFO : Evaluating on depth 5, decay 0.4...
+2015-06-09 08:21:00,503 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.47833   0.52500   0.47024        40
+
+2015-06-09 08:22:36,910 : INFO : Evaluating on depth 5, decay 0.5...
+2015-06-09 08:22:36,911 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.25000   0.50000   0.33333         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.50417   0.52500   0.49000        40
+
+2015-06-09 08:24:11,321 : INFO : Evaluating on depth 5, decay 0.6...
+2015-06-09 08:24:11,323 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.28571   1.00000   0.44444         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52262   0.55000   0.50056        40
+
+2015-06-09 08:25:45,015 : INFO : Evaluating on depth 5, decay 0.7...
+2015-06-09 08:25:45,016 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   0.50000   0.50000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.28571   1.00000   0.44444         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.58929   0.57500   0.54222        40
+
+2015-06-09 08:27:24,120 : INFO : Evaluating on depth 5, decay 0.8...
+2015-06-09 08:27:24,122 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.22222   1.00000   0.36364         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.53611   0.55000   0.50485        40
+
+2015-06-09 08:28:59,723 : INFO : Evaluating on depth 5, decay 0.9...
+2015-06-09 08:28:59,724 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.33333   0.50000   0.40000         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.40000   1.00000   0.57143         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.00000   0.00000   0.00000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.54083   0.57500   0.51524        40
+
+2015-06-09 08:30:43,321 : INFO : Evaluating on depth 6, decay 0.0...
+2015-06-09 08:30:43,322 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.45833   0.52500   0.46167        40
+
+2015-06-09 08:32:23,129 : INFO : Evaluating on depth 6, decay 0.1...
+2015-06-09 08:32:23,130 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 08:34:02,610 : INFO : Evaluating on depth 6, decay 0.2...
+2015-06-09 08:34:02,611 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.33333   0.50000   0.40000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.55000   0.55000   0.51167        40
+
+2015-06-09 08:35:42,907 : INFO : Evaluating on depth 6, decay 0.3...
+2015-06-09 08:35:42,908 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.52833   0.55000   0.49857        40
+
+2015-06-09 08:37:22,483 : INFO : Evaluating on depth 6, decay 0.4...
+2015-06-09 08:37:22,484 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.49500   0.55000   0.49690        40
+
+2015-06-09 08:38:59,828 : INFO : Evaluating on depth 6, decay 0.5...
+2015-06-09 08:38:59,829 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.33333   0.50000   0.40000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   0.50000   0.33333         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.53750   0.57500   0.53500        40
+
+2015-06-09 08:40:37,583 : INFO : Evaluating on depth 6, decay 0.6...
+2015-06-09 08:40:37,585 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   0.50000   0.50000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.33333   1.00000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.66667   1.00000   0.80000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.54167   0.62500   0.55667        40
+
+2015-06-09 08:42:14,662 : INFO : Evaluating on depth 6, decay 0.7...
+2015-06-09 08:42:14,664 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.22222   1.00000   0.36364         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.56944   0.57500   0.52818        40
+
+2015-06-09 08:43:51,857 : INFO : Evaluating on depth 6, decay 0.8...
+2015-06-09 08:43:51,859 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.25000   0.50000   0.33333         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   0.50000   0.50000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.55833   0.57500   0.52167        40
+
+2015-06-09 08:45:28,937 : INFO : Evaluating on depth 6, decay 0.9...
+2015-06-09 08:45:28,939 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.50000   0.50000   0.50000         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   0.50000   0.50000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    0.50000   0.50000   0.50000         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.60417   0.62500   0.58333        40
+
+2015-06-09 08:47:09,679 : INFO : Evaluating on depth 7, decay 0.0...
+2015-06-09 08:47:09,680 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.40000   1.00000   0.57143         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   0.50000   0.50000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.44000   0.47500   0.41881        40
+
+2015-06-09 08:48:50,327 : INFO : Evaluating on depth 7, decay 0.1...
+2015-06-09 08:48:50,329 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.25000   0.50000   0.33333         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.47083   0.50000   0.45333        40
+
+2015-06-09 08:50:31,022 : INFO : Evaluating on depth 7, decay 0.2...
+2015-06-09 08:50:31,023 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.55833   0.57500   0.52833        40
+
+2015-06-09 08:52:11,742 : INFO : Evaluating on depth 7, decay 0.3...
+2015-06-09 08:52:11,743 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.53667   0.55000   0.50190        40
+
+2015-06-09 08:53:53,436 : INFO : Evaluating on depth 7, decay 0.4...
+2015-06-09 08:53:53,437 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.40000   1.00000   0.57143         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   1.00000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.50000   0.50000   0.50000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   0.50000   0.50000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    1.00000   0.50000   0.66667         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.49500   0.52500   0.48024        40
+
+2015-06-09 08:55:33,981 : INFO : Evaluating on depth 7, decay 0.5...
+2015-06-09 08:55:33,983 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.50000   0.50000   0.50000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.20000   0.50000   0.28571         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.50000   1.00000   0.66667         2
+      rec.sport.baseball    1.00000   1.00000   1.00000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.33333   0.50000   0.40000         2
+
+             avg / total    0.48500   0.55000   0.49929        40
+
+2015-06-09 08:57:14,621 : INFO : Evaluating on depth 7, decay 0.6...
+2015-06-09 08:57:14,623 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    0.50000   0.50000   0.50000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   0.50000   0.50000         2
+
+             avg / total    0.55417   0.60000   0.54500        40
+
+2015-06-09 08:58:56,586 : INFO : Evaluating on depth 7, decay 0.7...
+2015-06-09 08:58:56,588 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.25000   1.00000   0.40000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    1.00000   1.00000   1.00000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.50000   0.50000   0.50000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.66250   0.62500   0.59833        40
+
+2015-06-09 09:00:40,863 : INFO : Evaluating on depth 7, decay 0.8...
+2015-06-09 09:00:40,865 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    1.00000   1.00000   1.00000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.00000   0.00000   0.00000         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.22222   1.00000   0.36364         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.66667   1.00000   0.80000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    1.00000   0.50000   0.66667         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.00000   0.00000   0.00000         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   0.50000   0.66667         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.51944   0.55000   0.49485        40
+
+2015-06-09 09:02:21,646 : INFO : Evaluating on depth 7, decay 0.9...
+2015-06-09 09:02:21,648 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.66667   1.00000   0.80000         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    1.00000   0.50000   0.66667         2
+comp.sys.ibm.pc.hardware    0.33333   0.50000   0.40000         2
+   comp.sys.mac.hardware    0.28571   1.00000   0.44444         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.33333   0.50000   0.40000         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.50000   0.50000   0.50000         2
+        rec.sport.hockey    0.50000   0.50000   0.50000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    0.00000   0.00000   0.00000         2
+                 sci.med    1.00000   1.00000   1.00000         2
+               sci.space    1.00000   1.00000   1.00000         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    1.00000   0.50000   0.66667         2
+   talk.politics.mideast    1.00000   1.00000   1.00000         2
+      talk.politics.misc    1.00000   1.00000   1.00000         2
+      talk.religion.misc    0.50000   1.00000   0.66667         2
+
+             avg / total    0.53929   0.60000   0.54222        40
+
+Bins-iMac:cs224u Ted$ 

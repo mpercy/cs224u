@@ -1,0 +1,81 @@
+2015-06-09 09:05:09,331 : INFO : LDA: Loading word dictionary...
+2015-06-09 09:05:09,766 : INFO : LDA: Loading pretrained model...
+2015-06-09 09:05:15,063 : INFO : LDA: Finished loading model files.
+/Library/Python/2.7/site-packages/numpy-1.9.1-py2.7-macosx-10.6-intel.egg/numpy/core/fromnumeric.py:2499: VisibleDeprecationWarning: `rank` is deprecated; use the `ndim` attribute or function instead. To find the rank of a matrix see `numpy.linalg.matrix_rank`.
+  VisibleDeprecationWarning)
+/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/spatial/distance.py:287: RuntimeWarning: invalid value encountered in double_scalars
+  dist = 1.0 - np.dot(u, v) / (norm(u) * norm(v))
+2015-06-09 09:06:39,101 : INFO : Evaluating on depth 1, decay 0.0...
+2015-06-09 09:06:39,102 : INFO : training finished
+/Library/Python/2.7/site-packages/sklearn/metrics/classification.py:958: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+2015-06-09 09:08:03,095 : INFO : Evaluating on depth 1, decay 0.1...
+2015-06-09 09:08:03,096 : INFO : training finished
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    1.00000   0.50000   0.66667         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.45333   0.50000   0.43857        40
+
+                          precision    recall  f1-score   support
+
+             alt.atheism    0.50000   1.00000   0.66667         2
+           comp.graphics    0.00000   0.00000   0.00000         2
+ comp.os.ms-windows.misc    0.40000   1.00000   0.57143         2
+comp.sys.ibm.pc.hardware    0.00000   0.00000   0.00000         2
+   comp.sys.mac.hardware    0.00000   0.00000   0.00000         2
+          comp.windows.x    0.00000   0.00000   0.00000         2
+            misc.forsale    0.00000   0.00000   0.00000         2
+               rec.autos    0.50000   1.00000   0.66667         2
+         rec.motorcycles    0.66667   1.00000   0.80000         2
+      rec.sport.baseball    0.66667   1.00000   0.80000         2
+        rec.sport.hockey    0.00000   0.00000   0.00000         2
+               sci.crypt    0.00000   0.00000   0.00000         2
+         sci.electronics    1.00000   0.50000   0.66667         2
+                 sci.med    0.66667   1.00000   0.80000         2
+               sci.space    1.00000   0.50000   0.66667         2
+  soc.religion.christian    1.00000   1.00000   1.00000         2
+      talk.politics.guns    0.00000   0.00000   0.00000         2
+   talk.politics.mideast    0.66667   1.00000   0.80000         2
+      talk.politics.misc    1.00000   0.50000   0.66667         2
+      talk.religion.misc    0.00000   0.00000   0.00000         2
+
+             avg / total    0.40333   0.47500   0.40524        40
+
+Traceback (most recent call last):
+  File "test.py", line 210, in <module>
+    test()
+  File "test.py", line 63, in test
+    feature = feature_extractor.featurize(doc)
+  File "/Users/Ted/Dropbox/2015_Spring/CS224U/cs224u/util.py", line 445, in featurize
+    tokens, regions = topicSearch(doc, feature_extractor = self.feature_extractor)
+  File "/Users/Ted/Dropbox/2015_Spring/CS224U/cs224u/util.py", line 333, in topicSearch
+    mergedRegion = mergeWithNext(similarityWithNext, mostSimilarIndex, segments)
+  File "/Users/Ted/Dropbox/2015_Spring/CS224U/cs224u/util.py", line 297, in mergeWithNext
+    prevFeatures = feature_extractor.featurize(joinSegments(segments, prevIndex, pairIndex))
+  File "/Users/Ted/Dropbox/2015_Spring/CS224U/cs224u/models.py", line 47, in featurize
+    vec = coo_matrix((data, (row, col)), shape = (1, self.model.num_topics)).toarray()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/sparse/coo.py", line 150, in __init__
+    self.shape = (M, N)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/Extras/lib/python/scipy/sparse/base.py", line 80, in set_shape
+    raise TypeError('invalid shape')
+TypeError: invalid shape
