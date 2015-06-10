@@ -8,7 +8,7 @@ filename prefix of the ESA model files, which must be in the current directory.
 data_dir should be the base folder for the newsgroups data.
 
 Example:
-    %(program)s wiki_en 20news-18828
+    %(program)s --sample_size 20 --model GloveModel glove.6B.300d.txt 20news-18828/
 """
 
 from glove import GloveModel
