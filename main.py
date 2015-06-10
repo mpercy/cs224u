@@ -14,7 +14,7 @@ Example:
 """
 
 from glove import GloveModel
-from esa import ESAModel
+from esa import ESAModel, ClusteredESAModel
 from models import LDAModel, LSAModel
 from util import sentenceSeg, PriorityQueue, cosine, DataSet, function_name, \
                  MaxTopicFeatureExtractor, HierarchicalTopicFeatureExtractor, \
