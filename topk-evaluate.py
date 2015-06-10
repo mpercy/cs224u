@@ -10,7 +10,7 @@ filename prefix of the ESA model files, which must be in the current directory.
 data_dir should be the base folder for the newsgroups data.
 
 Example:
-    %(program)s wiki_en 20news-18828
+    %(program)s --sample_size 20 --model GloveModel --depth 6 --decay 0.9 glove.6B.300d.txt 20news-18828/ testrecords.txt
 """
 
 from glove import GloveModel
@@ -99,7 +99,7 @@ def evaluation(model = None,
         except:
             continue
         numDocs = len(docs)
-        logger.info("Docs: %s", docs)
+        #logger.info("Docs: %s", docs)
         for docIdx, doc_filename in enumerate(docs):
             doc_filename = os.path.join(baseFolder, cat, doc_filename)
             logger.info('processing document %s (%d/%d)', doc_filename, docIdx, numDocs)
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
     # Define command-line args.
     parser = argparse.ArgumentParser(description='Evaluate topic classification approaches.',
-                                     epilog=str(inspect.cleandoc(__doc__) % {'program': program}))
+                                     epilog=str(__doc__ % {'program': program}))
     parser.add_argument('--model', help=('Base feature model. Default: ' + DEFAULT_MODEL))
     parser.set_defaults(model=DEFAULT_MODEL)
     parser.add_argument('--featurizer',

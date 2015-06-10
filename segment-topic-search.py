@@ -8,7 +8,7 @@ filename prefix of the ESA model files, which must be in the current directory.
 data_dir should be the base folder for the newsgroups data.
 
 Example:
-    %(program)s wiki_en 20news-18828
+    %(program)s --sample_size 20 --model GloveModel glove.6B.300d.txt 20news-18828/
 """
 
 from glove import GloveModel
@@ -87,15 +87,20 @@ def segment(model = None,
                data_dir = '20news-18828',
                result_record = None,
                record_fname = None,
-               sample_size = None):
+               sample_size = None,
+               requested_cats = None):
+    if not requested_cats:
+        raise Exception("cat must not be None")
 
     # load data
     baseFolder = data_dir
     cats = sorted(listdir(baseFolder))
     numCats = len(cats)
-    Parallel(n_jobs=-2)(delayed(runTopicSearchAndSave) \
-            (os.path.join(baseFolder, cat), model, catIdx, numCats, sample_size) \
-            for catIdx, cat in enumerate(cats))
+    for catIdx, cat in enumerate(cats):
+        if cat not in requested_cats:
+            continue
+        dirpath = os.path.join(baseFolder, cat)
+        runTopicSearchAndSave(dirpath, model, catIdx, numCats, sample_size)
 
     logger.info("Done.")
 
@@ -104,6 +109,8 @@ if __name__ == "__main__":
     # Define command-line args.
     parser = argparse.ArgumentParser(description='Run parallel topic segmentation job.',
                                      epilog=str(__doc__ % {'program': program}))
+    parser.add_argument('--cats', help=('Categories to process.'))
+
     parser.add_argument('--model', help=('Base feature model. Default: ' + DEFAULT_MODEL))
     parser.set_defaults(model=DEFAULT_MODEL)
 
@@ -124,4 +131,5 @@ if __name__ == "__main__":
     segment(model = model,
             model_prefix = args.model_prefix,
             data_dir = args.data_dir,
-            sample_size = args.sample_size)
+            sample_size = args.sample_size,
+            requested_cats = set(args.cats.split(',')))
